@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Repository.Data;
 
 namespace Repository.Entities;
 
@@ -38,8 +40,18 @@ public partial class BookSellingContext : DbContext
     public virtual DbSet<Role> Roles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(local);Integrated security=true; TrustServerCertificate=true;Database=BookSelling ");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                                        .SetBasePath(Directory.GetCurrentDirectory())
+                                        .AddJsonFile("appsettings.json").Build();
+
+            string? connectionString = config["ConnectionStrings:DefaultConnection"];
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+        base.OnConfiguring(optionsBuilder);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -89,8 +101,7 @@ public partial class BookSellingContext : DbContext
                 .HasColumnName("publisher");
             entity.Property(e => e.QuantityLeft).HasColumnName("quantity_left");
             entity.Property(e => e.Status)
-                .HasMaxLength(55)
-                .IsUnicode(false)
+                .HasDefaultValueSql("((0))")
                 .HasColumnName("status");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
@@ -273,6 +284,15 @@ public partial class BookSellingContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("role_name");
         });
+
+        #region Seed Data
+        modelBuilder.SeedRole();
+        modelBuilder.SeedGenre();
+        modelBuilder.SeedBook();
+        modelBuilder.SeedBookGenre();
+        modelBuilder.SeedAccount();
+        modelBuilder.SeedCustomer();
+        #endregion
 
         OnModelCreatingPartial(modelBuilder);
     }
