@@ -7,39 +7,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repo
+namespace Repository.Infrastructure
 {
-    public class RepositoryBase<T> where T : class
+    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        private readonly BookSellingContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public RepositoryBase()
+        public RepositoryBase(BookSellingContext context)
         {
-            _context = new BookSellingContext();
-            _dbSet = _context.Set<T>();
-
+            _dbSet = context.Set<T>();
         }
-        public IQueryable<T> GetAll()
+
+        public T GetById(int id)
         {
-            return _dbSet;
+            return _dbSet.Find(id);
+        }
+
+        public IEnumerable<T> GetAll()
+        {
+            return _dbSet.ToList();
         }
 
         public void Create(T entity)
         {
             _dbSet.Add(entity);
-            _context.SaveChanges();
         }
         public void Delete(T entity)
         {
             _dbSet.Remove(entity);
-            _context.SaveChanges();
         }
         public void Update(T entity)
         {
-            var tracker = _context.Attach(entity);
-            tracker.State = EntityState.Modified;
-            _context.SaveChanges();
+            _dbSet.Attach(entity);
+            _dbSet.Update(entity);
         }
     }
 }
