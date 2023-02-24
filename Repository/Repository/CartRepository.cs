@@ -1,6 +1,6 @@
-﻿using Repository.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Entities;
 using Repository.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Repository.Repository.Interfaces;
 
 namespace Repository.Repository
@@ -12,20 +12,13 @@ namespace Repository.Repository
         {
             _context = context;
         }
-        public IEnumerable<Cart> GetAllCartsWithDetails()
+
+        public IEnumerable<Cart> GetCartByCustomerId(int customerId)
         {
             return _context.Carts
+                .Where(c => c.CustomerId == customerId)
                 .Include(c => c.Book)
-                .Include(c => c.Customer)
                 .ToList();
-        }
-        public Cart? GetByIdWithDetails(int id)
-        {
-            var result = _context.Carts
-                .Include(c => c.Book)
-                .Include(c => c.Customer)
-                .FirstOrDefault(c => c.CartId == id);
-            return result;
         }
     }
 }

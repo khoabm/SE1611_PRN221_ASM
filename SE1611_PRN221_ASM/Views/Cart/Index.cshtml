@@ -5,44 +5,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>My Cart</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table>
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Book)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th></th>
+            <th>Book</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Book.BookId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.CustomerId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CartId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CartId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var cart in Model)
+        {
+            <tr>
+                <td>@cart.Book.Title</td>
+                <td>@cart.Book.Price</td>
+                <td>
+                    <form method="post" action="@Url.Action("UpdateQuantity", "Cart", new { id = cart.CartId })">
+                    @Html.AntiForgeryToken()
+                    <input type="number" name="quantity" value="@cart.Quantity" />
+                    <input type="submit" value="Update" />
+                    </form>
+                </td>
+                <td>@(Math.Round((decimal)(cart.Book.Price * cart.Quantity), 2))</td>
+            </tr>
+        }
     </tbody>
 </table>

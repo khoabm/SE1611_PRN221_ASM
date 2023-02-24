@@ -17,15 +17,32 @@ namespace SE1611_PRN221_ASM.Controllers
         // GET: CartController
         public ActionResult Index()
         {
-            var list = _unitOfWork.CartRepository.GetAllCartsWithDetails();
+            int customerId = 2;
+            var list = _unitOfWork.CartRepository.GetCartByCustomerId(customerId);
             return View(list);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateQuantity(int id, int quantity)
+        {
+            var cart = _unitOfWork.CartRepository.GetById(id);
+            if (cart == null)
+            {
+                return NotFound();
+            }
+
+            cart.Quantity = quantity;
+            _unitOfWork.CartRepository.Update(cart);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: CartController/Details/5
         public ActionResult Details(int id)
         {
-            var cart = _unitOfWork.CartRepository.GetByIdWithDetails(id);
-            return View(cart);
+            return View();
         }
 
         // GET: CartController/Create
