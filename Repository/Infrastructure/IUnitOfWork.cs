@@ -8,6 +8,7 @@ namespace Repository.Infrastructure
         ICartRepository CartRepository { get; }
         ICommentRepository CommentRepository { get; }
         IFavoriteRepository FavoriteRepository { get; }
+        IAccountRepository AccountRepository { get; }
         void Save();
     }
 }
