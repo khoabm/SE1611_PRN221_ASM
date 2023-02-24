@@ -62,6 +62,23 @@ namespace SE1611_PRN221_ASM.Controllers
             {
                 return View();
             }
+        }        
+
+        // POST: AccountController/SignUp
+        [HttpPost]
+        public async Task<ActionResult> SignUp(Account account)
+        {
+            try
+            {
+                
+                await _unitOfWork.AccountRepository.SignUp(account);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: AccountController/Edit/5

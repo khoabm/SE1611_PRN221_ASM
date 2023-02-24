@@ -5,4 +5,24 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <button id="ajaxButton">Click me</button>
+    <div id="ajaxResult"></div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ajaxButton').click(function () {
+            $.ajax({
+                url: '/Home/AjaxAction',
+                type: 'GET',
+                dataType: 'html',
+                success: function (result) {
+                    $('#ajaxResult').html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

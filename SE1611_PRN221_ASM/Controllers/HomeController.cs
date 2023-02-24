@@ -12,7 +12,10 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             _logger = logger;
         }
-
+        public IActionResult AjaxAction()
+        {
+            return PartialView("_AjaxPartialView");
+        }
         public IActionResult Index()
         {
             return View();

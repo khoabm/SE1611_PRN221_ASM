@@ -15,6 +15,11 @@ namespace Repository.Repository
         AVAILABLE = 1,
         DISABLE = 2,
     }
+    enum RoleId
+    {
+        Admin = 1,
+        Customer = 2,
+    }
     public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
         private readonly BookSellingContext _context;
@@ -77,7 +82,23 @@ namespace Repository.Repository
 
         public async Task SignUp(Account account)
         {
-            throw new NotImplementedException();
+            try
+            {
+                account.RoleId = (int)RoleId.Customer;
+                account.Password = Bcrypt.HashPassword(account.Password);
+                _context.Accounts.Add(account);
+                await _context.SaveChangesAsync();
+
+            }
+            catch (DbUpdateException ex)
+            {
+                var innerException = ex.InnerException;
+                Console.WriteLine(innerException);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
