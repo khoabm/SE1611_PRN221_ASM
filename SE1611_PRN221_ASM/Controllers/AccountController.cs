@@ -102,12 +102,17 @@ namespace SE1611_PRN221_ASM.Controllers
                         BirthDay = loginAccount.Customer.Birthday.ToString(),
                         RoleId = loginAccount.RoleId
                     };
+                    var cartItemCount = _unitOfWork.CartRepository.GetCartByCustomerId(loginAccount.Customer.CustomerId).Count();
+                    userSession.CartItemCount = cartItemCount;
+
                     HttpContext.Session.SetObject("UserSession", userSession);
                     HttpContext.Session.GetObject<UserSession>("UserSession");
                 }
+
                 if(loginAccount.RoleId == (int)RoleId.Customer)
                     return RedirectToAction(nameof(Index));
                 return RedirectToAction("Index", "Admin");
+
             }
             catch
             {

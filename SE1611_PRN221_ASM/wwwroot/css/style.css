@@ -43000,3 +43000,8 @@ body
     animation-name: driveInLeft;
     animation-duration: 2s;
 }
+
+.cart-items
+{
+    margin: 0 16.5vw;
+}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿@model IEnumerable<Repository.Entities.Account>
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
@@ -5,6 +6,14 @@
     Layout = "_AdminLayout";
     var myObject = HttpContextAccessor.HttpContext!.Session.GetObject<UserSession>("UserSession");
     var fullName = myObject != null ? myObject.FullName : "Account";
+=======
+﻿@using SE1611_PRN221_ASM.Helper
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    var userSession = session.GetObject<UserSession>("UserSession");
+>>>>>>> 8badeea4e7f7e639bb9ce3dc6b3c6860cc0d4516
 }
 
 <!DOCTYPE html>
@@ -74,7 +83,7 @@
                                 </div>
                             }
                             <div class="dropdn dropdn_fullheight minicart">
-                                <a href="#" class="dropdn-link js-dropdn-link minicart-link only-icon" data-panel="#dropdnMinicart">
+                                <a asp-controller="Cart" asp-action="Index" class="dropdn-link minicart-link" data-panel="#dropdnMinicart">
                                     <i class="icon-basket"></i>
                                     <span class="minicart-qty">3</span>
                                     <span class="minicart-total hide-mobile">$34.99</span>
@@ -505,9 +514,14 @@
                                     </div>
                                 </div>
                                 <div class="dropdn dropdn_fullheight minicart">
-                                    <a href="#" class="dropdn-link js-dropdn-link minicart-link" data-panel="#dropdnMinicart">
+                                    <a asp-controller="Cart" asp-action="Index" class="dropdn-link minicart-link" data-panel="#dropdnMinicart">
                                         <i class="icon-basket"></i>
-                                        <span class="minicart-qty">3</span>
+                                        <span class="minicart-qty">
+                                            @if (userSession != null)
+                                            {
+                                                <span>@userSession.CartItemCount</span>
+                                            } else {<span>0</span>}
+                                        </span>
                                         <span class="minicart-total hide-mobile">$34.99</span>
                                     </a>
                                 </div>
@@ -819,7 +833,7 @@
                         <div class="minicart-drop-total-price col" data-header-cart-total="">$340</div>
                     </div>
                     <div class="minicart-drop-actions">
-                        <a href="cart.html" class="btn btn--md btn--grey"><i class="icon-basket"></i><span>Cart Page</span></a>
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn--md btn--grey"><i class="icon-basket"></i><span>Cart Page</span></a>
                         <a href="checkout.html" class="btn btn--md"><i class="icon-checkout"></i><span>Check out</span></a>
                     </div>
                     <ul class="payment-link mb-2">
@@ -836,6 +850,17 @@
         </div>
     </div>
     <div class="page-content">
+<<<<<<< HEAD
+=======
+        <div class="holder breadcrumbs-wrap mt-0">
+            <div class="container">
+                <ul class="breadcrumbs">
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><span>Create account</span></li>
+                </ul>
+            </div>
+        </div>
+>>>>>>> 8badeea4e7f7e639bb9ce3dc6b3c6860cc0d4516
         @RenderBody()
     </div>
 

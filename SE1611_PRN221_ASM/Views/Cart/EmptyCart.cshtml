@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <h2>@TempData["Message"]?.ToString()</h2>
+        @if (TempData["Message"]?.ToString() == "Please log in first.")
+        {
+            <a asp-controller="Account" asp-action="SignIn" class="btn btn-primary">Login</a>
+        }
+    </div>
+</div>

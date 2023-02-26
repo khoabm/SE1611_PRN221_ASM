@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository.Infrastructure;
 using Repository.Repository;
+using SE1611_PRN221_ASM.Helper;
+using SE1611_PRN221_ASM.Models;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
@@ -15,17 +17,52 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: CartController
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _unitOfWork.CartRepository.GetAllCartsWithDetails();
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+
+            if (userSession == null)
+            {
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyCart");
+            }
+
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+
+            int customerId = account.AccountId;
+            var list = _unitOfWork.CartRepository.GetCartByCustomerId(customerId);
+
+            if (list == null || list.Count() == 0)
+            {
+                TempData["Message"] = "Cart is empty.";
+                return View("EmptyCart");
+            }
+
             return View(list);
         }
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult UpdateQuantity(int id, int quantity)
+        //{
+        //    var cart = _unitOfWork.CartRepository.GetById(id);
+        //    if (cart == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    cart.Quantity = quantity;
+        //    _unitOfWork.CartRepository.Update(cart);
+        //    _unitOfWork.Save();
+
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         // GET: CartController/Details/5
         public ActionResult Details(int id)
         {
-            var cart = _unitOfWork.CartRepository.GetByIdWithDetails(id);
-            return View(cart);
+            return View();
         }
 
         // GET: CartController/Create

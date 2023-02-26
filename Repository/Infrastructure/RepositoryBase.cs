@@ -31,6 +31,7 @@ namespace Repository.Infrastructure
         public void Create(T entity)
         {
             _dbSet.Add(entity);
+            
         }
         public void Delete(T entity)
         {
