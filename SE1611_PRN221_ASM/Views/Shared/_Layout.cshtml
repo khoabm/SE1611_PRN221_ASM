@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using SE1611_PRN221_ASM.Helper
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    var userSession = session.GetObject<UserSession>("UserSession");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <!-- Mirrored from big-skins.com/frontend/foxic-html-demo/account-create.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 17 Feb 2023 09:34:22 GMT -->
@@ -478,7 +486,12 @@
                                 <div class="dropdn dropdn_fullheight minicart">
                                     <a asp-controller="Cart" asp-action="Index" class="dropdn-link minicart-link" data-panel="#dropdnMinicart">
                                         <i class="icon-basket"></i>
-                                        <span class="minicart-qty">3</span>
+                                        <span class="minicart-qty">
+                                            @if (userSession != null)
+                                            {
+                                                <span>@userSession.CartItemCount</span>
+                                            } else {<span>0</span>}
+                                        </span>
                                         <span class="minicart-total hide-mobile">$34.99</span>
                                     </a>
                                 </div>
@@ -811,7 +824,7 @@
         <div class="holder breadcrumbs-wrap mt-0">
             <div class="container">
                 <ul class="breadcrumbs">
-                    <li><a href="index.html">Home</a></li>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><span>Create account</span></li>
                 </ul>
             </div>

@@ -7,5 +7,7 @@
         public String FullName { get; set; } = null!;
         public String Gender { get; set; } = null!;
         public String? BirthDay { get; set; }
+
+        public int CartItemCount { get; set; }
     }
 }

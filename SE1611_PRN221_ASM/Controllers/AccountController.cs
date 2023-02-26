@@ -101,8 +101,12 @@ namespace SE1611_PRN221_ASM.Controllers
                         Gender = loginAccount.Customer.Gender!,
                         BirthDay = loginAccount.Customer.Birthday.ToString(),
                     };
+                    var cartItemCount = _unitOfWork.CartRepository.GetCartByCustomerId(loginAccount.Customer.CustomerId).Count();
+                    userSession.CartItemCount = cartItemCount;
+
                     HttpContext.Session.SetObject("UserSession", userSession);
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             catch

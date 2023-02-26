@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository.Infrastructure;
 using Repository.Repository;
+using SE1611_PRN221_ASM.Helper;
+using SE1611_PRN221_ASM.Models;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
@@ -15,12 +17,30 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: CartController
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            int customerId = 2;
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+
+            if (userSession == null)
+            {
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyCart");
+            }
+
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+
+            int customerId = account.AccountId;
             var list = _unitOfWork.CartRepository.GetCartByCustomerId(customerId);
+
+            if (list == null || list.Count() == 0)
+            {
+                TempData["Message"] = "Cart is empty.";
+                return View("EmptyCart");
+            }
+
             return View(list);
         }
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
