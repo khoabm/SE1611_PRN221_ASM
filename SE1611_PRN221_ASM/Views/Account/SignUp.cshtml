@@ -12,6 +12,7 @@
                 <h2 class="text-center">Create an Account</h2>
                 <div class="form-wrapper">
                     <p>To access your whishlist, address book and contact preferences and to take advantage of our speedy checkout, create an account with us now.</p>
+                    <p class="text-danger">@TempData["SignUpError"]</p>
                     <form asp-action="SignUp">
                         <div class="form-group">
                             <input asp-for="Email" type="email" class="form-control" placeholder="E-mail">
@@ -23,14 +24,35 @@
                         </div>
                         <div class="form-group">
                             <input asp-for="Password" id="Password" name="Password" type="password" class="form-control" placeholder="Password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <input data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" id="ConfirmPassword" name="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
                             <span class="field-validation-valid error text-danger" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
                         </div>
+                        <div class="form-group">
+                            <input id="birthDay" name="birthDay" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="M" checked>
+                                <label class="form-check-label" for="male">
+                                    Male
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="F">
+                                <label class="form-check-label" for="female">
+                                    Female
+                                </label>
+                            </div>
+                        </div>
                         <div class="clearfix">
                             <input id="checkbox1" name="checkbox1" type="checkbox" checked="checked">
                             <label for="checkbox1">By registering your details you agree to our <a href="#" class="custom-color" data-fancybox data-src="#modalTerms">Terms and Conditions</a> and <a href="#" class="custom-color" data-fancybox data-src="#modalCookies">Cookie Policy</a></label>
+                        </div>
+                        <div class="text-center">
+                            <a class="link-info text-decoration-underline" asp-controller="account" asp-action="signin"> <i class="fas fa-arrow-left"></i> Already have an account get to <b>SignIn</b></a>
                         </div>
                         <div class="text-center">
                             <button class="btn">create an account</button>

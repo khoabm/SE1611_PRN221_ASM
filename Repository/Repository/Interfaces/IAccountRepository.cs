@@ -12,5 +12,10 @@ namespace Repository.Repository.Interfaces
         Task SignUp(Account account);
         Task<Account> SignIn(Account account);
         Task<IEnumerable<Account>> GetAllAccounts();
+        Task SendConfirmationMail();
+        Task<Account?> FindAccountByEmail(String email);
+        Task<IEnumerable<Account>> SearchAccountsWithPagination(String orderBy, String status, int page, int pageSize, String query);
+        Task DisableAccount(int accountId);
+        int CountData();
     }
 }
