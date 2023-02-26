@@ -100,10 +100,14 @@ namespace SE1611_PRN221_ASM.Controllers
                         FullName = loginAccount.Customer!.Name!,
                         Gender = loginAccount.Customer.Gender!,
                         BirthDay = loginAccount.Customer.Birthday.ToString(),
+                        RoleId = loginAccount.RoleId
                     };
                     HttpContext.Session.SetObject("UserSession", userSession);
+                    HttpContext.Session.GetObject<UserSession>("UserSession");
                 }
-                return RedirectToAction(nameof(Index));
+                if(loginAccount.RoleId == (int)RoleId.Customer)
+                    return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Admin");
             }
             catch
             {

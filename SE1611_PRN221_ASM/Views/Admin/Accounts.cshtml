@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<Repository.Entities.Account>
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     Layout = "_AdminLayout";
+    var myObject = HttpContextAccessor.HttpContext!.Session.GetObject<UserSession>("UserSession");
+    var fullName = myObject != null ? myObject.FullName : "Account";
 }
 
 <div class="page-wrapper">
@@ -30,7 +34,7 @@
                         <li>
                             <a href="#">
                                 <i class="fas fa-user"></i>
-                                <span class="bot-line"></span>Accounts
+                                <span class="bot-line"></span>Account
                             </a>
                         </li>
                     </ul>
@@ -43,7 +47,7 @@
                                 <img src="images/icon/avatar-01.jpg" alt="John Doe" />
                             </div>
                             <div class="content">
-                                <a class="js-acc-btn" href="#">john doe</a>
+                                <a class="js-acc-btn" href="#">@fullName</a>
                             </div>
                             <div class="account-dropdown js-dropdown">
                                 <div class="info clearfix">
@@ -167,7 +171,7 @@
                                 </ul>
                             </div>
                             <form class="au-form-icon--sm" asp-action="accounts" method="GET">
-                                <input name="query" class="au-input--w300 au-input--style2" type="text" placeholder="Search for datas &amp; reports...">
+                                <input name="query" class="au-input--w300 au-input--style2" type="text" placeholder="Search for datas &amp; reports..." value="@ViewBag.Query">
                                 <button class="au-btn--submit2" type="submit">
                                     <i class="zmdi zmdi-search"></i>
                                 </button>
@@ -263,7 +267,7 @@
                                                     <button class="item" data-toggle="tooltip" data-placement="top" title="Disable">
                                                         <i class="fas fa-user-slash"></i>
                                                     </button>
-                                                    <a href="#" onclick="disableAccount('@item.AccountId')">Disable</a>
+                                                   
                                                 </div>
                                             </td>
                                         </tr>

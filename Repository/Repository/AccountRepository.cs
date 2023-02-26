@@ -59,22 +59,24 @@ namespace Repository.Repository
             return accounts;
         }
 
-        public async Task<IEnumerable<Account>> SearchAccountsWithPagination(string orderBy, string status, int page, int pageSize, string query="")
+        public async Task<(IEnumerable<Account> accounts, int totalPages)> SearchAccountsWithPagination(string orderBy, string status, int page, int pageSize, string query)
         {
             var accounts = new List<Account>();
+            int totalPages = 0;
             try
             {
                 accounts = await _context.Accounts
                             .Include(a => a.Customer)
                             .Where((a => a.Email.Contains(query) || a.Customer.Name.Contains(query)))
                             .ToListAsync();
-
+                totalPages = accounts.Count();
+                Console.WriteLine(totalPages);
             }
             catch (Exception)
             {
                 throw new Exception();
             }
-            return PaginatedList<Account>.Create(accounts.AsQueryable(), page, pageSize);
+            return (PaginatedList<Account>.Create(accounts.AsQueryable(), page, pageSize), totalPages);
         }
         public int CountData()
         {
@@ -104,19 +106,20 @@ namespace Repository.Repository
 
         public async Task<Account> SignIn(Account account)
         {
-            Console.WriteLine("Called");
+
             Account returnAccount = new Account();
             try
             {
 
                 var existingAccount = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.Email == account.Email);
                 if (existingAccount != null && Bcrypt.Verify(account.Password, existingAccount.Password))
-                {
-                        returnAccount.Email = account.Email;
-                        returnAccount.Password = account.Password;
-                        returnAccount.RoleId = account.RoleId;
+                {      
+                        returnAccount.Email = existingAccount.Email;
+                        returnAccount.Password = existingAccount.Password;
+                        returnAccount.RoleId = existingAccount.RoleId;
                         returnAccount.Customer = existingAccount.Customer;
                 }
+
             }
             catch (Exception)
             {

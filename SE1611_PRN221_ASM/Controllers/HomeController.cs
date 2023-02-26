@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SE1611_PRN221_ASM.Helper;
 using SE1611_PRN221_ASM.Models;
 using System.Diagnostics;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,11 +19,13 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             return PartialView("_AjaxPartialView");
         }
+
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
-
+        [SessionAuthorize]
         public IActionResult Privacy()
         {
             return View();
