@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Repository.Infrastructure;
 using SE1611_PRN221_ASM.Models;
 using System.Diagnostics;
 
@@ -6,11 +7,11 @@ namespace SE1611_PRN221_ASM.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IUnitOfWork unitOfWork)
         {
-            _logger = logger;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult AjaxAction()
         {

@@ -22,22 +22,22 @@ namespace SE1611_PRN221_ASM.Controllers
             return View(list);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateQuantity(int id, int quantity)
-        {
-            var cart = _unitOfWork.CartRepository.GetById(id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult UpdateQuantity(int id, int quantity)
+        //{
+        //    var cart = _unitOfWork.CartRepository.GetById(id);
+        //    if (cart == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            cart.Quantity = quantity;
-            _unitOfWork.CartRepository.Update(cart);
-            _unitOfWork.Save();
+        //    cart.Quantity = quantity;
+        //    _unitOfWork.CartRepository.Update(cart);
+        //    _unitOfWork.Save();
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         // GET: CartController/Details/5
         public ActionResult Details(int id)

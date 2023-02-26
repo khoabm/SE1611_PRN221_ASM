@@ -5,32 +5,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>My Cart</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>Book</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var cart in Model)
-        {
-            <tr>
-                <td>@cart.Book.Title</td>
-                <td>@cart.Book.Price</td>
-                <td>
-                    <form method="post" action="@Url.Action("UpdateQuantity", "Cart", new { id = cart.CartId })">
-                    @Html.AntiForgeryToken()
-                    <input type="number" name="quantity" value="@cart.Quantity" />
-                    <input type="submit" value="Update" />
-                    </form>
-                </td>
-                <td>@(Math.Round((decimal)(cart.Book.Price * cart.Quantity), 2))</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="dropdn-content minicart-drop cart-items" id="dropdnMinicart">
+    <div class="dropdn-content-block">
+        <div class="dropdn-close"><a asp-controller="Home" asp-action="Index">Close</a></div>
+        <div class="minicart-drop-content js-dropdn-content-scroll">
+            @foreach (var cartItem in Model)
+            {
+                <div class="minicart-prd row">
+                    <div class="minicart-prd-image image-hover-scale-circle col">
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@cartItem.Book.BookId"><img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="@cartItem.Book.ImageLink" alt=""></a>
+                    </div>
+                    <div class="minicart-prd-info col">
+                        <h2 class="minicart-prd-name"><a asp-controller="Book" asp-action="Details" asp-route-id="@cartItem.Book.BookId">@cartItem.Book.Title</a></h2>
+                        <div class="minicart-prd-qty"><span class="minicart-prd-qty-label">Quantity:</span><span class="minicart-prd-qty-value">@cartItem.Quantity</span></div>
+                        <div class="minicart-prd-price prd-price">
+                            <div class="price">@($"{cartItem.Quantity * cartItem.Book.Price:C}")</div>
+                        </div>
+                    </div>
+                    <div class="minicart-prd-action">
+                        <a asp-controller="Cart" asp-action="Delete" asp-route-id="@cartItem.CartId"><i class="icon-recycle"></i></a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="minicart-drop-footer">
+            <div class="minicart-drop-total">
+                <span class="minicart-drop-total-label">Total:</span>
+                <span class="minicart-drop-total-value">@($"{Model.Sum(c => c.Book.Price * c.Quantity):C}")</span>
+            </div>
+            <div class="minicart-drop-actions">
+                <a asp-controller="Cart" asp-action="Index" class="btn btn-dark btn-hover-primary mr-2">View Cart</a>
+                <a asp-controller="Cart" asp-action="Checkout" class="btn btn-outline-dark btn-hover-primary">Checkout</a>
+            </div>
+        </div>
+    </div>
+</div>
