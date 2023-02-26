@@ -11,7 +11,8 @@
             <div class="col-md-9 col-lg-9">
                 <div class="form-wrapper">
                     <p>To access your whishlist, address book and contact preferences and to take advantage of our speedy checkout, create an account with us now.</p>
-                    <form asp-action="SignUp">
+                    <p class="text-danger">@TempData["Error"]</p>
+                    <form asp-action="SignIn">
                         <div class="form-group">
                             <input asp-for="Email" type="email" class="form-control" placeholder="E-mail">
                             <span asp-validation-for="Email" class="text-danger"></span>
@@ -20,8 +21,9 @@
                         <div class="form-group">
                             <input asp-for="Password" id="Password" name="Password" type="password" class="form-control" placeholder="Password">
                         </div>
-
-
+                        <div class="text-center">
+                            <a class="link-info text-decoration-underline" asp-controller="account" asp-action="signup">Don't have account yet? Go to <b>SignUp</b> <i class="fas fa-arrow-right"></i></a>
+                        </div>
                         <div class="text-center">
                             <button class="btn">Sign In</button>
                         </div>

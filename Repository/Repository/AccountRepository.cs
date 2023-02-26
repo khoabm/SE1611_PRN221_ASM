@@ -8,14 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bcrypt = BCrypt.Net.BCrypt;
+using System.Net.Mail;
 namespace Repository.Repository
 {
-    enum CustomerStatus
+    public enum CustomerStatus
     {
         AVAILABLE = 1,
         DISABLE = 2,
     }
-    enum RoleId
+    public enum RoleId
     {
         Admin = 1,
         Customer = 2,
@@ -26,6 +27,21 @@ namespace Repository.Repository
         public AccountRepository(BookSellingContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<Account?> FindAccountByEmail(String email)
+        {
+            var account = new Account();
+            try
+            {
+                account = await _context.Accounts.FirstOrDefaultAsync(a => a.Email == email);
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+            return account;
         }
 
         public async Task<IEnumerable<Account>> GetAllAccounts()
@@ -43,6 +59,49 @@ namespace Repository.Repository
             return accounts;
         }
 
+        public async Task<IEnumerable<Account>> SearchAccountsWithPagination(string orderBy, string status, int page, int pageSize, string query="")
+        {
+            var accounts = new List<Account>();
+            try
+            {
+                accounts = await _context.Accounts
+                            .Include(a => a.Customer)
+                            .Where((a => a.Email.Contains(query) || a.Customer.Name.Contains(query)))
+                            .ToListAsync();
+
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+            return PaginatedList<Account>.Create(accounts.AsQueryable(), page, pageSize);
+        }
+        public int CountData()
+        {
+            return _context.Accounts.Include(a => a.Customer).Where(a => a.Customer!.Status != (int)CustomerStatus.DISABLE).Count();
+        }
+        public async Task SendConfirmationMail()
+        {
+            try
+            {
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress("minhkhoa2706@gmail.com");
+                message.To.Add(new MailAddress("buiminhkhoa2706@gmail.com"));
+                message.Subject = "Your email subject";
+                message.Body = "Your email message body";
+                message.Priority = MailPriority.High;
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+                smtpClient.EnableSsl = true;
+                smtpClient.Credentials = new System.Net.NetworkCredential("minhkhoa2706@gmail.com", "cvcuzvobzugveuop");
+                await smtpClient.SendMailAsync(message);
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+        }
+
         public async Task<Account> SignIn(Account account)
         {
             Console.WriteLine("Called");
@@ -53,23 +112,10 @@ namespace Repository.Repository
                 var existingAccount = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.Email == account.Email);
                 if (existingAccount != null && Bcrypt.Verify(account.Password, existingAccount.Password))
                 {
-                    if (existingAccount.Customer!.Status != (int)CustomerStatus.AVAILABLE)
-                    {
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("hehe");
                         returnAccount.Email = account.Email;
                         returnAccount.Password = account.Password;
                         returnAccount.RoleId = account.RoleId;
                         returnAccount.Customer = existingAccount.Customer;
-                    }
-
-                }
-                else
-                {
-                    // Login failed
                 }
             }
             catch (Exception)
@@ -98,6 +144,23 @@ namespace Repository.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task DisableAccount(int accountId)
+        {
+            try
+            {
+                var account = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.AccountId == accountId);
+                if(account != null)
+                {
+                    account.Customer!.Status = (int)CustomerStatus.DISABLE;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
             }
         }
     }

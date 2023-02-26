@@ -1,0 +1,364 @@
+﻿@model IEnumerable<Repository.Entities.Account>
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="page-wrapper">
+    <!-- HEADER DESKTOP-->
+    <header class="header-desktop3 d-none d-lg-block">
+        <div class="section__content section__content--p35">
+            <div class="header3-wrap">
+                <div class="header__logo">
+                    <a href="#">
+                        <img src="images/icon/logo-white.png" alt="CoolAdmin" />
+                    </a>
+                </div>
+                <div class="header__navbar">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a asp-controller="admin" asp-action="index">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span class="bot-line"></span>Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="admin" asp-action="accounts">
+                                <i class="fas fa-book"></i>
+                                <span class="bot-line"></span>Books
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                <span class="bot-line"></span>Accounts
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="header__tool">
+
+                    <div class="account-wrap">
+                        <div class="account-item account-item--style2 clearfix js-item-menu">
+                            <div class="image">
+                                <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                            </div>
+                            <div class="content">
+                                <a class="js-acc-btn" href="#">john doe</a>
+                            </div>
+                            <div class="account-dropdown js-dropdown">
+                                <div class="info clearfix">
+                                    <div class="image">
+                                        <a href="#">
+                                            <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                        </a>
+                                    </div>
+                                    <div class="content">
+                                        <h5 class="name">
+                                            <a href="#">john doe</a>
+                                        </h5>
+                                        <span class="email">johndoe@example.com</span>
+                                    </div>
+                                </div>
+                                <div class="account-dropdown__body">
+                                    <div class="account-dropdown__item">
+                                        <a href="#">
+                                            <i class="zmdi zmdi-account"></i>Account
+                                        </a>
+                                    </div>
+                                    <div class="account-dropdown__item">
+                                        <a href="#">
+                                            <i class="zmdi zmdi-settings"></i>Setting
+                                        </a>
+                                    </div>
+                                    <div class="account-dropdown__item">
+                                        <a href="#">
+                                            <i class="zmdi zmdi-money-box"></i>Billing
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="account-dropdown__footer">
+                                    <a href="#">
+                                        <i class="zmdi zmdi-power"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- END HEADER DESKTOP-->
+    <!-- HEADER MOBILE-->
+    <header class="header-mobile header-mobile-2 d-block d-lg-none">
+        <div class="header-mobile__bar">
+            <div class="container-fluid">
+                <div class="header-mobile-inner">
+                    <a class="logo" href="index.html">
+                        <img src="images/icon/logo-white.png" alt="CoolAdmin" />
+                    </a>
+                    <button class="hamburger hamburger--slider" type="button">
+                        <span class="hamburger-box">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar-mobile">
+            <div class="container-fluid">
+                <ul class="navbar-mobile__list list-unstyled">
+                    <li>
+                        <a class="js-arrow" href="#">
+                            <i class="fas fa-tachometer-alt"></i>Dashboard
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chart-bar"></i>Charts
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-table"></i>Tables
+                        </a>
+                    </li>
+                    <li>
+                        <a href="form.html">
+                            <i class="far fa-check-square"></i>Forms
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-calendar-alt"></i>Calendar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-map-marker-alt"></i>Maps
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- PAGE CONTENT-->
+    <div class="page-content--bgf7">
+        <!-- BREADCRUMB-->
+        <section class="au-breadcrumb2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="au-breadcrumb-content">
+                            <div class="au-breadcrumb-left">
+                                <span class="au-breadcrumb-span">You are here:</span>
+                                <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                    <li class="list-inline-item active">
+                                        <a href="#">Home</a>
+                                    </li>
+                                    <li class="list-inline-item seprate">
+                                        <span>/</span>
+                                    </li>
+                                    <li class="list-inline-item">Accounts</li>
+                                </ul>
+                            </div>
+                            <form class="au-form-icon--sm" asp-action="accounts" method="GET">
+                                <input name="query" class="au-input--w300 au-input--style2" type="text" placeholder="Search for datas &amp; reports...">
+                                <button class="au-btn--submit2" type="submit">
+                                    <i class="zmdi zmdi-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END BREADCRUMB-->
+        <!-- WELCOME-->
+        <section class="welcome p-t-10">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="title-4">
+                            Manage Accounts
+
+                        </h1>
+                        <hr class="line-seprate">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END WELCOME-->
+        <!-- STATISTIC-->
+        <!-- DATA TABLE-->
+        <section class="p-t-20">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="title-5 m-b-35">data table</h3>
+                        <div class="table-data__tool">
+                            <div class="table-data__tool-left">
+                                <div class="rs-select2--light rs-select2--md">
+                                    <select class="js-select2" name="property">
+                                        <option value="all" selected="selected">All</option>
+                                        <option value="newest">Newest</option>
+                                        <option value="oldest">Oldest</option>
+                                    </select>
+                                    <div class="dropDownSelect2"></div>
+                                </div>
+                                <div class="rs-select2--light rs-select2--sm">
+                                    <select class="js-select2" name="time">
+                                        <option value="all" selected="selected">All Types</option>
+                                        <option value="available">Available</option>
+                                        <option value="disable">Disable</option>
+                                    </select>
+                                    <div class="dropDownSelect2"></div>
+                                </div>
+                                <button class="au-btn-filter">
+                                    <i class="zmdi zmdi-filter-list"></i>filters
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="table-responsive table-responsive-data2">
+                            <table class="table table-data2">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>name</th>
+                                        <th>email</th>
+                                        <th>date</th>
+                                        <th>gender</th>
+                                        <th>status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="tr-shadow">
+                                            <td>@item.AccountId</td>
+                                            <td>@item.Customer!.Name</td>
+                                            <td>
+                                                <span class="block-email">@item.Email</span>
+                                            </td>
+                                            <td class="desc">@item.Customer.Birthday.ToString()</td>
+                                            <td>@(item.Customer.Gender == "M" ? "Male" : "Female")</td>
+                                            @if (item.Customer.Status == 1)
+                                            {
+                                                <td class="text-success">Available</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-danger">Disable</td>
+                                            }
+                                            <td>
+                                                <div class="table-data-feature">
+                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                        <i class="zmdi zmdi-edit"></i>
+                                                    </button>
+                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="Disable">
+                                                        <i class="fas fa-user-slash"></i>
+                                                    </button>
+                                                    <a href="#" onclick="disableAccount('@item.AccountId')">Disable</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="spacer"></tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="pagination-container">
+                                <ul class="pagination">
+                                    @if (ViewBag.Pagination != null)
+                                    {
+                                        <li class="page-item @(ViewBag.Pagination.CurrentPage == 1 ? "disabled" : "")">
+                                            <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage - 1, query = ViewBag.Query })">Previous</a>
+                                        </li>
+
+                                        @if (ViewBag.Pagination.StartPage > 1)
+                                        {
+                                            <li class="page-item">
+                                                <a class="page-link" href="@Url.Action("accounts", new { page = 1, query = ViewBag.Query })">1</a>
+                                            </li>
+
+                                            @if (ViewBag.Pagination.StartPage > 2)
+                                            {
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">...</span>
+                                                </li>
+                                            }
+                                        }
+
+                                        @for (int i = ViewBag.Pagination.StartPage; i <= ViewBag.Pagination.EndPage; i++)
+                                        {
+                                            <li class="page-item @(ViewBag.Pagination.CurrentPage == i ? "active" : "")">
+                                                <a class="page-link" href="@Url.Action("accounts", new { page = i, query = ViewBag.Query })">@i</a>
+                                            </li>
+                                        }
+
+                                        @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages)
+                                        {
+                                            @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages - 1)
+                                            {
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">...</span>
+                                                </li>
+                                            }
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.TotalPages, query = ViewBag.Query })">@ViewBag.Pagination.TotalPages</a>
+                                            </li>
+                                        }
+
+                                        <li class="page-item @(ViewBag.Pagination.CurrentPage == ViewBag.Pagination.TotalPages ? "disabled" : "")">
+                                            <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage + 1, query = ViewBag.Query })">Next</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END DATA TABLE-->
+        <section class="p-t-60 p-b-20">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="copyright">
+                            <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</div>
+<script>
+    // Disable account using Ajax
+    function disableAccount(accountId) {
+        if (confirm("Are you sure you want to disable this account?")) {
+            $.ajax({
+                url: `/account/disableaccount?accountId=${accountId}`,
+                type: 'POST',
+                success: function (result) {
+                    if (result.success) {
+                        alert("Account disabled successfully.");
+                        location.reload();
+                    } else {
+                        alert("An error occurred while disabling the account.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while disabling the account.");
+                }
+            });
+        }
+    }
+</script>

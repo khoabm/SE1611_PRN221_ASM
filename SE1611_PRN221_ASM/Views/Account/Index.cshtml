@@ -4,11 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -25,19 +21,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>            
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer!.Name)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer!.Name)
+                </td>
 
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>
+
+@{
+    var pagination = ViewBag.Pagination as PaginationViewModel;
+}
+
+@if (pagination != null && pagination.TotalPages > 1)
+{
+    <ul class="pagination">
+        @if (pagination.StartPage > 1)
+        {
+            <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+        }
+        @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
+        {
+            <li class="page-item @(i == pagination.CurrentPage ? "active" : "")"><a class="page-link" href="?page=@i">@i</a></li>
+        }
+        @if (pagination.EndPage < pagination.TotalPages)
+        {
+            <li class="page-item"><a class="page-link" href="?page=@pagination.TotalPages">Last</a></li>
+        }
+    </ul>
+}
