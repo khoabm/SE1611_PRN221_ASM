@@ -1,4 +1,5 @@
-﻿@using SE1611_PRN221_ASM.Helper
+﻿@model Repository.Entities.Account;
+@using SE1611_PRN221_ASM.Helper
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
@@ -37,10 +38,9 @@
                             <div class="card-body">
                                 <h3>Personal Info</h3>
                                 <p>
-                                    <b>First Name:</b> <br>
-                                    <b>Last Name:</b> Raider<br>
-                                    <b>E-mail:</b> jennyraider@hotmail.com<br>
-                                    <b>Phone:</b> 876-432-4323
+                                    <b>Full Name:</b>@Model.Customer!.Name<br>
+                                    <b>E-mail:</b> @Model.Email<br>
+                                    <b>Birthday:</b>@Model.Customer.Birthday?.ToString("MM/dd/yyyy")
                                 </p>
                                 <div class="mt-2 clearfix">
                                     <a href="#" class="link-icn js-show-form" data-form="#updateDetails"><i class="icon-pencil"></i>Edit</a>
@@ -50,43 +50,46 @@
                     </div>
                 </div>
                 <div class="card mt-3 d-none" id="updateDetails">
-                    <div class="card-body">
-                        <h3>Update Account Details</h3>
-                        <div class="row mt-2">
-                            <div class="col-sm-9">
-                                <label class="text-uppercase">First Name:</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control form-control--sm" placeholder="Jenny">
-                                </div>
-                            </div>
-                            <div class="col-sm-9">
-                                <label class="text-uppercase">Last Name:</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control form-control--sm" placeholder="Raider">
+                    <form asp-action="update" method="post">
+                        <div class="card-body">
+                            <h3>Update Account Details</h3>
+
+                            <div class="row mt-2">
+                                <div class="col-sm-9">
+                                    <label class="text-uppercase">Full Name:</label>
+                                    <div class="form-group">
+                                        <input asp-for="Customer!.Name" type="text" class="form-control form-control--sm" placeholder="Full Name" value="@Model.Customer!.Name">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-2">
-                            <div class="col-sm-9">
-                                <label class="text-uppercase">E-mail:</label>
-                                <div class="form-group">
-                                    <input type="email" class="form-control form-control--sm" placeholder="jennyraider@hotmail.com">
+                        <div class="card-body">
+                            <div class="row mt-2">
+                                <div class="col-sm-9">
+                                    <label class="text-uppercase">E-mail:</label>
+                                    <div class="form-group">
+                                        <input asp-for="Email" type="email" class="form-control form-control--sm" placeholder="Email" value="@Model.Email">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-9">
-                                <label class="text-uppercase">Phone:</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control form-control--sm" placeholder="876-432-4323">
+                                <div class="col-sm-9">
+                                    <label class="text-uppercase">Date Of Birth:</label>
+                                    <div class="form-group">
+                                        @*@Html.TextBoxFor(m => m.Customer!.Birthday, "{0:MM/dd/yyyy}", new { type = "date", @class = "form-control " })*@
+                                        @Html.TextBoxFor(m => m.Customer.Birthday, "{0:MM/dd/yyyy}", new { type = "date", @class = "form-control datepicker", value = Model.Customer.Birthday.HasValue ? Model.Customer.Birthday?.ToString("MM-dd-yyyy") : "" })
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-2">
-                            <button type="reset" class="btn btn--alt js-close-form" data-form="#updateDetails">Cancel</button>
+                            <button type="reset" class="btn btn--alt btn--grey js-close-form" data-form="#updateDetails">Cancel</button>
                             <button type="submit" class="btn ml-1">Update</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
+
             </div>
+
         </div>
+
     </div>
 </div>

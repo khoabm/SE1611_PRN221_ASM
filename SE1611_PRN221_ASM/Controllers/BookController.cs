@@ -17,11 +17,20 @@ namespace SE1611_PRN221_ASM.Controllers
         // GET: BookController
         public ActionResult Index()
         {
-            var list = _unitOfWork.BookRepository.GetAll();
-            Console.WriteLine("im heRE");
-            return View(list);
+            //var list = _unitOfWork.BookRepository.GetAll();
+            return View();
         }
-
+        
+        [HttpGet]
+        public ActionResult Search(
+            string query,
+            string[] genres,
+            double minPrice=0, double maxPrice=1000000000)
+        {
+            var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice);
+            
+            return View("Index",books);
+        }
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
@@ -58,7 +67,7 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: BookController/Edit/5
-        [HttpGet("Book/Edit/{id}")]
+        [HttpGet("book/Edit/{id}")]
         public ActionResult Edit([FromRoute]int id)
         {
             Book b = _unitOfWork.BookRepository.GetById(id);
@@ -70,7 +79,7 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // POST: BookController/Edit/5
-        [HttpPost("Book/Edit/{id}")]
+        [HttpPost("book/Edit/{id}")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([FromRoute]int id,[FromForm]Book book)
         {

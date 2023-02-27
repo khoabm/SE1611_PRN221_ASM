@@ -58,9 +58,23 @@ namespace SE1611_PRN221_ASM.Controllers
 
         // GET: AccountController/Details/5
         [SessionAuthorize]
-        public ActionResult AccountDetails()
+        [HttpGet]
+        public async Task<IActionResult> Details()
+
         {
-            return View();
+            var account = new Account();
+            try
+            {
+                var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+                account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession!.Email);
+                if(account == null) return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+            return View("AccountDetails", account);
         }
 
         // GET: AccountController/Create
@@ -94,13 +108,14 @@ namespace SE1611_PRN221_ASM.Controllers
                 }
                 else
                 {
+                    
                     UserSession userSession = new UserSession
                     {
                         Email = loginAccount.Email,
                         Password = loginAccount.Password,
                         FullName = loginAccount.Customer!.Name!,
                         Gender = loginAccount.Customer.Gender!,
-                        BirthDay = loginAccount.Customer.Birthday.ToString(),
+                        BirthDay = loginAccount.Customer.Birthday,
                         RoleId = loginAccount.RoleId
                     };
                     var cartItemCount = _unitOfWork.CartRepository.GetCartByCustomerId(loginAccount.Customer.CustomerId).Count();
@@ -152,26 +167,46 @@ namespace SE1611_PRN221_ASM.Controllers
             }
         }
 
-        // GET: AccountController/Edit/5
-        public ActionResult Edit(int id)
+        
+        [SessionAuthorize]
+        [HttpPost]
+        public async Task<ActionResult> Update(Account account)
         {
-            return View();
+            
+            try
+            {
+                Console.WriteLine(account.Customer.Birthday.ToString());
+                //var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+                //var updatedAccount = await _unitOfWork.AccountRepository.UpdateAccount(userSession!.Email);
+                //if(updatedAccount != null)
+                //{
+                //    UserSession updatedUserSession = new UserSession
+                //    {
+                //        Email = updatedAccount.Email,
+                //        Password = updatedAccount.Password,
+                //        FullName = updatedAccount.Customer!.Name!,
+                //        Gender = updatedAccount.Customer.Gender!,
+                //        BirthDay = updatedAccount.Customer.Birthday,
+                //        RoleId = updatedAccount.RoleId
+                //    };
+
+                //    HttpContext.Session.SetObject("UserSession", userSession);
+                //}
+            }
+            catch (Exception)
+            {
+                TempData["UpdateError"] = "Update failed";
+                throw new Exception();
+            }
+            return RedirectToAction(nameof(Details));
         }
 
         // POST: AccountController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpGet]
+        //public ActionResult Edit()
+        //{
+
+        //}
 
         // GET: AccountController/Delete/5
         public ActionResult Delete(int id)

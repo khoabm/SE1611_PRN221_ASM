@@ -19,7 +19,7 @@ namespace SE1611_PRN221_ASM.Helper
             if (session == null)
             {
                 context.Result = new RedirectToRouteResult(
-                    new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Account", action = "SignIn" }));
+                    new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Home", action = "Index" }));
             }
             else if (session.RoleId == (int)RoleId.Customer)
             {
@@ -48,13 +48,13 @@ namespace SE1611_PRN221_ASM.Helper
                 {
                     base.OnActionExecuting(context);
                 }
-                // User is logged in as an admin, allow access to all controllers and actions
+               
             }
             else
             {
                 // User has an unknown role, redirect to an error page or some other appropriate action
                 context.Result = new RedirectToRouteResult(
-                    new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Error", action = "AccessDenied" }));
+                    new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Home", action = "Error" }));
             }
 
         }
