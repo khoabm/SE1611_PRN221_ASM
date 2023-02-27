@@ -9,6 +9,7 @@ namespace Repository.Infrastructure
         ICommentRepository CommentRepository { get; }
         IFavoriteRepository FavoriteRepository { get; }
         IAccountRepository AccountRepository { get; }
+        IBookRepository BookRepository { get; }
         void Save();
     }
 }

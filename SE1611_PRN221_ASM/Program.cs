@@ -48,5 +48,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
+    //pattern: "{controller=Book}/{action=Index}/{id?}");
 app.UseSession();
 app.Run();

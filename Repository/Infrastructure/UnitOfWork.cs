@@ -11,6 +11,7 @@ namespace Repository.Infrastructure
         private ICommentRepository _commentRepository;
         private IFavoriteRepository _favoriteRepository;
         private IAccountRepository _accountRepository;
+        private IBookRepository _bookRepository;
 
         public UnitOfWork(BookSellingContext context)
         {
@@ -34,6 +35,8 @@ namespace Repository.Infrastructure
         public IFavoriteRepository FavoriteRepository => _favoriteRepository ??= new FavoriteRepository(_context);
 
         public IAccountRepository AccountRepository => _accountRepository ??= new AccountRepository(_context);
+
+        public IBookRepository BookRepository => _bookRepository ??= new BookRepository(_context);
 
         public void Dispose()
         {
