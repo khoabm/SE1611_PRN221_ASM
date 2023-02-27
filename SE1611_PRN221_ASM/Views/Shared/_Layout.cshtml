@@ -1,19 +1,12 @@
-<<<<<<< HEAD
-﻿@model IEnumerable<Repository.Entities.Account>
-@using Microsoft.AspNetCore.Http
-@inject IHttpContextAccessor HttpContextAccessor
-@{
-    Layout = "_AdminLayout";
-    var myObject = HttpContextAccessor.HttpContext!.Session.GetObject<UserSession>("UserSession");
-    var fullName = myObject != null ? myObject.FullName : "Account";
-=======
+@model IEnumerable<Repository.Entities.Account>
+
 ﻿@using SE1611_PRN221_ASM.Helper
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
     var session = HttpContextAccessor.HttpContext.Session;
     var userSession = session.GetObject<UserSession>("UserSession");
->>>>>>> 8badeea4e7f7e639bb9ce3dc6b3c6860cc0d4516
+
 }
 
 <!DOCTYPE html>
@@ -70,7 +63,7 @@
                                     <i class="icon-heart"></i><span class="dropdn-link-txt">Wishlist</span><span class="wishlist-qty">3</span>
                                 </a>
                             </div>
-                            @if (myObject == null)
+                            @if (userSession == null)
                             {
                                 <div class="dropdn dropdn_account dropdn_fullheight">
                                     <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
@@ -79,7 +72,7 @@
                             else
                             {
                                 <div class="dropdn dropdn_account dropdn_fullheight">
-                                    <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@fullName</span></a>
+                                    <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@userSession.FullName</span></a>
                                 </div>
                             }
                             <div class="dropdn dropdn_fullheight minicart">
@@ -156,7 +149,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if (myObject == null)
+                                @if (userSession == null)
                                 {
                                     <div class="hdr_container_desktop">
                                         <div class="dropdn dropdn_account dropdn_fullheight">
@@ -168,7 +161,7 @@
                                 {
                                     <div class="hdr_container_desktop">
                                         <div class="dropdn dropdn_account dropdn_fullheight">
-                                            <a asp-controller="account" asp-action="signin" class="dropdn-link " data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@fullName</span></a>
+                                            <a asp-controller="account" asp-action="signin" class="dropdn-link " data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@userSession.FullName</span></a>
                                         </div>
                                     </div>
                                 }
@@ -850,17 +843,6 @@
         </div>
     </div>
     <div class="page-content">
-<<<<<<< HEAD
-=======
-        <div class="holder breadcrumbs-wrap mt-0">
-            <div class="container">
-                <ul class="breadcrumbs">
-                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><span>Create account</span></li>
-                </ul>
-            </div>
-        </div>
->>>>>>> 8badeea4e7f7e639bb9ce3dc6b3c6860cc0d4516
         @RenderBody()
     </div>
 

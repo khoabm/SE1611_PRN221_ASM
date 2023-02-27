@@ -1,11 +1,11 @@
-<<<<<<< HEAD
+
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SE1611_PRN221_ASM.Helper;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
+
+
 using Repository.Infrastructure;
->>>>>>> 8badeea4e7f7e639bb9ce3dc6b3c6860cc0d4516
+
 using SE1611_PRN221_ASM.Models;
 using System.Diagnostics;
 

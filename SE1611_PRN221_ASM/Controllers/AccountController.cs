@@ -57,7 +57,8 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: AccountController/Details/5
-        public ActionResult Details(int id)
+        [SessionAuthorize]
+        public ActionResult AccountDetails()
         {
             return View();
         }
@@ -108,11 +109,7 @@ namespace SE1611_PRN221_ASM.Controllers
                     HttpContext.Session.SetObject("UserSession", userSession);
                     HttpContext.Session.GetObject<UserSession>("UserSession");
                 }
-
-                if(loginAccount.RoleId == (int)RoleId.Customer)
-                    return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "Admin");
-
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
