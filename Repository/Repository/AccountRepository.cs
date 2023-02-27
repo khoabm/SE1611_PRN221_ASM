@@ -159,6 +159,8 @@ namespace Repository.Repository
                 {
                     account.Customer!.Status = (int)CustomerStatus.DISABLE;
                 }
+                _context.Update(account);
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {

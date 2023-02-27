@@ -8,6 +8,7 @@ using Repository.Infrastructure;
 
 using SE1611_PRN221_ASM.Models;
 using System.Diagnostics;
+using Repository.Entities;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
@@ -28,7 +29,21 @@ namespace SE1611_PRN221_ASM.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            return View();
+            var books = new List<Book>();
+            try
+            {
+                //books = _unitOfWork.BookRepository.GetAll().ToList();
+                books = _unitOfWork.BookRepository.GetBooksOrderByAverageRating().ToList();
+                //Console.WriteLine(books2.Count);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception();
+            }
+                
+            
+            return View(books);
         }
         [SessionAuthorize]
         public IActionResult Privacy()
