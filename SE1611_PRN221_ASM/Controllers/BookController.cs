@@ -37,6 +37,8 @@ namespace SE1611_PRN221_ASM.Controllers
             };
             ViewBag.PageSize = size;
             ViewBag.Pagination = pagination;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.SearchGenres = genres;
             ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
             return View(books);
         }
