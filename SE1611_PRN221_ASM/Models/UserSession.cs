@@ -7,7 +7,7 @@
         public String FullName { get; set; } = null!;
         public String Gender { get; set; } = null!;
         public DateTime? BirthDay { get; set; }
-
+        public short Status { get; set; }
         public int RoleId { get; set; }
 
 

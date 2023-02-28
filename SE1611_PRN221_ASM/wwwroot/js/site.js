@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+
+    $(".title-tabs-text").unbind('click');
     loadTab('novel');
     $(".title-tabs-text").click(function (e) {
         e.preventDefault();
@@ -32,6 +34,27 @@ function loadTab(tab) {
         }
     });
 }
+
+
+$(document).ready(function () {
+    $('.sidebar-block_title').unbind('click');
+    $('.sidebar-block_title').click(function () {
+        $(this).next('.sidebar-block_content').find('ul.category-list.clearfix').slideToggle();
+        if ($(this).closest('.sidebar-block').hasClass('open')) {
+            $(this).closest('.sidebar-block').removeClass('open')
+        } else {
+            $(this).closest('.sidebar-block').addClass('open')
+        }
+    });
+});
+
+$(document).ready(function () {
+    $('#btnDisable').click((e) => {
+        e.preventDefault();
+        $('#btnDisable').confirm();
+    })
+})
+
 
 
 

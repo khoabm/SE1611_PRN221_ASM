@@ -116,7 +116,7 @@ namespace SE1611_PRN221_ASM.Controllers
                         FullName = loginAccount.Customer!.Name!,
                         Gender = loginAccount.Customer.Gender!,
                         BirthDay = loginAccount.Customer.Birthday,
-                        RoleId = loginAccount.RoleId
+                        RoleId = loginAccount.RoleId,
                     };
                     var cartItemCount = _unitOfWork.CartRepository.GetCartByCustomerId(loginAccount.Customer.CustomerId).Count();
                     userSession.CartItemCount = cartItemCount;

@@ -21,6 +21,7 @@ namespace SE1611_PRN221_ASM.Helper
                 context.Result = new RedirectToRouteResult(
                     new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Home", action = "Index" }));
             }
+            
             else if (session.RoleId == (int)RoleId.Customer)
             {
                 // User is logged in as a regular user, restrict access to the admin controller and its actions

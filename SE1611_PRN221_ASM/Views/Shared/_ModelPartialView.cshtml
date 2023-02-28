@@ -2,10 +2,10 @@
 
 @foreach (var item in Model)
 {
-    <div class="prd--style2 prd-labels--max prd-labels-shadow ">
-        <div style="margin:50px 15% 0 0" class="prd-inside">
+    <div style="max-width: 25%; min-width: 25%; margin:5% 0 0 0" class="prd--style2 prd-labels--max prd-labels-shadow ">
+        <div class="prd-inside">
             <div class="prd-img-area">
-                <a href="#">
+                <a asp-controller="Book" asp-action="Index" asp-route-id="@item.BookId">
                     <img style="max-height:300px" data-src="@item.ImageLink" alt="Fashion Waist Bag" class="js-prd-img lazyload fade-up">
                 </a>
             </div>
@@ -24,7 +24,8 @@
                             }
                         }
                     </div>
-                    <div class="prd-tag"><a href="#">@item.Author</a></div>
+                    <div class="prd-tag"><a asp-controller="Book" asp-action="Index" asp-route-query="@item.Author">@item.Author</a></div>
+                    <h3 class="prd-title book-title"><a asp-controller="Book" asp-action="Index" asp-route-id="@item.BookId">@item.Title</a></h3>
                 </div>
             </div>
         </div>

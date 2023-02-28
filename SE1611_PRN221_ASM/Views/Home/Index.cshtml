@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Repository.Entities.Book>
 @{
     Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en");
+    ViewData["Title"] = "Home";
 }
 <div class="holder fullwidth full-nopad mt-0">
     <div class="container">
@@ -24,7 +25,7 @@
                     <div class="bnslider-image-mobile lazyload" data-bgset="images/skins/fashion/slider/slide-fashion-01-m.webp"></div>
                     <div class="bnslider-image lazyload" data-bgset="images/skins/fashion/slider/slide-fashion-01.webp"></div>
                     <div class="bnslider-text-wrap bnslider-overlay ">
-                        <div style="background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg'); background-repeat: no-repeat; background-size: cover;" class="bnslider-text-content txt-middle txt-left txt-middle-m txt-center-m">
+                        <div style="background-image: url('https://images.unsplash.com/photo-1547555999-14e818e09e33?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80'); background-repeat: no-repeat; background-size: cover;" class="bnslider-text-content txt-middle txt-left txt-middle-m txt-center-m">
                             <div class="bnslider-text-content-flex ">
                                 <div class="bnslider-vert w-s-60 w-ms-100" style="padding: 0px">
                                     <div class="bnslider-text order-1 mt-0 bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5">Bring books of your own mind</div>
@@ -48,7 +49,7 @@
             <div class="col-sm">
                 <a href="category.html" class="collection-grid-3-item image-hover-scale">
                     <div class="collection-grid-3-item-img image-container" style="padding-bottom: 93.68%">
-                        <img data-src="https://st2.depositphotos.com/4256075/10111/v/600/depositphotos_101115550-stock-illustration-seamless-stack-of-books-education.jpg" class="lazyload fade-up" alt="Banner">
+                        <img data-src="https://github.com/khoabm/A-Corner-Of-Books/blob/main/ACornerOfBooks/src/main/webapp/assets/images/7.jpg?raw=true" class="lazyload fade-up" alt="Banner">
                         <div class="foxic-loader"></div>
                     </div>
                     <div class="collection-grid-3-caption-bg">
@@ -60,7 +61,7 @@
             <div class="col-sm">
                 <a href="category.html" class="collection-grid-3-item image-hover-scale">
                     <div class="collection-grid-3-item-img image-container" style="padding-bottom: 93.68%">
-                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="images/skins/fashion/banner-fashion-2-04.webp" class="lazyload fade-up" alt="Banner">
+                        <img data-src="https://github.com/khoabm/A-Corner-Of-Books/blob/main/ACornerOfBooks/src/main/webapp/assets/images/6.jpg?raw=true" class="lazyload fade-up" alt="Banner">
                         <div class="foxic-loader"></div>
                     </div>
                     <div class="collection-grid-3-caption-bg">
@@ -143,10 +144,11 @@
             </div>
         </div>
         <div class="prd-grid-wrap">
-            <div class="prd-grid-wrap position-relative">
-                <div class="prd-grid data-to-show-4 data-to-show-lg-4 data-to-show-md-3 data-to-show-sm-2 data-to-show-xs-2 js-category-grid" id="partial-view-container">
-                    @*@Html.Partial("_ModelPartialView")*@
-                    <div class="loader-horizontal-sm js-loader-horizontal-sm d-none" data-loader-horizontal="" style="opacity: 0;"><span></span></div>
+            <div class="prd-grid data-to-show-4 data-to-show-md-3 data-to-show-sm-2 data-to-show-xs-2 js-category-grid" id="partial-view-container">
+                @*@Html.Partial("_ModelPartialView")*@
+                <div class="loader-horizontal-sm js-loader-horizontal-sm d-none" data-loader-horizontal="" style="opacity: 0;">
+                    <span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -203,8 +205,8 @@
                             <div class="prd-info">
                                 <div class="prd-info-wrap">
                                     @*<div class="prd-info-top">
-                                        <div class="prd-rating"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
-                                    </div>*@
+                                            <div class="prd-rating"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
+                                        </div>*@
                                     <div class="prd-rating justify-content-center">
                                         @for (int i = 0; i < 5; i++)
                                         {
