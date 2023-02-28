@@ -10,6 +10,7 @@ namespace Repository.Infrastructure
         IFavoriteRepository FavoriteRepository { get; }
         IAccountRepository AccountRepository { get; }
         IBookRepository BookRepository { get; }
+        IGenreRepository GenreRepository { get; }
         void Save();
     }
 }

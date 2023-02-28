@@ -34,7 +34,7 @@ namespace Repository.Repository
             var account = new Account();
             try
             {
-                account = await _context.Accounts.FirstOrDefaultAsync(a => a.Email == email);
+                account = await _context.Accounts.Include(a => a.Customer).FirstOrDefaultAsync(a => a.Email == email);
             }
             catch (Exception)
             {
@@ -159,12 +159,32 @@ namespace Repository.Repository
                 {
                     account.Customer!.Status = (int)CustomerStatus.DISABLE;
                 }
+                _context.Update(account);
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
 
                 throw new Exception();
             }
+        }
+
+        public async Task<Account> UpdateAccount(String email)
+        {
+         
+            var account = new Account();
+            try
+            {
+                account = await FindAccountByEmail(email);
+                _context.Entry(account!).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+            return account;
         }
     }
 }

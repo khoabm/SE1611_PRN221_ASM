@@ -7,9 +7,9 @@
     var fullName = myObject != null ? myObject.FullName : "Account";
 }
 
-<div class="page-wrapper">
+<!--<div class="page-wrapper">-->
     <!-- HEADER DESKTOP-->
-    <header class="header-desktop3 d-none d-lg-block">
+    <!--<header class="header-desktop3 d-none d-lg-block">
         <div class="section__content section__content--p35">
             <div class="header3-wrap">
                 <div class="header__logo">
@@ -32,7 +32,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a asp-action="Accounts" asp-controller="Admin">
                                 <i class="fas fa-user"></i>
                                 <span class="bot-line"></span>Account
                             </a>
@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-    </header>
+    </header>-->
     <!-- END HEADER DESKTOP-->
     <!-- HEADER MOBILE-->
     <header class="header-mobile header-mobile-2 d-block d-lg-none">
@@ -264,7 +264,8 @@
                                                     <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                         <i class="zmdi zmdi-edit"></i>
                                                     </button>
-                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="Disable">
+                                                    <button id="btnDisable" class="item" data-toggle="tooltip" data-placement="top" title="Disable"
+                                                            onclick="location.href='@Url.Action("Disable", "Admin",new { accountId = item.AccountId })'">
                                                         <i class="fas fa-user-slash"></i>
                                                     </button>
                                                    
@@ -343,26 +344,14 @@
         </section>
     </div>
 
-</div>
+@*</div>*@
+<script src="~/vendor/jquery-3.2.1.min.js"></script>
 <script>
-    // Disable account using Ajax
-    function disableAccount(accountId) {
-        if (confirm("Are you sure you want to disable this account?")) {
-            $.ajax({
-                url: `/account/disableaccount?accountId=${accountId}`,
-                type: 'POST',
-                success: function (result) {
-                    if (result.success) {
-                        alert("Account disabled successfully.");
-                        location.reload();
-                    } else {
-                        alert("An error occurred while disabling the account.");
-                    }
-                },
-                error: function () {
-                    alert("An error occurred while disabling the account.");
-                }
-            });
+
+    $("#btnDisable").click(function () {
+        console.log("hehe")
+        if (!confirm("Would you like to save this record?")) {
+            return false;
         }
-    }
+    });
 </script>

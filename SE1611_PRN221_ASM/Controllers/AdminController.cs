@@ -136,17 +136,16 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // POST: AdminController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Disable(int accountId)
         {
             try
             {
+                await _unitOfWork.AccountRepository.DisableAccount(accountId);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
     }

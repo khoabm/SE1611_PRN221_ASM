@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repository.Entities;
 
@@ -22,7 +23,9 @@ public partial class Book
     public short? Status { get; set; }
 
     public string? Title { get; set; }
-
+    public DateTime AddedDate { get; set; }
+    [NotMapped]
+    public double AverageRating { get; set; }
     public virtual ICollection<BookGenre> BookGenres { get; } = new List<BookGenre>();
 
     public virtual ICollection<Cart> Carts { get; } = new List<Cart>();

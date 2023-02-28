@@ -1,7 +1,9 @@
-﻿@model Repository.Entities.Book
+﻿@using Repository.Entities
+@model Repository.Entities.Book
 
 @{
     ViewData["Title"] = "Details";
+    var genres = ViewBag.BookGenres as List<Genre>;
 }
 <div class="page-content">
     <div class="holder">
@@ -44,20 +46,6 @@
                             <h3>Description</h3>
                             <p>@Html.DisplayFor(model => model.Description)</p>
                             <div class="mt-1"></div>
-                            <div class="row vert-margin-less">
-                                <div class="col-sm">
-                                    <ul class="list-marker">
-                                        <li>100% Polyester</li>
-                                        <li>Lining:100% Viscose</li>
-                                    </ul>
-                                </div>
-                                <div class="col-sm">
-                                    <ul class="list-marker">
-                                        <li>Do not dry clean</li>
-                                        <li>Only non-chlorine</li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                         <div class="prd-block_info_item prd-block_info-when-arrives d-none" data-when-arrives>
                             <div class="prd-block_links prd-block_links m-0 d-inline-flex">
@@ -78,6 +66,13 @@
                                 <p class="prd-taxes">
                                     @Html.DisplayNameFor(model => model.Publisher):
                                     <span>@Html.DisplayFor(model => model.Publisher)</span>
+                                </p>
+                                <p>
+                                    Genre:
+                                    @foreach (var item in genres)
+                                    {
+                                        <span class="" data-stock-status="">@item.GenreName</span>
+                                    }
                                 </p>
                             </div>
                         </div>
@@ -152,10 +147,6 @@
         </div>
     </div>
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 
 @section Scripts {
 <script>
