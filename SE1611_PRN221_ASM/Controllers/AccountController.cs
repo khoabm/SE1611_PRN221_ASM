@@ -124,7 +124,7 @@ namespace SE1611_PRN221_ASM.Controllers
                     HttpContext.Session.SetObject("UserSession", userSession);
                     HttpContext.Session.GetObject<UserSession>("UserSession");
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home");
             }
             catch
             {

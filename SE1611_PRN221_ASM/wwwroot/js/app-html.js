@@ -1599,20 +1599,20 @@ function onYouTubeIframeAPIReady() {
 				THEME.simplefilters.init();
 			}
 		},
-		imageLoadedProductPage: function imageLoadedProductPage(image) {
-			$(image).each(function () {
-				var $this = $(this);
-				if ($this.closest('.prd')) $this.find('img').css({
-					opacity: 0
-				});
-				$this.imagesLoaded(function () {
-					$this.addClass('loaded');
-					$this.find('img').animate({
-						opacity: 1
-					}, 200);
-				});
-			});
-		},
+		//imageLoadedProductPage: function imageLoadedProductPage(image) {
+		//	$(image).each(function () {
+		//		var $this = $(this);
+		//		if ($this.closest('.prd')) $this.find('img').css({
+		//			opacity: 0
+		//		});
+		//		$this.imagesLoaded(function () {
+		//			$this.addClass('loaded');
+		//			$this.find('img').animate({
+		//				opacity: 1
+		//			}, 200);
+		//		});
+		//	});
+		//},
 		imageLoaded: function imageLoaded(image, carousel) {
 			var $imageL = $(image);
 			if (carousel) {

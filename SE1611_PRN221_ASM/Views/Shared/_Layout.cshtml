@@ -46,7 +46,7 @@
                         <div class="menu-toggle"> <a href="#" class="mobilemenu-toggle"><i class="icon-menu"></i></a> </div>
                     </div>
                     <div class="col-auto hdr-logo">
-                        <a asp-action="Index" asp-controller="Home" class="logo"><img srcset="~/images/skins/fashion/logo.webp 1x, ~/images/skins/fashion/logo2x.webp 2x" alt="Logo"></a>
+                        <a asp-action="Index" asp-controller="Home" class="logo"><img style="max-height:40px" src="https://raw.githubusercontent.com/khoabm/A-Corner-Of-Books/main/ACornerOfBooks/src/main/webapp/User/imgs/book-logo-1.jpg" alt="Logo"></a>
                     </div>
                     <div class="hdr-nav hide-mobile nav-holder-s">
                     </div>
@@ -71,18 +71,21 @@
                                     <i class="icon-heart"></i><span class="dropdn-link-txt">Wishlist</span><span class="wishlist-qty">3</span>
                                 </a>
                             </div>
-                            @if (userSession == null)
-                            {
-                                <div class="dropdn dropdn_account dropdn_fullheight">
-                                    <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="dropdn dropdn_account dropdn_fullheight">
-                                    <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@userSession.FullName</span></a>
-                                </div>
-                            }
+                            <div class="dropdn dropdn_account dropdn_fullheight">
+                                <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
+                            </div>
+                            @*@if (userSession == null)
+                                {
+                                    <div class="dropdn dropdn_account dropdn_fullheight">
+                                        <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="dropdn dropdn_account dropdn_fullheight">
+                                        <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@userSession.FullName</span></a>
+                                    </div>
+                                }*@
                             <div class="dropdn dropdn_fullheight minicart">
                                 <a asp-controller="Cart" asp-action="Index" class="dropdn-link minicart-link" data-panel="#dropdnMinicart">
                                     <i class="icon-basket"></i>
@@ -96,41 +99,41 @@
             </div>
         </div>
         <div class="hdr">
-            <div class="hdr-topline hdr-topline--dark js-hdr-top">
+            <!--<div class="hdr-topline hdr-topline--dark js-hdr-top">
                 <div class="container">
-                    <div class="row flex-nowrap">
-                        <div class="col hdr-topline-left hide-mobile">
-                            <div class="hdr-line-separate">
-                                <ul class="social-list list-unstyled">
-                                    <li>
-                                        <a href="#"><i class="icon-facebook"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="icon-twitter"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="icon-google"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="icon-instagram"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="icon-vimeo"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="icon-linkedin"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        @*<div class="col hdr-topline-center">
-                            <div class="custom-text js-custom-text-carousel" data-slick='{"speed": 1000, "autoplaySpeed": 3000}'>
-                                <div class="custom-text-item"><i class="icon-fox"></i> Use promocode <span>FOXIC</span> to get 15% discount!</div>
-                                <div class="custom-text-item"><i class="icon-air-freight"></i> <span>Free</span> plane shipping over <span>$250</span></div>
-                                <div class="custom-text-item"><i class="icon-gift"></i> Today only! Post <span>holiday</span> Flash Sale! 2 for $20</div>
-                            </div>
-                        </div>*@
-                        <div class="col hdr-topline-right hide-mobile">
+                    <div class="row flex-nowrap">-->
+            @*<div class="col hdr-topline-left hide-mobile">
+                    <div class="hdr-line-separate">
+                        <ul class="social-list list-unstyled">
+                            <li>
+                                <a href="#"><i class="icon-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="icon-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="icon-google"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="icon-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="icon-vimeo"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="icon-linkedin"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>*@
+            @*<div class="col hdr-topline-center">
+                    <div class="custom-text js-custom-text-carousel" data-slick='{"speed": 1000, "autoplaySpeed": 3000}'>
+                        <div class="custom-text-item"><i class="icon-fox"></i> Use promocode <span>FOXIC</span> to get 15% discount!</div>
+                        <div class="custom-text-item"><i class="icon-air-freight"></i> <span>Free</span> plane shipping over <span>$250</span></div>
+                        <div class="custom-text-item"><i class="icon-gift"></i> Today only! Post <span>holiday</span> Flash Sale! 2 for $20</div>
+                    </div>
+                </div>*@
+            <!--<div class="col hdr-topline-right hide-mobile">
                             <div class="hdr-inline-link">
                                 <div class="dropdn_language">
                                     <div class="dropdn dropdn_language dropdn_language--noimg dropdn_caret">
@@ -177,7 +180,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="hdr-content">
                 <div class="container">
                     <div class="row">
@@ -185,9 +188,9 @@
                             <div class="menu-toggle"> <a href="#" class="mobilemenu-toggle"><i class="icon-menu"></i></a> </div>
                         </div>
                         <div class="col-auto hdr-logo">
-                            <a asp-controller="Home" asp-action="Index" class="logo"><img srcset="~/images/skins/fashion/logo.webp 1x, ~/images/skins/fashion/logo2x.webp 2x" alt="Logo"></a>
+                            <a asp-controller="Home" asp-action="Index" class="logo"><img style="max-height:40px" src="https://raw.githubusercontent.com/khoabm/A-Corner-Of-Books/main/ACornerOfBooks/src/main/webapp/User/imgs/book-logo-1.jpg" alt="Logo"></a>
                         </div>
-                        <div class="hdr-nav hide-mobile nav-holder justify-content-center px-4">
+                        @*<div class="hdr-nav hide-mobile nav-holder justify-content-center px-4">
                             <ul class="mmenu mmenu-js">
                                 <li class="mmenu-item--simple">
                                     <a href="#" class="active">Home</a>
@@ -487,9 +490,14 @@
                                     </div>
                                 </li>
                             </ul>
-                        </div>
+                        </div>*@
                         <div class="hdr-links-wrap col-auto ml-auto">
                             <div class="hdr-inline-link">
+                                <div class="dropdn dropdn_fullheight ">
+                                    <a asp-controller="Home" asp-action="Index" class="dropdn-link only-icon">
+                                        <i class="icon-shop"></i>
+                                    </a>
+                                </div>
                                 <div class="search_container_desktop">
                                     <div class="dropdn dropdn_search dropdn_fullwidth">
                                         <a href="#" class="dropdn-link  js-dropdn-link only-icon"><i class="icon-search"></i><span class="dropdn-link-txt">Search</span></a>
@@ -509,11 +517,18 @@
                                         <i class="icon-heart"></i><span class="dropdn-link-txt">Wishlist</span><span class="wishlist-qty">3</span>
                                     </a>
                                 </div>
-                                <div class="hdr_container_mobile show-mobile">
-                                    <div class="dropdn dropdn_account dropdn_fullheight">
-                                        <a href="#" class="dropdn-link js-dropdn-link" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
-                                    </div>
+                                <div class="dropdn dropdn_account dropdn_fullheight">
+                                    @if (userSession != null)
+                                    {
+                                        <a asp-controller="Account" asp-action="Details" class="dropdn-link" data-panel="#dropdnAccount"><i class="icon-user"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Account" asp-action="SignIn" class="dropdn-link" data-panel="#dropdnAccount"><i class="icon-user"></i></a>
+                                    }
+
                                 </div>
+
                                 <div class="dropdn dropdn_fullheight minicart">
                                     <a asp-controller="Cart" asp-action="Index" class="dropdn-link minicart-link" data-panel="#dropdnMinicart">
                                         <i class="icon-basket"></i>
@@ -521,7 +536,9 @@
                                             @if (userSession != null)
                                             {
                                                 <span>@userSession.CartItemCount</span>
-                                            } else {<span>0</span>}
+                                            }
+                                            else
+                                            {<span>0</span>}
                                         </span>
                                         <span class="minicart-total hide-mobile">$34.99</span>
                                     </a>
@@ -1014,6 +1031,7 @@
     <script src="~/js/vendor-special/jquery.ez-plus.js"></script>
     <script src="~/js/vendor/vendor.min.js"></script>
     <script src="~/js/app-html.js"></script>
+    <script src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

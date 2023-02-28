@@ -18,6 +18,21 @@ namespace Repository.Repository
             _context = context;
         }
 
+        public IEnumerable<Book> GetBooksOrderByAddedDate()
+        {
+            var books = new List<Book>();
+            try
+            {
+                books = _context.Books.OrderByDescending(b => b.AddedDate).ToList();
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+            return books;
+        }
+
         public IEnumerable<Book> GetBooksOrderByAverageRating()
         {
             var books = new List<Book>();
@@ -66,6 +81,47 @@ namespace Repository.Repository
             {
                 Console.WriteLine(ex.StackTrace);
                 Console.WriteLine(ex.Message);
+                throw new Exception();
+            }
+            return books;
+        }
+
+        public IEnumerable<Book> GetBooksOrderByCategory(string categoryName)
+        {
+            var books = new List<Book>();
+            try
+            {
+
+                //String query = $" SELECT top 4 db.publisher, db.image_link, db.price, db.quantity_left, db.[status], db.title, db.[description] ,db.author,db.AddedDate, db.book_id, db.average, genre_name FROM ( SELECT b.publisher, b.image_link, b.price, b.quantity_left, b.[status], b.title, b.[description] ,b.author, b.AddedDate, b.book_id, AVG(cm.rating) as average FROM Books b join Comments cm on b.book_id = cm.book_id GROUP BY b.book_id, b.AddedDate, b.author, b.[description], b.publisher, b.image_link, b.price, b.quantity_left, b.[status], b.title ) as db join Book_genre bg on db.book_id = bg.book_id join Genres g on bg.genre_id = g.genre_id WHERE g.genre_name LIKE '%{categoryName}%' ORDER BY db.average";
+                //    books = _context.Books.FromSqlRaw(query).ToList();
+                books = (from b in _context.Books
+                         join bg in _context.BookGenres on b.BookId equals bg.BookId
+                         join g in _context.Genres on bg.GenreId equals g.GenreId
+                         join cm in _context.Comments on b.BookId equals cm.BookId into cmGroup
+                         where g.GenreName.Contains(categoryName)
+                         let average = cmGroup.Average(cm => cm.Rating)
+                         orderby average descending
+
+                         //orderby cmAvg.Average(x => x.FirstOrDefault().Rating ?? 0) descending
+                         select new Book
+                         {
+                             BookId = b.BookId,
+                             Title = b.Title,
+                             Author = b.Author,
+                             Description = b.Description,
+                             Publisher = b.Publisher,
+                             Price = b.Price,
+                             QuantityLeft = b.QuantityLeft,
+                             Status = b.Status,
+                             AddedDate = b.AddedDate,
+                             ImageLink = b.ImageLink,
+                             AverageRating = average ?? 0,
+                             //BookGenres = cmAvg.Key.b.BookGenres
+                         }).Take(4).ToList();
+            }
+            catch (Exception)
+            {
+
                 throw new Exception();
             }
             return books;
