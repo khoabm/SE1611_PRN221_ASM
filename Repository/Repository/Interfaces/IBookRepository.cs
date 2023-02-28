@@ -11,7 +11,7 @@ namespace Repository.Repository.Interfaces
     public interface IBookRepository : IRepositoryBase<Book>
     {
         public (List<Book>, int totalItems) SearchBooks(string query, string[] genres, double minPrice, double maxPrice
-                                                        , int pageNum, int pageSize);
+                                                        , int pageNum, int pageSize,string sort);
         IEnumerable<Book> GetBooksOrderByAverageRating();
 
         IEnumerable<Book> GetBooksOrderByAddedDate();

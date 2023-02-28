@@ -136,17 +136,17 @@ namespace Repository.Repository
 
 
         public (List<Book>, int totalItems) SearchBooks(string query, string[] genres, double minPrice, double maxPrice
-                                                        , int pageNum, int pageSize)
+                                                        , int pageNum, int pageSize, string sort)
 
         {
             List<Book> books = _context.Books.ToList();
             List<Book> list = new List<Book>();
             //-----------------------------------
-            Console.WriteLine(query);
             //search by query title and author
             if (!string.IsNullOrEmpty(query))
             {
-                books = books.Where(b => (b.Title.Contains(query) || b.Author.Contains(query))).ToList();
+                books = books.Where(b => b.Author.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || b.Title.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             //filter by price
             books = books.Where(b => (b.Price <= maxPrice && b.Price >= minPrice)).ToList();
@@ -158,7 +158,13 @@ namespace Repository.Repository
                 books = books.Where(b => bookGenres.Any(bg => bg.BookId == b.BookId)).ToList();
             }
             //----------------------------
+            //sort
+            if (sort.Equals("latest")) books = books.OrderBy(b => b.AddedDate).ToList();
+            if (sort.Equals("oldest")) books = books.OrderByDescending(b => b.AddedDate).ToList();
+            if (sort.Equals("price")) books = books.OrderBy(b => b.Price).ToList();
+            ///
             int totalItems = books.Count();
+            
             return (PaginatedList<Book>.Create(books.AsQueryable(),pageNum,pageSize), totalItems);
         }
     }

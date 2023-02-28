@@ -22,9 +22,11 @@ namespace SE1611_PRN221_ASM.Controllers
             ,double minPrice = 0
             ,double maxPrice = 1000000000
             ,int page=1
-            ,int size=10)
+            ,int size=9
+            ,string sort="latest")
         {
-            var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice,page,size);
+            Console.WriteLine(sort);
+            var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice,page,size,sort);
             var totalPages = (int)Math.Ceiling((double)totalItems / size);
             var startPage = Math.Max(1, page - size);
             var endPage = Math.Min(totalPages, page + size);
@@ -35,10 +37,18 @@ namespace SE1611_PRN221_ASM.Controllers
                 StartPage = startPage,
                 EndPage = endPage
             };
-            ViewBag.PageSize = size;
+            var searchModel = new SearchModel
+            {
+                genres = genres,
+                maxPrice = (int)maxPrice,
+                minPrice = (int)minPrice,
+                query = query,
+                size = size,
+                sort = sort
+            };
             ViewBag.Pagination = pagination;
             ViewBag.TotalItems = totalItems;
-            ViewBag.SearchGenres = genres;
+            ViewBag.SearchModel = searchModel;    
             ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
             return View(books);
         }
