@@ -18,6 +18,11 @@ namespace Repository.Repository
             _context = context;
         }
 
+        public List<Genre> GetBookGenres(int id)
+        {
+            return _context.Genres.Where(g => g.BookGenres.Any(bg => bg.BookId == id)).ToList();
+        }
+
         public IEnumerable<Book> GetBooksOrderByAverageRating()
         {
             var books = new List<Book>();
@@ -71,31 +76,30 @@ namespace Repository.Repository
             return books;
         }
 
-        public (List<Book>, int totalItems) SearchBooks(string query, string[] genres, double minPrice, double maxPrice)
+        public (List<Book>, int totalItems) SearchBooks(string query, string[] genres, double minPrice, double maxPrice
+                                                        , int pageNum, int pageSize)
         {
-            Console.WriteLine(genres[0]);
-            //List<Book> list = _context.Books.Include(b => b.BookGenres)
-            //                                        .ThenInclude(bg => bg.Genre)
-            //                                        .Where(b => (b.Title.Contains(query)
-            //                                        || b.Author.Contains(query))
-            //                                        && (b.Price <= maxPrice
-            //                                        && b.Price >= minPrice)
-            //                                        //&& b.BookGenres.Any(bg =>
-            //                                        //genres.Contains(bg.Genre.GenreName)
-            //                                        //)
-            //                                        ).ToList();
-
-            List<Book> list = _context.Books.Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
-                .Where(b =>
-                    (b.Title.Contains(query) || b.Author.Contains(query))
-                    && (b.Price <= maxPrice && b.Price >= minPrice)
-                        && b.BookGenres.Any(bg =>
-                        genres.Contains(bg.Genre.GenreName.ToLower())
-                            ))
-                    .ToList();
-            int totalItems = list.Count();
-            return (list, totalItems);
+            List<Book> books = _context.Books.ToList();
+            List<Book> list = new List<Book>();
+            //-----------------------------------
+            Console.WriteLine(query);
+            //search by query title and author
+            if (!string.IsNullOrEmpty(query))
+            {
+                books = books.Where(b => (b.Title.Contains(query) || b.Author.Contains(query))).ToList();
+            }
+            //filter by price
+            books = books.Where(b => (b.Price <= maxPrice && b.Price >= minPrice)).ToList();
+            //filter by genre
+            if (genres.Length > 0)
+            {
+                Console.WriteLine(genres);
+                List<BookGenre> bookGenres = _context.BookGenres.Where(bg => genres.Contains(bg.Genre.GenreName)).ToList();
+                books = books.Where(b => bookGenres.Any(bg => bg.BookId == b.BookId)).ToList();
+            }
+            //----------------------------
+            int totalItems = books.Count();
+            return (PaginatedList<Book>.Create(books.AsQueryable(),pageNum,pageSize), totalItems);
         }
     }
 }
