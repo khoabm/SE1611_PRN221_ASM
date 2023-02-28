@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository;
 using Repository.Entities;
 using Repository.Infrastructure;
+using SE1611_PRN221_ASM.Models;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
@@ -15,27 +17,36 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: BookController
-        public ActionResult Index()
+        public ActionResult Index(string query
+            ,string[] genres
+            ,double minPrice = 0
+            ,double maxPrice = 1000000000
+            ,int page=1
+            ,int size=10)
         {
-            //var list = _unitOfWork.BookRepository.GetAll();
-            return View();
+            var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice,page,size);
+            var totalPages = (int)Math.Ceiling((double)totalItems / size);
+            var startPage = Math.Max(1, page - size);
+            var endPage = Math.Min(totalPages, page + size);
+            var pagination = new PaginationViewModel
+            {
+                CurrentPage = page,
+                TotalPages = totalPages,
+                StartPage = startPage,
+                EndPage = endPage
+            };
+            ViewBag.PageSize = size;
+            ViewBag.Pagination = pagination;
+            ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
+            return View(books);
         }
         
-        [HttpGet]
-        public ActionResult Search(
-            string query,
-            string[] genres,
-            double minPrice=0, double maxPrice=1000000000)
-        {
-            var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice);
-            
-            return View("Index",books);
-        }
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
             var book = _unitOfWork.BookRepository.GetById(id);
             if (book == null) return NotFound();
+            ViewBag.BookGenres = _unitOfWork.BookRepository.GetBookGenres(id);
             return View(book);
         }
 
