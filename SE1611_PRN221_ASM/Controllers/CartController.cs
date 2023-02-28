@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Entities;
 using Repository.Infrastructure;
 using Repository.Repository;
 using SE1611_PRN221_ASM.Helper;
@@ -59,31 +60,52 @@ namespace SE1611_PRN221_ASM.Controllers
         //    return RedirectToAction(nameof(Index));
         //}
 
-        // GET: CartController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: CartController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CartController/Create
+        // POST: CartController/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> AddToCart(int bookId, int quantity)
         {
-            try
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+
+            if (userSession == null)
             {
-                return RedirectToAction(nameof(Index));
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyCart");
             }
-            catch
+
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+            int customerId = account.AccountId;
+
+            // check if the book is already in the cart
+            var cartItem = _unitOfWork.CartRepository.GetByBookIdAndCustomerId(bookId, customerId);
+
+            if (cartItem == null)
             {
-                return View();
+                // book is not in cart, create a new cart item
+                cartItem = new Cart
+                {
+                    Quantity = quantity,
+                    BookId = bookId,
+                    CustomerId = customerId
+                };
+
+                _unitOfWork.CartRepository.Create(cartItem);
+                userSession.CartItemCount++;
+                HttpContext.Session.SetObject("UserSession", userSession);
             }
+            else
+            {
+                // book is already in cart, update its quantity
+                cartItem.Quantity += quantity;
+                _unitOfWork.CartRepository.Update(cartItem);
+            }
+
+            _unitOfWork.Save();
+
+            TempData["Message"] = "Added to cart successfully.";
+            TempData["MessageType"] = "success";
+
+            return RedirectToAction("Details", "Book", new { id = bookId });
         }
 
         // GET: CartController/Edit/5
@@ -107,25 +129,29 @@ namespace SE1611_PRN221_ASM.Controllers
             }
         }
 
-        // GET: CartController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: CartController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id)
         {
-            try
+            var cartItem = _unitOfWork.CartRepository.GetById(id);
+
+            if (cartItem == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+
+            _unitOfWork.CartRepository.Delete(cartItem);
+            _unitOfWork.Save();
+
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+            if (userSession != null)
             {
-                return View();
+                userSession.CartItemCount--;
+                HttpContext.Session.SetObject("UserSession", userSession);
             }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
