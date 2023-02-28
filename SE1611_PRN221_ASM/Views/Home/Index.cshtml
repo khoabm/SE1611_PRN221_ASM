@@ -116,17 +116,17 @@
         <div class="title-wrap text-center">
             <h2 class="h1-style">Collections</h2>
             @*<div class="title-wrap title-tabs-wrap text-center js-title-tabs">
-                    <div class="title-tabs">
-                        <h2 class="h3-style">
-                            <a href="#"><span class="title-tabs-text theme-font">Novel</span></a>
-                        </h2>
-                        <h2 class="h3-style">
-                            <a href="#"><span class="title-tabs-text theme-font">Comics</span></a>
-                        </h2>
-                        <h2 class="h3-style">
-                            <a href="#"><span class="title-tabs-text theme-font">Others</span></a>
-                        </h2>
-                    </div>
+                <div class="title-tabs">
+                <h2 class="h3-style">
+                <a href="#"><span class="title-tabs-text theme-font">Novel</span></a>
+                </h2>
+                <h2 class="h3-style">
+                <a href="#"><span class="title-tabs-text theme-font">Comics</span></a>
+                </h2>
+                <h2 class="h3-style">
+                <a href="#"><span class="title-tabs-text theme-font">Others</span></a>
+                </h2>
+                </div>
                 </div>*@
             <div class="title-wrap title-tabs-wrap text-center js-title-tabs">
                 <div class="title-tabs">
@@ -204,7 +204,7 @@
                                 <div class="prd-info-wrap">
                                     @*<div class="prd-info-top">
                                         <div class="prd-rating"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
-                                    </div>*@
+                                        </div>*@
                                     <div class="prd-rating justify-content-center">
                                         @for (int i = 0; i < 5; i++)
                                         {
@@ -225,8 +225,10 @@
                                         @item.Description
                                     </div>
                                     <div class="prd-action">
-                                        <form action="#">
-                                            <button class="btn js-prd-addtocart" data-product='{"name": "Fashion Waist Bag", "path":"images/skins/fashion/products/product-25-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                            <input type="hidden" name="bookId" value="@item.BookId" />
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn js-prd-addtocart">Add To Cart</button>
                                         </form>
                                     </div>
                                 </div>
@@ -240,8 +242,10 @@
                                     </div>
                                     <div class="prd-action">
                                         <div class="prd-action-left">
-                                            <form action="#">
-                                                <button class="btn js-prd-addtocart" data-product='{"name": "Fashion Waist Bag", "path":"images/skins/fashion/products/product-25-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                                <input type="hidden" name="bookId" value="@item.BookId" />
+                                                <input type="hidden" name="quantity" value="1" />
+                                                <button type="submit" class="btn js-prd-addtocart">Add To Cart</button>
                                             </form>
                                         </div>
                                     </div>
@@ -282,28 +286,28 @@
             }
 
             @*<div class="post-prw-vert col">
-                    <a href="blog-post.html" class="post-prw-img image-hover-scale image-container" style="padding-bottom: 54.44%">
-                        <img class="fade-up w-100 lazyload" alt="The High-Street Brand Fashion" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="images/skins/fashion/blog/blog-fashion-03.webp">
-                    </a>
-                    <h4 class="post-prw-title"><a href="blog-post.html">Trends to Try This Season</a></h4>
-                    <div class="post-prw-links">
-                        <div class="post-prw-date">
-                            <i class="icon-calendar1"></i>
-                            June 3, 2020
-                        </div>
-                    </div>
+                <a href="blog-post.html" class="post-prw-img image-hover-scale image-container" style="padding-bottom: 54.44%">
+                <img class="fade-up w-100 lazyload" alt="The High-Street Brand Fashion" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="images/skins/fashion/blog/blog-fashion-03.webp">
+                </a>
+                <h4 class="post-prw-title"><a href="blog-post.html">Trends to Try This Season</a></h4>
+                <div class="post-prw-links">
+                <div class="post-prw-date">
+                <i class="icon-calendar1"></i>
+                June 3, 2020
+                </div>
+                </div>
                 </div>
                 <div class="post-prw-vert col">
-                    <a href="blog-post.html" class="post-prw-img image-hover-scale image-container" style="padding-bottom: 54.44%">
-                        <img class="fade-up w-100 lazyload" alt="The High-Street Brand Fashion" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="images/skins/fashion/blog/blog-fashion-04.webp">
-                    </a>
-                    <h4 class="post-prw-title"><a href="blog-post.html">Working From Home</a></h4>
-                    <div class="post-prw-links">
-                        <div class="post-prw-date">
-                            <i class="icon-calendar1"></i>
-                            June 1, 2020
-                        </div>
-                    </div>
+                <a href="blog-post.html" class="post-prw-img image-hover-scale image-container" style="padding-bottom: 54.44%">
+                <img class="fade-up w-100 lazyload" alt="The High-Street Brand Fashion" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="images/skins/fashion/blog/blog-fashion-04.webp">
+                </a>
+                <h4 class="post-prw-title"><a href="blog-post.html">Working From Home</a></h4>
+                <div class="post-prw-links">
+                <div class="post-prw-date">
+                <i class="icon-calendar1"></i>
+                June 1, 2020
+                </div>
+                </div>
                 </div>*@
         </div>
     </div>
