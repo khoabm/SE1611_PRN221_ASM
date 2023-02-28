@@ -13,6 +13,12 @@ namespace Repository.Repository
             _context = context;
         }
 
+        public Cart? GetByBookIdAndCustomerId(int bookId, int customerId)
+        {
+            return _context.Carts
+                .SingleOrDefault(c => c.BookId == bookId && c.CustomerId == customerId);
+        }
+
         public IEnumerable<Cart> GetCartByCustomerId(int customerId)
         {
             return _context.Carts
@@ -20,5 +26,7 @@ namespace Repository.Repository
                 .Include(c => c.Book)
                 .ToList();
         }
+
+
     }
 }

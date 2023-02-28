@@ -22,7 +22,9 @@
                         </div>
                     </div>
                     <div class="minicart-prd-action">
-                        <a asp-controller="Cart" asp-action="Delete" asp-route-id="@cartItem.CartId"><i class="icon-recycle"></i></a>
+                        <form asp-controller="Cart" asp-action="Delete" asp-route-id="@cartItem.CartId" method="post">
+                            <button type="submit"><i class="icon-recycle"></i></button>
+                        </form>
                     </div>
                 </div>
             }
