@@ -18,6 +18,7 @@ namespace Repository.Repository.Interfaces
         IEnumerable<Book> GetBooksOrderByCategory(String categoryName);
 
         List<Genre> GetBookGenres(int id);
+        IEnumerable<Book> GetBooksWithTheSameGenres(Book book);
 
     }
 }

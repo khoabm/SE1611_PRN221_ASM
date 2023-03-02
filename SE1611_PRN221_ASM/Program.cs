@@ -1,9 +1,11 @@
 using Firebase.Storage;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Repository.Entities;
 using Repository.Infrastructure;
+using SE1611_PRN221_ASM.Helper;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +29,9 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddAuthentication("MySession")
+        .AddScheme<SessionAuthenticationOptions, SessionAuthenticationHandler>(
+            "MySession", options => { });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,11 +47,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
     //pattern: "{controller=Book}/{action=Index}/{id?}");
-app.UseSession();
+
 app.Run();

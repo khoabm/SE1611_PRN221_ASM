@@ -131,15 +131,15 @@
                 </div>*@
             <div class="title-wrap title-tabs-wrap text-center js-title-tabs">
                 <div class="title-tabs">
-                    <h2 class="h3-style">
-                        <a href="#" data-tab="novel"><span class="title-tabs-text theme-font">Novel</span></a>
-                    </h2>
-                    <h2 class="h3-style">
-                        <a href="#" data-tab="comics"><span class="title-tabs-text theme-font">Comics</span></a>
-                    </h2>
-                    <h2 class="h3-style">
-                        <a href="#" data-tab="others"><span class="title-tabs-text theme-font">Others</span></a>
-                    </h2>
+                    @if (ViewBag.GenresByBook != null)
+                    {
+                        foreach (var item in ViewBag.GenresByBook)
+                        {
+                            <h2 class="h3-style">
+                                <a href="#" data-tab="novel"><span class="title-tabs-text theme-font">@item.GenreName</span></a>
+                            </h2>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -221,7 +221,7 @@
                                         }
 
                                     </div>
-                                    <div class="prd-tag"><a href="#">@item.Author</a></div>
+                                    <div class="prd-tag"><a asp-controller="Book" asp-action="Index" asp-route-query="@item.Author.Trim()">@item.Author</a></div>
                                     <h2 class="prd-title book-title"><a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId">@item.Title</a></h2>
                                     <div class="prd-description">
                                         @item.Description

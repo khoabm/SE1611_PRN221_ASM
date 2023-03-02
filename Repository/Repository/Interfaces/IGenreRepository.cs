@@ -10,5 +10,6 @@ namespace Repository.Repository.Interfaces
 {
     public interface IGenreRepository: IRepositoryBase<Genre>
     {
+        IEnumerable<Genre> GetGenresOrderByNumberOfBooks();
     }
 }

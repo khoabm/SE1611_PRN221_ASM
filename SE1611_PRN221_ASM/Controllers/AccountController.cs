@@ -39,6 +39,8 @@ namespace SE1611_PRN221_ASM.Controllers
             };
 
             ViewBag.Pagination = pagination;
+            TempData["Success"] = "Demo Success";
+            TempData["Error"] = "Demo Error";
             return View(listOfAccounts);
         }
         [HttpPost]

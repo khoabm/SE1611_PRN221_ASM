@@ -27,6 +27,7 @@ namespace SE1611_PRN221_ASM.Controllers
             _logger = logger;
             
         }
+
         // GET: AdminController
         public ActionResult Index()
         {

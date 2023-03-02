@@ -1,0 +1,43 @@
+﻿@{
+    Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en");
+}
+@if (ViewBag.Comments != null)
+{
+    <span class="reviews-link"><a href="#" class="js-reviews-link"> (@ViewBag.TotalItems reivews)</a></span>
+    foreach (var item in ViewBag.Comments)
+    {
+        <div id="productReviewsBottom">
+            <div class="review-item">
+                <div class="review-item_rating">
+                    @for (int i = 0; i < item.Rating; i++)
+                    {
+                        <i class="icon-star-fill fill"></i>
+                    }
+                </div>
+                <div class="review-item_top row align-items-center">
+                    <div class="col"><h5 class="review-item_author">@item.Customer.Name on @item.CommentDate.ToString("MMMM d, yyyy")</h5></div>
+                    <div class="col-auto"><a href="#" class="review-item_report">Report as Inappropriate</a></div>
+                </div>
+                <div class="review-item_content">
+                    <p>@item.Content</p>
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+    <div id="pagination">
+        <ul class="pagination" style="display: flex; justify-content: center; align-items: center;list-style: none;padding: 0;margin: 20px 0;">
+            @for (int i = 0; i < ViewBag.Pagination.TotalPages; i++)
+            {
+                <li class="comment_page @(i + 1 == ViewBag.Pagination.CurrentPage ? "active" : "")"><a class="comment_index" href="#">@(i + 1)</a></li>
+
+            }
+        </ul>
+    </div>
+
+}
+
+
+
