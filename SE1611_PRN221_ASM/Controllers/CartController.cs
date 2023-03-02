@@ -105,28 +105,36 @@ namespace SE1611_PRN221_ASM.Controllers
             TempData["Message"] = "Added to cart successfully.";
             TempData["MessageType"] = "success";
 
-            return RedirectToAction("Details", "Book", new { id = bookId });
+            // Get the URL of the previous page
+            string url = Request.Headers["Referer"].ToString();
+
+            // Redirect the user back to the previous page
+            return Redirect(url);
         }
 
-        // GET: CartController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CartController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> UpdateCart(IEnumerable<Cart> cartItems)
         {
-            try
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+
+            if (userSession == null)
             {
-                return RedirectToAction(nameof(Index));
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyCart");
             }
-            catch
+
+            foreach (var cartItem in cartItems)
             {
-                return View();
+                var item = _unitOfWork.CartRepository.GetById(cartItem.CartId);
+                if (item != null)
+                {
+                    _unitOfWork.CartRepository.Update(item);
+                }
             }
+
+            _unitOfWork.Save();
+            return View("Index");
         }
 
         // POST: CartController/Delete/5

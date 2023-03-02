@@ -5,6 +5,7 @@
     ViewData["Title"] = "View";
     var pagination = ViewBag.Pagination as PaginationViewModel;
     var genres = ViewBag.Genres as List<Genre>;
+    var searchModel = ViewBag.SearchModel as SearchModel;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -17,20 +18,11 @@
                 <div class="select-wrap d-none d-md-flex">
                     <div class="select-label">SORT:</div>
                     <div class="select-wrapper select-wrapper-xxs">
-                        <select class="form-control input-sm">
-                            <option value="featured">Featured</option>
+                        <select class="form-control input-sm" name="sort" form="filter">
+                            <option value="latest">Latest</option>
+                            <option value="oldest">Oldest</option>
                             <option value="rating">Rating</option>
                             <option value="price">Price</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="select-wrap d-none d-md-flex">
-                    <div class="select-label">VIEW:</div>
-                    <div class="select-wrapper select-wrapper-xxs">
-                        <select class="form-control input-sm">
-                            <option value="featured">12</option>
-                            <option value="rating">36</option>
-                            <option value="price">100</option>
                         </select>
                     </div>
                 </div>
@@ -41,43 +33,15 @@
                 <div class="filter-col-content filter-mobile-content">
                     <div class="sidebar-block">
                         <div class="sidebar-block_title">
-                            <span>Current selection</span>
-                        </div>
-                        <div class="sidebar-block_content">
-                            <div class="selected-filters-wrap">
-                                @if (ViewBag.SearchGenres != null)
-                                {
-                                    <ul class="selected-filters">
-                                        @foreach (var item in ViewBag.SearchGenres)
-                                        {
-                                            <li><a href="#">@item.ToString()</a></li>
-                                        }
-
-                                        @*<li><a href="#">Grey</a></li>
-                                            <li><a href="#">Men</a></li>
-                                            <li><a href="#">Above $200</a></li>*@
-                                    </ul>
-                                    <div class="d-flex flex-wrap align-items-center">
-                                        @*<a href="#" class="clear-filters"><span>Clear All</span></a>*@
-                                        <div class="selected-filters-count ml-auto d-none d-lg-block">Selected <span>@ViewBag.SearchGenres.Length items</span></div>
-                                    </div>
-                                }
-                            </div>
-
+                            <span>Filter</span>
                         </div>
                     </div>
 
-                    <div class="sidebar-block d-filter-mobile">
-                        <h3 class="mb-1">SORT BY</h3>
-                        <div class="select-wrapper select-wrapper-xs">
-                            <select class="form-control">
-                                <option value="featured">Featured</option>
-                                <option value="rating">Rating</option>
-                                <option value="price">Price</option>
-                            </select>
-                        </div>
-                    </div>
-                    <form asp-action="Index" method="GET">
+                    <form asp-action="Index" id="filter" method="GET">
+                        @if (!String.IsNullOrEmpty(searchModel.query))
+                        {
+                            <input type="hidden" id="query" name="query" value="@searchModel.query"></input>
+                        }
 
                         <div class="sidebar-block filter-group-block open">
                             <div class="sidebar-block_title">
@@ -91,7 +55,7 @@
                                         <li>
                                             @if (ViewBag.SearchGenres != null)
                                             {
-                                                <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox" @(ViewBag.SearchGenres != null && ((string[])ViewBag.SearchGenres).Contains(item.GenreName) ? "checked" : "")>
+                                                <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox" @(searchModel.genres != null && (searchModel.genres).Contains(item.GenreName) ? "checked" : "")>
                                             }
                                             else
                                             {
@@ -112,11 +76,11 @@
                             <div class="sidebar-block_content">
                                 <div>
                                     <label for="minPrice">Minimum Price:</label>
-                                    <input type="number" id="minPrice" name="minPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" />
+                                    <input type="number" id="minPrice" name="minPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" value="@searchModel.minPrice"/>
                                 </div>
                                 <div>
                                     <label for="maxPrice">Maximum Price:</label>
-                                    <input type="number" id="maxPrice" name="maxPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" />
+                                    <input type="number" id="maxPrice" name="maxPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" value="@searchModel.maxPrice"/>
                                 </div>
                             </div>
 
@@ -159,7 +123,7 @@
                                             </div>
                                             <div class="prd-rating justify-content-center"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
                                             <div class="prd-tag"><a href="#">@Html.DisplayFor(modelItem => item.Author)</a></div>
-                                            <h2 class="prd-title"><a href="product.html">@Html.DisplayFor(modelItem => item.Title)</a></h2>
+                                            <h2 class="prd-title"><a a asp-action="Details" asp-route-id="@item.BookId">@Html.DisplayFor(modelItem => item.Title)</a></h2>
                                             <div class="prd-description">
                                                 @Html.DisplayFor(modelItem => item.Description)
                                             </div>
@@ -171,7 +135,7 @@
                                         </div>
                                         <div class="prd-hovers">
                                             <div class="prd-price">
-                                                <div class="price-new">@Html.DisplayFor(modelItem => item.Price) VND</div>
+                                                <div class="price-new">@Html.DisplayFor(modelItem => item.Price) $</div>
                                             </div>
                                             <div class="prd-action">
                                                 <div class="prd-action-left">
@@ -191,15 +155,18 @@
                         <ul class="pagination" style="display: flex; justify-content: center; align-items: center;list-style: none;padding: 0;margin: 20px 0;">
                             @if (pagination.StartPage > 1)
                             {
-                                <li class="@(1 == pagination.CurrentPage ? "active" : "")"><a href="?page=1">First</a></li>
+                                <li class="@(1 == pagination.CurrentPage ? "active" : "")"><a href="?page=1&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                            }">First</a></li>
                             }
                             @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
                             {
-                                <li class=" @(i == pagination.CurrentPage ? "active" : "")"><a href="?page=@i">@i</a></li>
+                                <li class=" @(i == pagination.CurrentPage ? "active" : "")"><a href="?page=@i&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                            }">@i</a></li>
                             }
                             @if (pagination.EndPage < pagination.TotalPages)
                             {
-                                <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")"><a class="page-link" href="?page=@pagination.TotalPages">@(pagination.TotalPages)</a></li>
+                                <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")"><a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                            }">@(pagination.TotalPages)</a></li>
                             }
                         </ul>
                     }
@@ -216,75 +183,3 @@
         </div>
     </div>
 </div>
-@*<h1>View</h1>
-
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Author)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageLink)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Publisher)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.QuantityLeft)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Author)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImageLink)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Publisher)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QuantityLeft)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.BookId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>*@

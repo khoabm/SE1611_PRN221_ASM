@@ -41,7 +41,7 @@
                     <div class="prd-block_info prd-block_info--style1" data-prd-handle="/products/copy-of-suede-leather-mini-skirt">
                         <div class="prd-block_info-top prd-block_info_item order-0 order-md-2">
                             <div class="prd-block_price prd-block_price--style2">
-                                <div class="prd-block_price--actual">@Html.DisplayFor(model => model.Price) VND</div>
+                                <div class="prd-block_price--actual">@Html.DisplayFor(model => model.Price) $</div>
                             </div>
                         </div>
                         <div class="prd-block_description prd-block_info_item ">
@@ -73,7 +73,13 @@
                                     Genre:
                                     @foreach (var item in genres)
                                     {
-                                        <span class="" data-stock-status="">@item.GenreName</span>
+                                        <span class="" data-stock-status="">
+                                            @item.GenreName
+                                            @if ((genres.Count >= 2) && (!item.Equals(genres[genres.Count-1])))
+                                            {
+                                                <text>,</text>
+                                            }
+                                        </span>
                                     }
                                 </p>
                             </div>

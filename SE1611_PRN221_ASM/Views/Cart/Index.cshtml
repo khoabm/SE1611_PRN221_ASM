@@ -35,7 +35,7 @@
                 <span class="minicart-drop-total-value">@($"{Model.Sum(c => c.Book.Price * c.Quantity):C}")</span>
             </div>
             <div class="minicart-drop-actions">
-                <a asp-controller="Cart" asp-action="Index" class="btn btn-dark btn-hover-primary mr-2">View Cart</a>
+                <a asp-controller="Cart" asp-action="UpdateCart" class="btn btn-dark btn-hover-primary mr-2">Save</a>
                 <a asp-controller="Cart" asp-action="Checkout" class="btn btn-outline-dark btn-hover-primary">Checkout</a>
             </div>
         </div>
