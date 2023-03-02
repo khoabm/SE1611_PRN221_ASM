@@ -25,7 +25,6 @@ namespace SE1611_PRN221_ASM.Controllers
             ,int size=9
             ,string sort="latest")
         {
-            Console.WriteLine(sort);
             var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice,page,size,sort);
             var totalPages = (int)Math.Ceiling((double)totalItems / size);
             var startPage = Math.Max(1, page - size);
@@ -68,27 +67,6 @@ namespace SE1611_PRN221_ASM.Controllers
         // GET: BookController/Create
         public ActionResult Create()
         {
-            return View();
-        }
-
-        // POST: BookController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Book book)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _unitOfWork.BookRepository.Create(book);
-                    _unitOfWork.Save();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch
-                {
-                    return View();
-                }
-            }
             return View();
         }
 

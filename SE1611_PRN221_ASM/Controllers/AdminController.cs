@@ -1,8 +1,8 @@
 ﻿
 using Firebase.Auth;
 using Firebase.Storage;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Entities;
 using Repository.Infrastructure;
 using SE1611_PRN221_ASM.Helper;
 using SE1611_PRN221_ASM.Models;
@@ -15,7 +15,7 @@ namespace SE1611_PRN221_ASM.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<AccountController> _logger;
-        
+
         private static String ApiKey = "AIzaSyCIaH3IzEahld6Nt_kb8EmPxgZ1hqZ-4GQ";
         private static String Bucket = "bookseller-5f813.appspot.com";
         private static String Email = "minhkhoa2706@gmail.com";
@@ -25,7 +25,7 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
-            
+
         }
 
         // GET: AdminController
@@ -33,12 +33,20 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> MyAction()
+        private async Task<MemoryStream> ConvertToMemoryStreamAsync(IFormFile file)
+        {
+            var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            memoryStream.Position = 0; // Reset the position to the beginning of the stream
+            return memoryStream;
+        }
+        private async Task<String> UploadToFirebase(IFormFile file, string bookAuthor, string extension)
         {
             // Upload a file to Firebase Storage
+            String downloadUrl = "";
             try
             {
-                var fileStream = new MemoryStream(Encoding.UTF8.GetBytes("Hello, world!"));
+                var fileStream = await ConvertToMemoryStreamAsync(file);
 
                 var auth = new FirebaseAuthProvider(new FirebaseConfig(ApiKey));
                 var a = await auth.SignInWithEmailAndPasswordAsync(Email, Password);
@@ -53,9 +61,9 @@ namespace SE1611_PRN221_ASM.Controllers
                          ThrowOnCancel = true,
                      })
                         .Child("my-folder")
-                        .Child("my-text-2.txt")
+                        .Child(bookAuthor + "." + extension)
                         .PutAsync(fileStream, cancellation.Token);
-                String downloadUrl = await task;
+                downloadUrl = await task;
                 Console.WriteLine(downloadUrl);
             }
             catch (Exception ex)
@@ -63,8 +71,8 @@ namespace SE1611_PRN221_ASM.Controllers
                 Console.WriteLine(ex.Message);
                 throw new Exception();
             }
-            
-            return RedirectToAction(nameof(Index));
+
+            return downloadUrl;
             // ...
         }
         public async Task<IActionResult> Accounts(String orderBy, String status, int page = 1, [FromQuery] String query = "")
@@ -93,15 +101,37 @@ namespace SE1611_PRN221_ASM.Controllers
             return View(listOfAccounts);
         }
 
+        // GET: AdminController/Create
+        [HttpGet]
+        public ActionResult Create()
+        {
+            List<Book> books = _unitOfWork.BookRepository.GetAll().ToList();
+            ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
+            return View(books);
+        }
 
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(string title, string author, string description, string publisher, string price, string quantity, int status, int[] genres, IFormFile file)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                string bookauthor = title + author;
+                string imgurl = await UploadToFirebase(file, bookauthor, Path.GetExtension(file.FileName));
+                Book book = new Book();
+                book.Title = title;
+                book.Author = author;
+                book.Description = description;
+                book.Publisher = publisher;
+                book.Price = float.Parse(price);
+                book.QuantityLeft = int.Parse(quantity);
+                book.Status = Convert.ToInt16(status);
+                book.ImageLink = imgurl;
+                _unitOfWork.BookRepository.Create(book);
+                _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genres);
+                //Console.WriteLine(file.FileName);
+                return RedirectToAction(nameof(Create));
             }
             catch
             {
