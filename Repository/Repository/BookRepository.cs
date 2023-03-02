@@ -139,7 +139,7 @@ namespace Repository.Repository
                                                         , int pageNum, int pageSize, string sort)
 
         {
-            List<Book> books = _context.Books.ToList();
+            List<Book> books = _context.Books.Where(b=>b.Status==1).ToList();
             List<Book> list = new List<Book>();
             //-----------------------------------
             //search by query title and author
@@ -167,7 +167,17 @@ namespace Repository.Repository
 
             return (PaginatedList<Book>.Create(books.AsQueryable(), pageNum, pageSize), totalItems);
         }
-
+        public int[] CreateBookGenre(int bookId, int[] genreId)
+        {
+            foreach(var genre in genreId)
+            {
+                BookGenre bg = new BookGenre();
+                bg.GenreId = genre;
+                bg.BookId = bookId;
+                _context.BookGenres.Add(bg);
+            }
+            return null;
+        }
         public IEnumerable<Book> GetBooksWithTheSameGenres(Book book)
         {
             var books = new List<Book>();
