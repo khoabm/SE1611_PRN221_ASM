@@ -179,16 +179,21 @@ namespace Repository.Repository
 
             return (PaginatedList<Book>.Create(books.AsQueryable(), pageNum, pageSize), totalItems);
         }
-        public int[] CreateBookGenre(int bookId, int[] genreId)
+        public int CreateBookGenre(int bookId, int genreId)
         {
-            foreach(var genre in genreId)
+            try
             {
                 BookGenre bg = new BookGenre();
-                bg.GenreId = genre;
+                bg.GenreId = genreId;
                 bg.BookId = bookId;
                 _context.BookGenres.Add(bg);
+                return genreId;
             }
-            return genreId;
+            catch(Exception e)
+            {
+                return -1;
+            }
+                
         }
         public IEnumerable<Book> GetBooksWithTheSameGenres(Book book)
         {

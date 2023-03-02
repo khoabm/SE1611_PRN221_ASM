@@ -39,24 +39,6 @@
                                 <strong>Add a new book</strong>
                             </div>
                             <div class="card-body card-block">
-                                <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="text-input" class=" form-control-label">Title</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div><button type="submit">submit</button></div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <strong>Add a new book</strong>
-                            </div>
-                            <div class="card-body card-block">
 
                                 <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
                                     @*@Html.AntiForgeryToken()*@

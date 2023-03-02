@@ -130,8 +130,13 @@ namespace SE1611_PRN221_ASM.Controllers
                 book.ImageLink = imgurl;
                 book.AddedDate = DateTime.UtcNow;
                 _unitOfWork.BookRepository.Create(book);
-                _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genres);
                 _unitOfWork.Save();
+                foreach (var genre in genres)
+                {
+                    _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
+                    _unitOfWork.Save();
+                }
+                
                 //Console.WriteLine(file.FileName);
                 return RedirectToAction(nameof(Create));
             }
