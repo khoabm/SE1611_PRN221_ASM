@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Entities;
 using Repository.Infrastructure;
 using Repository.Repository;
 using SE1611_PRN221_ASM.Helper;
 using SE1611_PRN221_ASM.Models;
+using System.Security.Claims;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
@@ -217,18 +220,42 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // POST: AccountController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult LogOut()
         {
-            try
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpGet]
+        public IActionResult SignInWithGoogle()
+        {
+           
+            var authenticationProperties = new AuthenticationProperties
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+                RedirectUri = Url.Action("","/signin-google")
+            };
+            Console.WriteLine("Google ne`");
+            return Challenge(new AuthenticationProperties {RedirectUri = "/signin-google" }, GoogleDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> HandleGoogleSignIn()
+        {
+            var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            Console.WriteLine("Handle google signin");
+            if (!authenticateResult.Succeeded)
             {
-                return View();
+                Console.WriteLine("AUTHENTICATED FAILED");
+                // Handle the sign-in failure
             }
+
+            var email = authenticateResult.Principal.FindFirst(ClaimTypes.Email)?.Value;
+
+            // Sign in the user
+            // ...
+
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

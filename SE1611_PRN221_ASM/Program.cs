@@ -2,6 +2,7 @@ using Firebase.Storage;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Repository.Entities;
 using Repository.Infrastructure;
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<BookSellingContext>(options
     => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -26,12 +28,32 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 
 });
+builder.Services.AddRazorPages();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddAuthentication("MySession")
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+
         .AddScheme<SessionAuthenticationOptions, SessionAuthenticationHandler>(
-            "MySession", options => { });
+            "MySession", options => { })
+        .AddGoogle(googleOptions =>
+        {
+            googleOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            googleOptions.ClientId = "546584990405-i57t58ev9ib0dh3kk1celkulfdoiolgq.apps.googleusercontent.com";
+            googleOptions.ClientSecret = "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";
+            //googleOptions.CallbackPath = "/account/handlegooglesignin";
+        })
+        .AddCookie(options =>
+        {
+            
+        });
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,7 +64,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -55,6 +77,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
-    //pattern: "{controller=Book}/{action=Index}/{id?}");
-
+//pattern: "{controller=Book}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapRazorPages();
+});
 app.Run();

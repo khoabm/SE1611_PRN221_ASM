@@ -139,7 +139,7 @@ namespace Repository.Repository
                                                         , int pageNum, int pageSize, string sort)
 
         {
-            List<Book> books = _context.Books.ToList();
+            List<Book> books = _context.Books.Include(b => b.Comments).ToList();
             List<Book> list = new List<Book>();
             //-----------------------------------
             //search by query title and author
@@ -156,6 +156,15 @@ namespace Repository.Repository
                 Console.WriteLine(genres);
                 List<BookGenre> bookGenres = _context.BookGenres.Where(bg => genres.Contains(bg.Genre.GenreName)).ToList();
                 books = books.Where(b => bookGenres.Any(bg => bg.BookId == b.BookId)).ToList();
+            }
+            foreach (var book in books)
+            {
+                if (book.Comments.Count > 0)
+                {
+                    double averageRating = book.Comments.Average(c => c.Rating!.Value);
+                    book.AverageRating = averageRating;
+                }
+                else { book.AverageRating = 0; }
             }
             //----------------------------
             //sort
@@ -191,7 +200,7 @@ namespace Repository.Repository
                 throw new Exception();
             }
 
-            return books;         
+            return books;
 
         }
     }

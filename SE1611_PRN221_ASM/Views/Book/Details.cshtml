@@ -1,11 +1,67 @@
 ﻿@using Repository.Entities
 @model Repository.Entities.Book
-
+@using SE1611_PRN221_ASM.Helper
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Details";
     var genres = ViewBag.BookGenres as List<Genre>;
+    var session = HttpContextAccessor.HttpContext.Session;
+    var userSession = session.GetObject<UserSession>("UserSession");
+}
+@section StarRating{
+    <style>
+        .form-group {
+            display: flex;
+        }
 
+        .form-check-inline .rating {
+            display: none;
+        }
 
+        .form-check-inline span {
+            padding-right: 2%;
+            cursor: pointer;
+            color: transparent;
+        }
+
+            .form-check-inline span:before {
+                content: '\2606';
+                color: gold;
+            }
+
+            .form-check-inline span:hover:before,
+            .form-check-inline span:hover ~ span:before {
+                content: '\2605';
+                color: gold;
+            }
+
+        .form-check-inline .rating:checked ~ span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
+        .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
+        .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+    </style>
 }
 <div class="page-content">
     <div class="holder">
@@ -75,7 +131,7 @@
                                     {
                                         <span class="" data-stock-status="">
                                             @item.GenreName
-                                            @if ((genres.Count >= 2) && (!item.Equals(genres[genres.Count-1])))
+                                            @if ((genres.Count >= 2) && (!item.Equals(genres[genres.Count - 1])))
                                             {
                                                 <text>,</text>
                                             }
@@ -205,7 +261,9 @@
                                 <i class="icon-pencil"></i>
                                 Write review
                             </div>
-                            <div class="col-18 col-md-auto pt-2" id="comment_section" style="display: none">
+                           
+                            <div class="col-18" id="comment_section" style="display: none">
+                                <div class="rating"></div>
                                 <textarea id="comment" class="form-control textarea--height-170" name="message" placeholder="Message" required=""></textarea>
                                 @*<a asp-controller="Comment" asp-action="Test" asp-route-bookId="@Model.BookId" asp-route-page="1" class="btn"></a>*@
                                 <a class="mt-2 btn" style="float:right" id="post_comment" href="#">Comment</a>
@@ -234,7 +292,22 @@
                 }
             });
         });
+        //star rating options
+        var options = {
+            max_value: 5,
+            step_size: 1,
+            initial_value: 1,
+            selected_symbol_type: 'fontawesome_star',
+            cursor: 'default',
 
+        }
+        //star rating init
+        let rating = 0;
+        $(".rating").rate(options);
+        $(".rating").on("change", function (ev, data) {
+            console.log(data.from, data.to);
+            rating = data.to;
+        });
         $(document).ready(() => {
             $('#post_comment').click((e) => {
                 e.preventDefault();
@@ -246,9 +319,10 @@
                 $.ajax({
                     url: "/Comment/Test",
                     type: "POST",
-                    data: { id: 6, comment: comment, customerId: 2, rating: 4, },
+                    data: { id: @Model.BookId, comment: comment , rating: rating, },
                     success: function (result) {
                         console.log(result);
+                        
                         $("#partial_comment_container").html(result);
                     },
                     error: function () {
@@ -257,5 +331,8 @@
                 });
             })
         })
+
+        // Options
+
     </script>
 }

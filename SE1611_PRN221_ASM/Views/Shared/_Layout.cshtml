@@ -38,8 +38,11 @@
             line-clamp: 2;
             -webkit-box-orient: vertical;
         }
-       
     </style>
+    @if (IsSectionDefined("StarRating"))
+    {
+        @RenderSection("StarRating")
+    }
 </head>
 <body class="has-smround-btns has-loader-bg equal-height has-sm-container">
     <header class="hdr-wrap">
@@ -76,20 +79,32 @@
                                 </a>
                             </div>
                             <div class="dropdn dropdn_account dropdn_fullheight">
-                                <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
-                            </div>
-                            @*@if (userSession == null)
+                                @if (userSession != null)
                                 {
-                                <div class="dropdn dropdn_account dropdn_fullheight">
-                                <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
-                                </div>
+                                    <a asp-controller="Account" asp-action="Details" class="dropdn-link" data-panel="#dropdnAccount"><i class="icon-user"></i></a>
                                 }
                                 else
                                 {
-                                <div class="dropdn dropdn_account dropdn_fullheight">
-                                <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@userSession.FullName</span></a>
-                                </div>
-                                }*@
+                                    <a asp-controller="Account" asp-action="SignIn" class="dropdn-link" data-panel="#dropdnAccount"><i class="icon-user"></i></a>
+                                }
+
+                            </div>
+                            @*<div class="dropdn dropdn_account dropdn_fullheight">
+            <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
+
+        </div>*@
+                            @*@if (userSession == null)
+        {
+        <div class="dropdn dropdn_account dropdn_fullheight">
+        <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
+        </div>
+        }
+        else
+        {
+        <div class="dropdn dropdn_account dropdn_fullheight">
+        <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">@userSession.FullName</span></a>
+        </div>
+        }*@
                             <div class="dropdn dropdn_fullheight minicart">
                                 <a asp-controller="Cart" asp-action="Index" class="dropdn-link minicart-link" data-panel="#dropdnMinicart">
                                     <i class="icon-basket"></i>
@@ -1064,6 +1079,7 @@
     <script src="~/js/vendor/vendor.min.js"></script>
     <script src="~/js/app-html.js"></script>
     <script src="~/js/site.js"></script>
+    <script src="~/js/rater.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
