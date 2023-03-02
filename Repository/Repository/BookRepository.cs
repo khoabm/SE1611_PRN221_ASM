@@ -188,7 +188,7 @@ namespace Repository.Repository
                 bg.BookId = bookId;
                 _context.BookGenres.Add(bg);
             }
-            return null;
+            return genreId;
         }
         public IEnumerable<Book> GetBooksWithTheSameGenres(Book book)
         {

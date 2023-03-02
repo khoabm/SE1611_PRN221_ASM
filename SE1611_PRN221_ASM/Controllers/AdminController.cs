@@ -10,7 +10,7 @@ using System.Text;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
-    [SessionAuthorize]
+    
     public class AdminController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -60,8 +60,8 @@ namespace SE1611_PRN221_ASM.Controllers
                          AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
                          ThrowOnCancel = true,
                      })
-                        .Child("my-folder")
-                        .Child(bookAuthor + "." + extension)
+                        .Child("book-cover")
+                        .Child(bookAuthor + extension)
                         .PutAsync(fileStream, cancellation.Token);
                 downloadUrl = await task;
                 Console.WriteLine(downloadUrl);
@@ -113,29 +113,31 @@ namespace SE1611_PRN221_ASM.Controllers
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string title, string author, string description, string publisher, string price, string quantity, int status, int[] genres, IFormFile file)
+        public async Task<IActionResult> Create(string title, string author, string description, string publisher, string price, string quantity, int status, int[] genres, IFormFile picture)
         {
             try
             {
                 string bookauthor = title + author;
-                string imgurl = await UploadToFirebase(file, bookauthor, Path.GetExtension(file.FileName));
+                string imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
                 Book book = new Book();
                 book.Title = title;
                 book.Author = author;
                 book.Description = description;
                 book.Publisher = publisher;
-                book.Price = float.Parse(price);
-                book.QuantityLeft = int.Parse(quantity);
+                book.Price = float.Parse(price.Replace(",",""));
+                book.QuantityLeft = int.Parse(quantity.Replace(",",""));
                 book.Status = Convert.ToInt16(status);
                 book.ImageLink = imgurl;
+                book.AddedDate = DateTime.UtcNow;
                 _unitOfWork.BookRepository.Create(book);
                 _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genres);
+                _unitOfWork.Save();
                 //Console.WriteLine(file.FileName);
                 return RedirectToAction(nameof(Create));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Create));
             }
         }
 
