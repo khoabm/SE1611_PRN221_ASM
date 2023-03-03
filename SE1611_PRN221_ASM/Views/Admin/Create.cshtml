@@ -1,0 +1,198 @@
+﻿@model List<Repository.Entities.Book>
+@using Repository.Entities
+@{
+    Layout = "_AdminLayout";
+    var genres = ViewBag.Genres as List<Genre>;
+}
+@section script{
+    <script>
+        function previewImage(event) {
+            var preview = document.getElementById('preview');
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function() {
+                preview.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+        function addThousandSeparator(inputField) {
+            // Get input value and remove any non-numeric characters
+            let inputValue = inputField.value.replace(/\D/g, '');
+
+            // Add thousand separator to the input value
+            inputValue = Number(inputValue).toLocaleString('en-US');
+
+            // Update the input field with the formatted value
+            inputField.value = inputValue;
+        }
+    </script>
+
+}
+    <!-- MAIN CONTENT-->
+    <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong>Add a new book</strong>
+                            </div>
+                            <div class="card-body card-block">
+
+                                <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
+                                    @*@Html.AntiForgeryToken()*@
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="text-input" class=" form-control-label">Title</label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="text-input" class=" form-control-label">Author</label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="text-input" name="author" placeholder="Who wrote this book for example" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="textarea-input" class=" form-control-label">Description</label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <textarea name="description" id="textarea-input" rows="5" placeholder="Quick peek of the book content" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="text-input" class=" form-control-label">Publisher</label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="text-input" name="publisher" placeholder="What company does this book published by" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group ">
+                                        <div class="col col-md-3">
+                                            <label for="price" class=" form-control-label">Price</label>
+                                        </div>
+                                        <div class="col-12 col-md-9 input-group">
+                                            <div class="input-group-addon"><i class="fa fa-dollar"></i></div>
+                                            <input type="text" id="price" name="price" placeholder="How much does this book going to cost ..." class="form-control" onkeyup="addThousandSeparator(this)">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="text-input" class=" form-control-label">Quantity</label>
+                                        </div>
+                                        <div class="col-12 col-md-9 input-group">
+                                            <div class="input-group-addon"><i class="fa fa-book"></i></div>
+                                            <input type="text" id="quantity" name="quantity" placeholder="How many of this book do you have" class="form-control" onkeyup="addThousandSeparator(this)">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="select" class=" form-control-label">Status</label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <select name="status" id="status" class="form-control">
+                                                <option value="0">Please select</option>
+                                                <option value="1">Active</option>
+                                                <option value="2">Disable</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label class=" form-control-label">Genres</label>
+                                        </div>
+                                        <div class="col col-md-9">
+                                            <div class="form-check">
+                                                <div class="row">
+                                                    @foreach (var item in genres)
+                                                {
+                                                    <div class="checkbox col-6">
+                                                        <label for="@item.GenreName" class="form-check-label">
+                                                            <input type="checkbox" id="genres" name="genres" value="@item.GenreId" class="form-check-input">@item.GenreName
+                                                        </label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="file-input" class=" form-control-label">Book picture</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="file" id="file-input" name="picture" class="form-control-file" accept="image/*" onchange="previewImage(event)">
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button type="reset" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-ban"></i> Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fa fa-dot-circle-o"></i> Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Preview image</strong>
+                        </div>
+                        <div class="card-body card-block" style="text-align:center">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/bookseller-5f813.appspot.com/o/book-cover%2F3d463db31f.jfif?alt=media&token=82ef2568-909b-4a2f-bb12-399b56fe4a7a" alt="preview-image" id="preview" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="@item.ImageLink" alt="@item.Title" class="card-img-top" />
+                            <div class="card-body">
+
+                                <div class="col-md-1 ml-auto d-flex justify-content-center row" style="padding:0px 0px">
+                                    <button class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding:0px 0px">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 44px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <a class="dropdown-item" href="#">Delete</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 class="card-title mb-3">@item.Title</h4>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>@item.Author</h5>
+                                            <p>$@item.Price</p>
+                                        </div>
+                                    </div>
+                                    <p class="card-text" style="overflow:hidden">@item.Description</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MAIN CONTENT-->

@@ -36,11 +36,13 @@
                             <span>Filter</span>
                         </div>
                     </div>
+
                     <form asp-action="Index" id="filter" method="GET">
                         @if (!String.IsNullOrEmpty(searchModel.query))
                         {
                             <input type="hidden" id="query" name="query" value="@searchModel.query"></input>
                         }
+
                         <div class="sidebar-block filter-group-block open">
                             <div class="sidebar-block_title">
                                 <span>Genres</span>
@@ -51,14 +53,13 @@
                                     @foreach (var item in genres!)
                                     {
                                         <li>
-                                            @if (ViewBag.SearchGenres != null)
-                                            {
-                                                <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox" @(searchModel.genres != null && (searchModel.genres).Contains(item.GenreName) ? "checked" : "")>
-                                            }
-                                            else
-                                            {
-                                                <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox">
-                                            }
+
+                                            <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox" @(searchModel.genres != null && (searchModel.genres).Contains(item.GenreName) ? "checked" : "")>
+
+                                            @*else
+                                                {
+                                                    <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox">
+                                                }*@
                                             <label for="@item.GenreId">@item.GenreName</label>
                                         </li>
                                         @*<li><a href="#" title="@item.GenreName" class="open">@item.GenreName</a></li>*@
@@ -74,11 +75,11 @@
                             <div class="sidebar-block_content">
                                 <div>
                                     <label for="minPrice">Minimum Price:</label>
-                                    <input type="number" id="minPrice" name="minPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" value="@searchModel.minPrice"/>
+                                    <input type="number" id="minPrice" name="minPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" value="@searchModel.minPrice" />
                                 </div>
                                 <div>
                                     <label for="maxPrice">Maximum Price:</label>
-                                    <input type="number" id="maxPrice" name="maxPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" value="@searchModel.maxPrice"/>
+                                    <input type="number" id="maxPrice" name="maxPrice" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" value="@searchModel.maxPrice" />
                                 </div>
                             </div>
 
@@ -117,9 +118,34 @@
                                     <div class="prd-info">
                                         <div class="prd-info-wrap">
                                             <div class="prd-info-top">
-                                                <div class="prd-rating"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
+                                                <div class="prd-rating">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.AverageRating)
+                                                        {
+                                                            <i class="icon-star-fill fill"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="icon-star-fill"></i>
+                                                        }
+                                                    }
+
+                                                </div>
                                             </div>
-                                            <div class="prd-rating justify-content-center"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
+                                            <div class="prd-rating justify-content-center">
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    if (i < item.AverageRating)
+                                                    {
+                                                        <i class="icon-star-fill fill"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="icon-star-fill"></i>
+                                                    }
+                                                }
+                                            </div>
                                             <div class="prd-tag"><a href="#">@Html.DisplayFor(modelItem => item.Author)</a></div>
                                             <h2 class="prd-title"><a a asp-action="Details" asp-route-id="@item.BookId">@Html.DisplayFor(modelItem => item.Title)</a></h2>
                                             <div class="prd-description">
@@ -153,18 +179,24 @@
                         <ul class="pagination" style="display: flex; justify-content: center; align-items: center;list-style: none;padding: 0;margin: 20px 0;">
                             @if (pagination.StartPage > 1)
                             {
-                                <li class="@(1 == pagination.CurrentPage ? "active" : "")"><a href="?page=1&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
-                            }">First</a></li>
+                                <li class="@(1 == pagination.CurrentPage ? "active" : "")">
+                                    <a href="?page=1&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                            }">First</a>
+                                </li>
                             }
                             @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
                             {
-                                <li class=" @(i == pagination.CurrentPage ? "active" : "")"><a href="?page=@i&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
-                            }">@i</a></li>
-                            }
+                                <li class=" @(i == pagination.CurrentPage ? "active" : "")">
+                                    <a href="?page=@i&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                            }">@i</a>
+                        </li>
+                    }
                             @if (pagination.EndPage < pagination.TotalPages)
                             {
-                                <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")"><a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
-                            }">@(pagination.TotalPages)</a></li>
+                                <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")">
+                                    <a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                            }">@(pagination.TotalPages)</a>
+                                </li>
                             }
                         </ul>
                     }

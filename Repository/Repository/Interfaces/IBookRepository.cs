@@ -12,12 +12,14 @@ namespace Repository.Repository.Interfaces
     {
         public (List<Book>, int totalItems) SearchBooks(string query, string[] genres, double minPrice, double maxPrice
                                                         , int pageNum, int pageSize,string sort);
+        int CreateBookGenre(int bookId,int genreId);
         IEnumerable<Book> GetBooksOrderByAverageRating();
 
         IEnumerable<Book> GetBooksOrderByAddedDate();
         IEnumerable<Book> GetBooksOrderByCategory(String categoryName);
 
         List<Genre> GetBookGenres(int id);
+        IEnumerable<Book> GetBooksWithTheSameGenres(Book book);
 
     }
 }

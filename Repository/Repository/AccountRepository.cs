@@ -66,11 +66,13 @@ namespace Repository.Repository
             try
             {
                 accounts = await _context.Accounts
-                            .Include(a => a.Customer)
-                            .Where((a => a.Email.Contains(query) || a.Customer.Name.Contains(query)))
+                            .Include(a => a.Customer)                        
+                            .Where((a => a.Email.Contains(query) 
+                            || a.Customer.Name.Contains(query) 
+                            && a.RoleId != (int)RoleId.Admin))                          
                             .ToListAsync();
                 totalPages = accounts.Count();
-                Console.WriteLine(totalPages);
+                
             }
             catch (Exception)
             {

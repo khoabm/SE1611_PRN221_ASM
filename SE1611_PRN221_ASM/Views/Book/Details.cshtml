@@ -8,8 +8,9 @@
 @{
     ViewData["Title"] = "Details";
     var genres = ViewBag.BookGenres as List<Genre>;
+    var session = HttpContextAccessor.HttpContext.Session;
+    var userSession = session.GetObject<UserSession>("UserSession");
     var isFavorite = false;
-    var userSession = HttpContextAccessor.HttpContext.Session.GetObject<UserSession>("UserSession");
     if (userSession != null)
     {
         var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
@@ -21,7 +22,61 @@
         }
     }
 }
+@section StarRating{
+    <style>
+        .form-group {
+            display: flex;
+        }
 
+        .form-check-inline .rating {
+            display: none;
+        }
+
+        .form-check-inline span {
+            padding-right: 2%;
+            cursor: pointer;
+            color: transparent;
+        }
+
+            .form-check-inline span:before {
+                content: '\2606';
+                color: gold;
+            }
+
+            .form-check-inline span:hover:before,
+            .form-check-inline span:hover ~ span:before {
+                content: '\2605';
+                color: gold;
+            }
+
+        .form-check-inline .rating:checked ~ span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
+        .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+
+        .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
+        .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+    </style>
+}
 <div class="page-content">
     <div class="holder">
         <div class="container js-prd-gallery" id="prdGallery">
@@ -56,7 +111,7 @@
                     <div class="prd-block_info prd-block_info--style1" data-prd-handle="/products/copy-of-suede-leather-mini-skirt">
                         <div class="prd-block_info-top prd-block_info_item order-0 order-md-2">
                             <div class="prd-block_price prd-block_price--style2">
-                                <div class="prd-block_price--actual">@Html.DisplayFor(model => model.Price) $</div>
+                                <div class="prd-block_price--actual">$@Html.DisplayFor(model => model.Price)</div>
                             </div>
                         </div>
                         <div class="prd-block_description prd-block_info_item ">
@@ -74,7 +129,7 @@
                             <div class="two-column">
                                 <p>
                                     In stock:
-                                    <span class="prd-in-stock" data-stock-status="">@Html.DisplayFor(model=>model.QuantityLeft)</span>
+                                    <span class="prd-in-stock" data-stock-status="">@Html.DisplayFor(model => model.QuantityLeft)</span>
                                 </p>
                                 <p>
                                     @Html.DisplayNameFor(model => model.Author):
@@ -137,6 +192,73 @@
             </div>
         </div>
     </div>
+    <div class="holder">
+        <div class="container">
+            <div class="title-wrap text-center">
+                <h2 class="h1-style">You may also like</h2>
+                <div class="carousel-arrows carousel-arrows--center"></div>
+            </div>
+            <div class="prd-grid prd-carousel js-prd-carousel slick-arrows-aside-simple slick-arrows-mobile-lg data-to-show-4 data-to-show-md-3 data-to-show-sm-3 data-to-show-xs-2"
+                 data-slick='{"slidesToShow": 4, "slidesToScroll": 2, "responsive": [{"breakpoint": 992,"settings": {"slidesToShow": 3, "slidesToScroll": 1}},{"breakpoint": 768,"settings": {"slidesToShow": 2, "slidesToScroll": 1}},{"breakpoint": 480,"settings": {"slidesToShow": 2, "slidesToScroll": 1}}]}'>
+                @foreach (var item in ViewBag.SimilarBooks)
+                {
+                    <div class="prd prd--style2 prd-labels--max prd-labels-shadow ">
+                        <div class="prd-inside">
+                            <div class="prd-img-area">
+                                <a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId" class="prd-img image-hover-scale image-container">
+                                    <img data-src="@item.ImageLink" alt="Midi Dress with Belt" class="js-prd-img lazyload fade-up">
+                                    <div class="foxic-loader"></div>
+                                    <div class="prd-big-squared-labels">
+                                    </div>
+                                </a>
+                                <div class="prd-circle-labels">
+                                    <a href="#" class="circle-label-compare circle-label-wishlist--add js-add-wishlist mt-0" title="Add To Wishlist"><i class="icon-heart-stroke"></i></a><a href="#" class="circle-label-compare circle-label-wishlist--off js-remove-wishlist mt-0" title="Remove From Wishlist"><i class="icon-heart-hover"></i></a>
+                                    <a href="#" class="circle-label-qview js-prd-quickview prd-hide-mobile" data-src="ajax/ajax-quickview.html"><i class="icon-eye"></i><span>QUICK VIEW</span></a>
+
+                                </div>
+
+                            </div>
+                            <div class="prd-info">
+                                <div class="prd-info-wrap">
+                                    <div class="prd-info-top">
+                                        <div class="prd-rating"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
+                                    </div>
+                                    <div class="prd-rating justify-content-center"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
+                                    <div class="prd-tag"><a href="#">@item.Author</a></div>
+                                    <h2 class="prd-title"><a asp-controller="Book" asp-action="Index" asp-route-query="@item.Title">@item.Title</a></h2>
+                                    <div class="prd-description">
+                                        @item.Description
+                                    </div>
+                                    <div class="prd-action">
+                                        <form action="#">
+                                            <button class="btn js-prd-addtocart" data-product='{"name": "Midi Dress with Belt", "path":"images/skins/fashion/products/product-06-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="prd-hovers">
+                                    <div class="prd-circle-labels">
+                                        <div><a href="#" class="circle-label-compare circle-label-wishlist--add js-add-wishlist mt-0" title="Add To Wishlist"><i class="icon-heart-stroke"></i></a><a href="#" class="circle-label-compare circle-label-wishlist--off js-remove-wishlist mt-0" title="Remove From Wishlist"><i class="icon-heart-hover"></i></a></div>
+                                        <div class="prd-hide-mobile"><a href="#" class="circle-label-qview js-prd-quickview" data-src="ajax/ajax-quickview.html"><i class="icon-eye"></i><span>QUICK VIEW</span></a></div>
+                                    </div>
+                                    <div class="prd-price">
+                                        <div class="price-new">$ @item.Price</div>
+                                    </div>
+                                    <div class="prd-action">
+                                        <div class="prd-action-left">
+                                            <form action="#">
+                                                <button class="btn js-prd-addtocart" data-product='{"name": "Midi Dress with Belt", "path":"images/skins/fashion/products/product-06-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
 
     <div class="holder mt-3 mt-md-5">
         <div class="container">
@@ -146,41 +268,40 @@
                         Reviews
                         <span class="toggle-arrow"><span></span><span></span></span>
                     </a>
+
                 </li>
             </ul>
             <div class="tab-content">
+
                 <div role="tabpanel" class="tab-pane fade" id="Tab5">
                     <div id="productReviews">
-                        <div class="row align-items-center">
+                        <div style="display: block" class="row align-items-center">
                             <div class="col"><h2>CUSTOMER REVIEWS</h2></div>
-                            <div class="col-18 col-md-auto mb-3 mb-md-0"><a href="#" class="review-write-link"><i class="icon-pencil"></i>Write review</a></div>
-                        </div>
-                        <div id="productReviewsBottom">
-                            <div class="review-item">
-                                <div class="review-item_rating">
-                                    <i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i>
-                                </div>
-                                <div class="review-item_top row align-items-center">
-                                    <div class="col"><h5 class="review-item_author">Jaden Ngo on May 25, 2018</h5></div>
-                                    <div class="col-auto"><a href="#" class="review-item_report">Report as Inappropriate</a></div>
-                                </div>
-                                <div class="review-item_content">
-                                    <h4>Good ball and company</h4>
-                                    <p>I recently bought this ball and this is the first ball that I actually buy based on quality and material, I always been playing my friend ball and one of them recommended me this, read some review online and decided to buy it, the ball feel sticky at first but quality is nice and the hand wrote letter was awesome because it shows how much season creator actually care about their customers.</p>
-                                </div>
+                            <div style="cursor: pointer" id="write-review" class="col-18 col-md-auto mb-3 mb-md-0 unselectable">
+                                <i class="icon-pencil"></i>
+                                Write review
                             </div>
+                           
+                            <div class="col-18" id="comment_section" style="display: none">
+                                <div class="rating"></div>
+                                <textarea id="comment" class="form-control textarea--height-170" name="message" placeholder="Message" required=""></textarea>
+                                @*<a asp-controller="Comment" asp-action="Test" asp-route-bookId="@Model.BookId" asp-route-page="1" class="btn"></a>*@
+                                <a class="mt-2 btn" style="float:right" id="post_comment" href="#">Comment</a>
+                            </div>
+                        </div>
+                        <div style="padding-top:5%" id="partial_comment_container">
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
 @section Scripts {
-
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
         var qtyInput = $(".qty-input");
         var maxQuantity = parseInt(qtyInput.attr("data-max"));
         var bookId = parseInt(qtyInput.attr("data-book-id"));
@@ -261,5 +382,47 @@
                             return false;
                         });
                     });
-</script>
+        //star rating options
+        var options = {
+            max_value: 5,
+            step_size: 1,
+            initial_value: 1,
+            selected_symbol_type: 'fontawesome_star',
+            cursor: 'default',
+
+        }
+        //star rating init
+        let rating = 0;
+        $(".rating").rate(options);
+        $(".rating").on("change", function (ev, data) {
+            console.log(data.from, data.to);
+            rating = data.to;
+        });
+        $(document).ready(() => {
+            $('#post_comment').click((e) => {
+                e.preventDefault();
+                let comment = $('#comment').val();
+                if (comment.length == 0) {
+                    $('#comment').addClass('form-control--sm form-control--error');
+                    return;
+                }
+                $.ajax({
+                    url: "/Comment/Test",
+                    type: "POST",
+                    data: { id: @Model.BookId, comment: comment , rating: rating, },
+                    success: function (result) {
+                        console.log(result);
+                        
+                        $("#partial_comment_container").html(result);
+                    },
+                    error: function () {
+                        console.log("Error loading partial view.");
+                    }
+                });
+            })
+        })
+
+        // Options
+
+    </script>
 }

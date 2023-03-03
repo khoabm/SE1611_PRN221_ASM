@@ -12,32 +12,33 @@ using Repository.Entities;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
-
+    [SessionAuthorize]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public HomeController(IUnitOfWork unitOfWork)
+        private readonly ILogger<HomeController> _logger;
+        public HomeController(IUnitOfWork unitOfWork, ILogger<HomeController> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
-        public IActionResult AjaxAction()
-        {
-            return PartialView("_AjaxPartialView");
-        }
+
 
         [AllowAnonymous]
         public IActionResult Index()
         {
             var books = new List<Book>();
             var booksByDate = new List<Book>();
+            var genresByBook = new List<Genre>();
             try
             {
                 //books = _unitOfWork.BookRepository.GetAll().ToList();
                 books = _unitOfWork.BookRepository.GetBooksOrderByAverageRating().ToList();
                 booksByDate = _unitOfWork.BookRepository.GetBooksOrderByAddedDate().ToList();
                 //Console.WriteLine(books2.Count);
+                genresByBook = _unitOfWork.GenreRepository.GetGenresOrderByNumberOfBooks().ToList();
                 ViewBag.BooksByDate = booksByDate;
+                ViewBag.GenresByBook = genresByBook;
             }
             catch (Exception ex)
             {
@@ -49,26 +50,14 @@ namespace SE1611_PRN221_ASM.Controllers
             return View(books);
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult LoadBooks(string tab)
         {
             List<Book> books = new List<Book>();
-            Console.WriteLine("Load books");
-            if (tab == "novel")
-            {
-                // Filter books for Novel tab
-                books = _unitOfWork.BookRepository.GetBooksOrderByCategory("Fiction").ToList();
-            }
-            else if (tab == "comics")
-            {
-                // Filter books for Comics tab
-                books = _unitOfWork.BookRepository.GetBooksOrderByCategory("Romance").ToList();
-            }
-            else if (tab == "others")
-            {
-                // Filter books for Others tab
-                books = _unitOfWork.BookRepository.GetBooksOrderByCategory("").ToList();
-            }
-
+            
+            books = _unitOfWork.BookRepository.GetBooksOrderByCategory(tab).ToList();
+            _logger.LogWarning("Loading tabs: " + tab);
+            _logger.LogWarning("Current Data: " + books[0].Title);
             return PartialView("_ModelPartialView", books);
         }
         [SessionAuthorize]
@@ -76,7 +65,7 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
