@@ -23,59 +23,59 @@
     }
 }
 @section StarRating{
-    <style>
-        .form-group {
-            display: flex;
+<style>
+    .form-group {
+        display: flex;
+    }
+
+    .form-check-inline .rating {
+        display: none;
+    }
+
+    .form-check-inline span {
+        padding-right: 2%;
+        cursor: pointer;
+        color: transparent;
+    }
+
+        .form-check-inline span:before {
+            content: '\2606';
+            color: gold;
         }
 
-        .form-check-inline .rating {
-            display: none;
-        }
-
-        .form-check-inline span {
-            padding-right: 2%;
-            cursor: pointer;
-            color: transparent;
-        }
-
-            .form-check-inline span:before {
-                content: '\2606';
-                color: gold;
-            }
-
-            .form-check-inline span:hover:before,
-            .form-check-inline span:hover ~ span:before {
-                content: '\2605';
-                color: gold;
-            }
-
-        .form-check-inline .rating:checked ~ span:before {
+        .form-check-inline span:hover:before,
+        .form-check-inline span:hover ~ span:before {
             content: '\2605';
             color: gold;
         }
 
-        .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
+    .form-check-inline .rating:checked ~ span:before {
+        content: '\2605';
+        color: gold;
+    }
 
-        .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
-        .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
+    .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
 
-        .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
+    .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
+    .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
 
-        .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
-        .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
-    </style>
+    .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
+
+    .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
+    .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
+</style>
 }
 <div class="page-content">
     <div class="holder">
@@ -230,8 +230,10 @@
                                         @item.Description
                                     </div>
                                     <div class="prd-action">
-                                        <form action="#">
-                                            <button class="btn js-prd-addtocart" data-product='{"name": "Midi Dress with Belt", "path":"images/skins/fashion/products/product-06-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                            <input type="hidden" name="bookId" value="@item.BookId" />
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button class="btn js-prd-addtocart">Add To Cart</button>
                                         </form>
                                     </div>
                                 </div>
@@ -245,8 +247,10 @@
                                     </div>
                                     <div class="prd-action">
                                         <div class="prd-action-left">
-                                            <form action="#">
-                                                <button class="btn js-prd-addtocart" data-product='{"name": "Midi Dress with Belt", "path":"images/skins/fashion/products/product-06-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                                <input type="hidden" name="bookId" value="@item.BookId" />
+                                                <input type="hidden" name="quantity" value="1" />
+                                                <button class="btn js-prd-addtocart">Add To Cart</button>
                                             </form>
                                         </div>
                                     </div>
@@ -281,7 +285,7 @@
                                 <i class="icon-pencil"></i>
                                 Write review
                             </div>
-                           
+
                             <div class="col-18" id="comment_section" style="display: none">
                                 <div class="rating"></div>
                                 <textarea id="comment" class="form-control textarea--height-170" name="message" placeholder="Message" required=""></textarea>
@@ -300,7 +304,7 @@
 </div>
 
 @section Scripts {
-    <script>
+<script>
         $(document).ready(function() {
         var qtyInput = $(".qty-input");
         var maxQuantity = parseInt(qtyInput.attr("data-max"));
@@ -412,7 +416,7 @@
                     data: { id: @Model.BookId, comment: comment , rating: rating, },
                     success: function (result) {
                         console.log(result);
-                        
+
                         $("#partial_comment_container").html(result);
                     },
                     error: function () {
@@ -424,5 +428,5 @@
 
         // Options
 
-    </script>
+</script>
 }
