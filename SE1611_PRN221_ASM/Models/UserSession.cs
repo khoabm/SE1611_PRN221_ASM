@@ -12,6 +12,6 @@
 
 
         public int CartItemCount { get; set; }
-
+        public int FavoriteItemCount { get; set; }
     }
 }

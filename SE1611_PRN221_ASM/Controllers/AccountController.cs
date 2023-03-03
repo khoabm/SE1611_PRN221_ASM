@@ -119,7 +119,9 @@ namespace SE1611_PRN221_ASM.Controllers
                         RoleId = loginAccount.RoleId
                     };
                     var cartItemCount = _unitOfWork.CartRepository.GetCartByCustomerId(loginAccount.Customer.CustomerId).Count();
+                    var favoriteItemCount = _unitOfWork.FavoriteRepository.GetFavoriteByCustomerId(loginAccount.Customer.CustomerId).Count();
                     userSession.CartItemCount = cartItemCount;
+                    userSession.FavoriteItemCount = favoriteItemCount;
 
                     HttpContext.Session.SetObject("UserSession", userSession);
                     HttpContext.Session.GetObject<UserSession>("UserSession");

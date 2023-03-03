@@ -39,7 +39,7 @@ namespace SE1611_PRN221_ASM.Controllers
                 return View("EmptyCart");
             }
 
-            return View(list);
+            return View("Index2", list);
         }
 
 
@@ -95,6 +95,13 @@ namespace SE1611_PRN221_ASM.Controllers
             }
             else
             {
+                if (quantity == 0)
+                {
+                    TempData["Message"] = "Out of stocks.";
+                    TempData["MessageType"] = "error";
+                    string url1 = Request.Headers["Referer"].ToString();
+                    return Redirect(url1);
+                }
                 // book is already in cart, update its quantity
                 cartItem.Quantity += quantity;
                 _unitOfWork.CartRepository.Update(cartItem);
@@ -111,10 +118,41 @@ namespace SE1611_PRN221_ASM.Controllers
             // Redirect the user back to the previous page
             return Redirect(url);
         }
+        public async Task<int> GetCartQuantity(int bookId)
+        {
+            try
+            {
+                var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+                if (userSession == null)
+                {
+                    return 0;
+                }
+                var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+
+                if (account == null)
+                {
+                    throw new Exception("Could not find account for user");
+                }
+
+                int customerId = account.AccountId;
+                var cartItem = _unitOfWork.CartRepository.GetByBookIdAndCustomerId(bookId, customerId);
+
+                if (cartItem == null)
+                {
+                    return 0;
+                }
+
+                int quantity = cartItem.Quantity ?? 0;
+                return quantity;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateCart(IEnumerable<Cart> cartItems)
+        public async Task<IActionResult> UpdateCartItem(Dictionary<int, int> quantity)
         {
             var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
 
@@ -123,19 +161,23 @@ namespace SE1611_PRN221_ASM.Controllers
                 TempData["Message"] = "Please log in first.";
                 return View("EmptyCart");
             }
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
 
-            foreach (var cartItem in cartItems)
+            int customerId = account.AccountId;
+            var list = _unitOfWork.CartRepository.GetCartByCustomerId(customerId);
+
+            foreach (var cartItem in list)
             {
-                var item = _unitOfWork.CartRepository.GetById(cartItem.CartId);
-                if (item != null)
+                if (quantity.ContainsKey(cartItem.Book.BookId))
                 {
-                    _unitOfWork.CartRepository.Update(item);
+                    cartItem.Quantity = quantity[cartItem.Book.BookId];
+                    _unitOfWork.CartRepository.Update(cartItem);
+                    _unitOfWork.Save();
                 }
             }
-
-            _unitOfWork.Save();
-            return View("Index");
+            return RedirectToAction(nameof(Index));
         }
+
 
         // POST: CartController/Delete/5
         [HttpPost]
