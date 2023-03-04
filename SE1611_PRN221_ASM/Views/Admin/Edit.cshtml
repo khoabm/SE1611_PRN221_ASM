@@ -81,10 +81,21 @@
                                         <label for="status" class="form-control-label">Status</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <select name="status" class="form-control" required>
-                                            <option value="2">Disable</option>
-                                            <option value="1">Active</option>
-                                        </select>
+                                        @if (book.Status == 1)
+                                        {
+                                            <select name="status" class="form-control" required>
+                                                <option value="1">Active</option>
+                                                <option value="2">Disable</option>
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select name="status" class="form-control" required>
+                                                <option value="2">Disable</option>
+                                                <option value="1">Active</option>
+                                            </select>
+                                        }
+
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -100,11 +111,15 @@
                                                         <label for="@item.GenreName" class="form-check-label">
                                                             @if (bookGenres.Contains(item))
                                                             {
-                                                                <input type="checkbox" id="genres" name="genres" value="@item.GenreId" class="form-check-input" checked>@item.GenreName
+                                                                <input type="checkbox" id="genres" name="genres" value="@item.GenreId" class="form-check-input" checked>
+
+                                                                @item.GenreName
                                                             }
-                                                            else 
+                                                            else
                                                             {
-                                                                <input type="checkbox" id="genres" name="genres" value="@item.GenreId" class="form-check-input">@item.GenreName
+                                                                <input type="checkbox" id="genres" name="genres" value="@item.GenreId" class="form-check-input">
+
+                                                                @item.GenreName
                                                             }
                                                         </label>
                                                     </div>
@@ -139,7 +154,7 @@
                             <strong>Preview new image</strong>
                         </div>
                         <div class="card-body card-block" style="text-align:center">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/bookseller-5f813.appspot.com/o/book-cover%2F3d463db31f.jfif?alt=media&token=82ef2568-909b-4a2f-bb12-399b56fe4a7a" alt="preview-image" id="preview"/>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/bookseller-5f813.appspot.com/o/book-cover%2F3d463db31f.jfif?alt=media&token=82ef2568-909b-4a2f-bb12-399b56fe4a7a" alt="preview-image" id="preview" />
                         </div>
                     </div>
                     <div class="card">
@@ -147,7 +162,7 @@
                             <strong>Preview old image</strong>
                         </div>
                         <div class="card-body card-block" style="text-align:center">
-                            <img src="@book.ImageLink" alt="preview-image"/>
+                            <img src="@book.ImageLink" alt="preview-image" />
                         </div>
                     </div>
                 </div>
@@ -210,7 +225,7 @@
             var preview = document.getElementById("preview");
             var file = event.target.files[0];
             var reader = new FileReader();
-            reader.onload = function () {
+            reader.onload = function() {
                 preview.src = reader.result;
             }
             reader.readAsDataURL(file);

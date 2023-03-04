@@ -108,10 +108,10 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             List<Book> books = _unitOfWork.BookRepository.GetAll().ToList();
             var totalData = books.Count;
-            var totalPages = (int)Math.Ceiling((double)totalData / 8);
+            var totalPages = (int)Math.Ceiling((double)totalData / 7);
 
-            var startPage = Math.Max(1, page - 8);
-            var endPage = Math.Min(totalPages, page + 8);
+            var startPage = Math.Max(1, page - 7);
+            var endPage = Math.Min(totalPages, page + 7);
             _logger.LogWarning(startPage.ToString());
             _logger.LogWarning(endPage.ToString());
             // Create a PaginationViewModel object and store it in the ViewBag or ViewData
@@ -125,7 +125,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
             ViewBag.Pagination = pagination;
             ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
-            return View(PaginatedList<Book>.Create(books.AsQueryable(), page, 8));
+            return View(PaginatedList<Book>.Create(books.AsQueryable(), page, 7));
         }
 
         // POST: AdminController/Create
