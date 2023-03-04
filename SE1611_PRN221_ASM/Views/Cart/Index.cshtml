@@ -18,12 +18,12 @@
                         <h2 class="minicart-prd-name"><a asp-controller="Book" asp-action="Details" asp-route-id="@cartItem.Book.BookId">@cartItem.Book.Title</a></h2>
                         <div class="minicart-prd-qty"><span class="minicart-prd-qty-label">Quantity:</span><span class="minicart-prd-qty-value">@cartItem.Quantity</span></div>
                         <div class="minicart-prd-price prd-price">
-                            <div class="price">@($"{cartItem.Quantity * cartItem.Book.Price:C}")</div>
+                            <div class="price">@($"{cartItem.Book.Price:C}")</div>
                         </div>
                     </div>
                     <div class="minicart-prd-action">
                         <form asp-controller="Cart" asp-action="Delete" asp-route-id="@cartItem.CartId" method="post">
-                            <button type="submit"><i class="icon-recycle"></i></button>
+                            <button type="submit" style="border: none;"><i class="icon-recycle"></i></button>
                         </form>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                 <span class="minicart-drop-total-value">@($"{Model.Sum(c => c.Book.Price * c.Quantity):C}")</span>
             </div>
             <div class="minicart-drop-actions">
-                <a asp-controller="Cart" asp-action="UpdateCart" class="btn btn-dark btn-hover-primary mr-2">Save</a>
+                @*<a asp-controller="Cart" asp-action="UpdateCart" class="btn btn-dark btn-hover-primary mr-2">Save</a>*@
                 <a asp-controller="Cart" asp-action="Checkout" class="btn btn-outline-dark btn-hover-primary">Checkout</a>
             </div>
         </div>

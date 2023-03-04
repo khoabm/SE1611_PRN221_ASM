@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Repository.Entities.Favorite>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="dropdn-content minicart-drop cart-items">
+        <div class="dropdn-content-block">
+            <div class="dropdn-close"><a asp-controller="Home" asp-action="Index">Close</a></div>
+        </div>
+    </div>
+    <div class="title-wrap text-center">
+        <h2 class="h1-style">My Favorite Books</h2>
+        <div class="h-sub maxW-825">Check out the books that I've added to my favorites list</div>
+    </div>
+    <div class="prd-grid-wrap position-relative">
+        <div class="prd-grid data-to-show-4 data-to-show-lg-4 data-to-show-md-3 data-to-show-sm-2 data-to-show-xs-2 js-category-grid" data-grid-tab-content>
+            @foreach (var favorite in Model)
+            {
+                <div class="prd prd--style2 prd-labels--max prd-labels-shadow">
+                    <div class="prd-inside">
+                        <div class="prd-img-area">
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@favorite.Book.BookId" class="prd-img image-hover-scale image-container">
+                                <img data-src="@favorite.Book.ImageLink" alt="@favorite.Book.Title" class="js-prd-img lazyload fade-up">
+                                <div class="foxic-loader"></div>
+                                <div class="prd-big-squared-labels"></div>
+                            </a>
+                        </div>
+                        <div class="prd-info">
+                            <div class="prd-info-wrap">
+                                <div class="prd-rating justify-content-center">
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        if (i < favorite.Book.AverageRating)
+                                        {
+                                            <i class="icon-star-fill fill"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="icon-star-fill"></i>
+                                        }
+                                    }
+                                </div>
+                                <div class="prd-tag"><a href="#">@favorite.Book.Author</a></div>
+                                <h2 class="prd-title book-title"><a asp-controller="Book" asp-action="Details" asp-route-id="@favorite.Book.BookId">@favorite.Book.Title</a></h2>
+                                <div class="prd-description">
+                                    @favorite.Book.Description
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        @*@if (TempData["Message"] != null)
+        {
+            <div style="height: 0"></div>
+        }*@
+    </div>
+</div>

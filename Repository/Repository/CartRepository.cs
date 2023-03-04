@@ -26,7 +26,5 @@ namespace Repository.Repository
                 .Include(c => c.Book)
                 .ToList();
         }
-
-
     }
 }
