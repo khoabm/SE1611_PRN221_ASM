@@ -5,26 +5,57 @@
 }
 
 <partial name="_Notification" />
+<textarea name="message" id="message"></textarea>
+<textarea name="connectionId" id="connectionId"></textarea>
+<button type="button" id="sendButton" value="Send message">Send</button>
 
+<div id="messages"></div>
 
-@{
-    var pagination = ViewBag.Pagination as PaginationViewModel;
+@section Scripts{
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl('/notificationHub').build();
+
+    try {
+        connection.on('UserConnected', (connectionId) => {
+            console.log(connectionId);
+        });
+    } catch (e) {
+        console.error(e);
+    }
+
+    try {
+        connection.on('UserDisconnected', (connectionId) => {
+            console.log(connectionId);
+        });
+    } catch (e) {
+        console.error(e);
+    }
+
+    connection.start().catch((e) => {
+        return console.error(e);
+    });
+
+    try {
+        document.getElementById("sendButton").addEventListener("click", (e) => {
+            e.preventDefault();
+            var message = document.getElementById("message").value;
+            var connectionId = document.getElementById("connectionId").value;
+            console.log(message +" "+ connectionId);
+            connection.invoke("NotifyOrderStatusChanged", connectionId).catch((err) => {
+                console.error(err.toString());
+            });
+        });
+
+        connection.on("ReceiveMessage", function (message) {
+            var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, '&gt;');
+            var div = document.createElement('div');
+            div.innerHTML = msg + "<hr />";
+            document.getElementById("messages").appendChild(div);
+        });
+    } catch (e) {
+        console.error(e);
+    }
+</script>
+
 }
 
-@if (pagination != null && pagination.TotalPages > 1)
-{
-    <ul class="pagination">
-        @if (pagination.StartPage > 1)
-        {
-            <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
-        }
-        @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
-        {
-            <li class="page-item @(i == pagination.CurrentPage ? "active" : "")"><a class="page-link" href="?page=@i">@i</a></li>
-        }
-        @if (pagination.EndPage < pagination.TotalPages)
-        {
-            <li class="page-item"><a class="page-link" href="?page=@pagination.TotalPages">Last</a></li>
-        }
-    </ul>
-}

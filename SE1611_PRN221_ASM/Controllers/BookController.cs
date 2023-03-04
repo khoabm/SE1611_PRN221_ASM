@@ -59,8 +59,8 @@ namespace SE1611_PRN221_ASM.Controllers
             var similarBooks = _unitOfWork.BookRepository.GetBooksWithTheSameGenres(book);
             if (book == null) return NotFound();
             ViewBag.BookGenres = _unitOfWork.BookRepository.GetBookGenres(id);
-            ViewBag.SimilarBooks = similarBooks;
-            Console.WriteLine("HEHEHEHEHE" + similarBooks.Count());
+            ViewBag.SimilarBooks = similarBooks ;
+            
             return View(book);
         }
 

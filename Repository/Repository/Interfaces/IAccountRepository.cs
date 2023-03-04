@@ -18,6 +18,7 @@ namespace Repository.Repository.Interfaces
         Task DisableAccount(int accountId);
         Task<Account> UpdateAccount(String email);
         int CountData();
+        
 
     }
 }

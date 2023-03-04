@@ -10,7 +10,7 @@
             var preview = document.getElementById('preview');
             var file = event.target.files[0];
             var reader = new FileReader();
-            reader.onload = function() {
+            reader.onload = function () {
                 preview.src = reader.result;
             }
             reader.readAsDataURL(file);
@@ -28,108 +28,109 @@
     </script>
 
 }
-    <!-- MAIN CONTENT-->
-    <div class="main-content">
-        <div class="section__content section__content--p30">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <strong>Add a new book</strong>
-                            </div>
-                            <div class="card-body card-block">
-                                <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="text-input" class=" form-control-label">Title</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div><button type="submit">submit</button></div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <strong>Add a new book</strong>
-                            </div>
-                            <div class="card-body card-block">
 
-                                <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
-                                    @*@Html.AntiForgeryToken()*@
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="text-input" class=" form-control-label">Title</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
-                                        </div>
+<!-- MAIN CONTENT-->
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Add a new book</strong>
+                        </div>
+                        <div class="card-body card-block">
+                            <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label">Title</label>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="text-input" class=" form-control-label">Author</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" id="text-input" name="author" placeholder="Who wrote this book for example" class="form-control">
-                                        </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="textarea-input" class=" form-control-label">Description</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <textarea name="description" id="textarea-input" rows="5" placeholder="Quick peek of the book content" class="form-control"></textarea>
-                                        </div>
+                                </div>
+                                <div><button type="submit">submit</button></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Add a new book</strong>
+                        </div>
+                        <div class="card-body card-block">
+
+                            <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
+                                @*@Html.AntiForgeryToken()*@
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label">Title</label>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="text-input" class=" form-control-label">Publisher</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" id="text-input" name="publisher" placeholder="What company does this book published by" class="form-control">
-                                        </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
                                     </div>
-                                    <div class="row form-group ">
-                                        <div class="col col-md-3">
-                                            <label for="price" class=" form-control-label">Price</label>
-                                        </div>
-                                        <div class="col-12 col-md-9 input-group">
-                                            <div class="input-group-addon"><i class="fa fa-dollar"></i></div>
-                                            <input type="text" id="price" name="price" placeholder="How much does this book going to cost ..." class="form-control" onkeyup="addThousandSeparator(this)">
-                                        </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label">Author</label>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="text-input" class=" form-control-label">Quantity</label>
-                                        </div>
-                                        <div class="col-12 col-md-9 input-group">
-                                            <div class="input-group-addon"><i class="fa fa-book"></i></div>
-                                            <input type="text" id="quantity" name="quantity" placeholder="How many of this book do you have" class="form-control" onkeyup="addThousandSeparator(this)">
-                                        </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="text" id="text-input" name="author" placeholder="Who wrote this book for example" class="form-control">
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="select" class=" form-control-label">Status</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <select name="status" id="status" class="form-control">
-                                                <option value="0">Please select</option>
-                                                <option value="1">Active</option>
-                                                <option value="2">Disable</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="textarea-input" class=" form-control-label">Description</label>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label class=" form-control-label">Genres</label>
-                                        </div>
-                                        <div class="col col-md-9">
-                                            <div class="form-check">
-                                                <div class="row">
-                                                    @foreach (var item in genres)
+                                    <div class="col-12 col-md-9">
+                                        <textarea name="description" id="textarea-input" rows="5" placeholder="Quick peek of the book content" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label">Publisher</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="text" id="text-input" name="publisher" placeholder="What company does this book published by" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <div class="col col-md-3">
+                                        <label for="price" class=" form-control-label">Price</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 input-group">
+                                        <div class="input-group-addon"><i class="fa fa-dollar"></i></div>
+                                        <input type="text" id="price" name="price" placeholder="How much does this book going to cost ..." class="form-control" onkeyup="addThousandSeparator(this)">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label">Quantity</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 input-group">
+                                        <div class="input-group-addon"><i class="fa fa-book"></i></div>
+                                        <input type="text" id="quantity" name="quantity" placeholder="How many of this book do you have" class="form-control" onkeyup="addThousandSeparator(this)">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="select" class=" form-control-label">Status</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="0">Please select</option>
+                                            <option value="1">Active</option>
+                                            <option value="2">Disable</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label class=" form-control-label">Genres</label>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <div class="form-check">
+                                            <div class="row">
+                                                @foreach (var item in genres)
                                                 {
                                                     <div class="checkbox col-6">
                                                         <label for="@item.GenreName" class="form-check-label">
@@ -176,12 +177,12 @@
             <div class="row">
                 @foreach (var item in Model)
                 {
-                    <div class="col-md-3">
-                        <div class="card">
-                            <img src="@item.ImageLink" alt="@item.Title" class="card-img-top" />
-                            <div class="card-body">
+                    <div style="padding: 0 10px;" class="col-md-3 mb-3">
+                        <div style="min-height: 100%;" class="card">
+                            <img style="max-width: 100%; max-height:50%;" src="@item.ImageLink" alt="@item.Title" class="card-img-top" />
+                            <div style="padding: 10px;" class="card-body">
 
-                                <div class="col-md-1 ml-auto d-flex justify-content-center row" style="padding:0px 0px">
+                                <div class="col-md-1 ml-auto d-flex justify-content-center row mr-2" style="padding:0px 0px">
                                     <button class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding:0px 0px">
                                         <i class="fa fa-ellipsis-h"></i>
                                     </button>
@@ -192,23 +193,84 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <h4 class="card-title mb-3">@item.Title</h4>
+                                        <h4 style=" display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis;" class="card-title mb-3">@item.Title</h4>
                                     </div>
                                 </div>
+                                @*<div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5 style="margin-bottom: 0.5rem;">@item.Author</h5>
+                                        <p style="margin-bottom: 0.5rem;">$@item.Price</p>
+                                    </div>
+                                </div>
+                                <p class="card-text" style=" overflow: hidden; text-overflow: ellipsis;  max-height: 10%">@item.Description</p>
+                            </div>*@
                                 <div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <h5>@item.Author</h5>
-                                            <p>$@item.Price</p>
+                                            <h5 style="margin-bottom: 0.5rem;">@item.Author</h5>
+                                            <p style="margin-bottom: 0.5rem; height: 100px; overflow: hidden; text-overflow: ellipsis;">@item.Description</p>
                                         </div>
                                     </div>
-                                    <p class="card-text" style="overflow:hidden">@item.Description</p>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="font-weight-bold" style="margin-bottom: 0.5rem;">$@item.Price</p>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 }
+            </div>
+            <div class="pagination-container">
+                <ul class="pagination">
+                    @if (ViewBag.Pagination != null)
+                    {
+                        <li class="page-item @(ViewBag.Pagination.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage - 1, query = ViewBag.Query })">Previous</a>
+                        </li>
+
+                        @if (ViewBag.Pagination.StartPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("create", new { page = 1})">1</a>
+                            </li>
+
+                            @if (ViewBag.Pagination.StartPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        @for (int i = ViewBag.Pagination.StartPage; i <= ViewBag.Pagination.EndPage; i++)
+                        {
+                            <li class="page-item @(ViewBag.Pagination.CurrentPage == i ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("create", new { page = i})">@i</a>
+                            </li>
+                        }
+
+                        @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages)
+                        {
+                            @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("create", new { page = ViewBag.Pagination.TotalPages,})">@ViewBag.Pagination.TotalPages</a>
+                            </li>
+                        }
+
+                        <li class="page-item @(ViewBag.Pagination.CurrentPage == ViewBag.Pagination.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("create", new { page = ViewBag.Pagination.CurrentPage + 1})">Next</a>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
     </div>

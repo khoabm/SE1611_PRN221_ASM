@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="dropdn-content minicart-drop cart-items" id="dropdnMinicart">
+<div style="min-height:100vh" class="dropdn-content minicart-drop cart-items justify-content-center d-flex flex-column align-items-center" id="dropdnMinicart">
     <div class="dropdn-content-block text-center">
         @if (TempData["Message"]?.ToString() != "Please log in first.")
         {

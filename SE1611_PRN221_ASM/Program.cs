@@ -32,28 +32,29 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-})
+builder.Services.AddAuthentication("MySession")
+//    (options =>
+//{
+//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//})
 
         .AddScheme<SessionAuthenticationOptions, SessionAuthenticationHandler>(
-            "MySession", options => { })
-        .AddGoogle(googleOptions =>
-        {
-            googleOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            googleOptions.ClientId = "546584990405-i57t58ev9ib0dh3kk1celkulfdoiolgq.apps.googleusercontent.com";
-            googleOptions.ClientSecret = "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";
-            //googleOptions.CallbackPath = "/account/handlegooglesignin";
-        })
-        .AddCookie(options =>
-        {
+            "MySession", options => { });
+        //.AddGoogle(googleOptions =>
+        //{
+        //    googleOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //    googleOptions.ClientId = "546584990405-i57t58ev9ib0dh3kk1celkulfdoiolgq.apps.googleusercontent.com";
+        //    googleOptions.ClientSecret = "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";
+        //    //googleOptions.CallbackPath = "/account/handlegooglesignin";
+        //})
+        //.AddCookie(options =>
+        //{
             
-        });
+        //});
 
 
-
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -63,7 +64,15 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.Use(async (context, next) =>
+{
+    await next();
+    if (context.Response.StatusCode == 404)
+    {
+        context.Request.Path = "/Home/Index";
+        await next();
+    }
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -80,6 +89,8 @@ app.MapControllerRoute(
 //pattern: "{controller=Book}/{action=Index}/{id?}");
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapRazorPages();
+    endpoints.MapHub<NotificationHub>("/notificationHub");
 });
+
+
 app.Run();

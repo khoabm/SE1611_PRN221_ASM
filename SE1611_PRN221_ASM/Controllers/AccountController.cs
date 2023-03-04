@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Repository.Entities;
 using Repository.Infrastructure;
 using Repository.Repository;
@@ -15,10 +16,12 @@ namespace SE1611_PRN221_ASM.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<AccountController> _logger;
-        public AccountController(IUnitOfWork unitOfWork, ILogger<AccountController> logger)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public AccountController(IUnitOfWork unitOfWork, ILogger<AccountController> logger, IHubContext<NotificationHub> hubContext)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _hubContext = hubContext;
         }
         // GET: AccountController
         public async Task<ActionResult> Index(int page = 1)
@@ -227,35 +230,36 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult SignInWithGoogle()
-        {
-           
-            var authenticationProperties = new AuthenticationProperties
-            {
-                RedirectUri = Url.Action("","/signin-google")
-            };
-            Console.WriteLine("Google ne`");
-            return Challenge(new AuthenticationProperties {RedirectUri = "/signin-google" }, GoogleDefaults.AuthenticationScheme);
-        }
+        //[HttpGet]
+        //public IActionResult SignInWithGoogle()
+        //{
 
-        [HttpGet]
-        public async Task<IActionResult> HandleGoogleSignIn()
-        {
-            var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-            Console.WriteLine("Handle google signin");
-            if (!authenticateResult.Succeeded)
-            {
-                Console.WriteLine("AUTHENTICATED FAILED");
-                // Handle the sign-in failure
-            }
+        //    var authenticationProperties = new AuthenticationProperties
+        //    {
+        //        RedirectUri = Url.Action("","/signin-google")
+        //    };
+        //    Console.WriteLine("Google ne`");
+        //    return Challenge(new AuthenticationProperties {RedirectUri = "/signin-google" }, GoogleDefaults.AuthenticationScheme);
+        //}
 
-            var email = authenticateResult.Principal.FindFirst(ClaimTypes.Email)?.Value;
+        //[HttpGet]
+        //public async Task<IActionResult> HandleGoogleSignIn()
+        //{
+        //    var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+        //    Console.WriteLine("Handle google signin");
+        //    if (!authenticateResult.Succeeded)
+        //    {
+        //        Console.WriteLine("AUTHENTICATED FAILED");
+        //        // Handle the sign-in failure
+        //    }
 
-            // Sign in the user
-            // ...
+        //    var email = authenticateResult.Principal.FindFirst(ClaimTypes.Email)?.Value;
 
-            return RedirectToAction(nameof(HomeController.Index), "Home");
-        }
+        //    // Sign in the user
+        //    // ...
+
+        //    return RedirectToAction(nameof(HomeController.Index), "Home");
+        //}
+
     }
 }

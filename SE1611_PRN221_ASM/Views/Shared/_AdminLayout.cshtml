@@ -30,6 +30,10 @@
     <!-- Main CSS-->
     <link href="~/css/theme.css" rel="stylesheet" media="all">
     @RenderSection("script", required: false)
+    @if (IsSectionDefined("StarRating"))
+    {
+        @RenderSection("StarRating")
+    }
 </head>
 
 

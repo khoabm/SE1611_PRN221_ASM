@@ -71,7 +71,11 @@
                     <div class="js-prd-d-holder">
                         <div class="prd-block_title-wrap">
                             <div class="prd-block_reviews" data-toggle="tooltip" data-placement="top" title="Scroll To Reviews">
-                                <i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star"></i>
+                                <i class="icon-star-fill fill"></i>
+                                <i class="icon-star-fill fill"></i>
+                                <i class="icon-star-fill fill"></i>
+                                <i class="icon-star-fill fill"></i>
+                                <i class="icon-star"></i>
                                 <span class="reviews-link"><a href="#" class="js-reviews-link"> (17 reviews)</a></span>
                             </div>
                             <h1 class="prd-block_title">@Html.DisplayFor(model => model.Title)</h1>
@@ -252,7 +256,6 @@
                 </li>
             </ul>
             <div class="tab-content">
-
                 <div role="tabpanel" class="tab-pane fade" id="Tab5">
                     <div id="productReviews">
                         <div style="display: block" class="row align-items-center">
@@ -261,13 +264,25 @@
                                 <i class="icon-pencil"></i>
                                 Write review
                             </div>
-                           
-                            <div class="col-18" id="comment_section" style="display: none">
-                                <div class="rating"></div>
-                                <textarea id="comment" class="form-control textarea--height-170" name="message" placeholder="Message" required=""></textarea>
-                                @*<a asp-controller="Comment" asp-action="Test" asp-route-bookId="@Model.BookId" asp-route-page="1" class="btn"></a>*@
-                                <a class="mt-2 btn" style="float:right" id="post_comment" href="#">Comment</a>
-                            </div>
+                            @if ((userSession != null))
+                            {
+
+
+                                <div class="col-18" id="comment_section" style="display: none">
+                                    <div class="rating"></div>
+                                    <textarea id="comment" class="form-control textarea--height-170" name="message" placeholder="Message" required=""></textarea>
+                                    @*<a asp-controller="Comment" asp-action="Test" asp-route-bookId="@Model.BookId" asp-route-page="1" class="btn"></a>*@
+                                    <a class="mt-2 btn" style="float:right" id="post_comment" href="#">Comment</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center col-18" id="comment_section" style="display: none">
+                                    <div class="text-center p-5" style="border:solid;min-width:50%;">
+                                        Log In Di Choi Oi Choi
+                                    </div>
+                                </div>
+                            }
                         </div>
                         <div style="padding-top:5%" id="partial_comment_container">
                         </div>
@@ -322,7 +337,7 @@
                     data: { id: @Model.BookId, comment: comment , rating: rating, },
                     success: function (result) {
                         console.log(result);
-                        
+
                         $("#partial_comment_container").html(result);
                     },
                     error: function () {

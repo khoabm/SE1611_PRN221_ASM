@@ -24,6 +24,7 @@ namespace Repository.Repository
     public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
         private readonly BookSellingContext _context;
+
         public AccountRepository(BookSellingContext context) : base(context)
         {
             _context = context;

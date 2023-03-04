@@ -2,6 +2,7 @@
 using Firebase.Auth;
 using Firebase.Storage;
 using Microsoft.AspNetCore.Mvc;
+using Repository;
 using Repository.Entities;
 using Repository.Infrastructure;
 using SE1611_PRN221_ASM.Helper;
@@ -103,11 +104,28 @@ namespace SE1611_PRN221_ASM.Controllers
 
         // GET: AdminController/Create
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int page = 1)
         {
             List<Book> books = _unitOfWork.BookRepository.GetAll().ToList();
+            var totalData = books.Count;
+            var totalPages = (int)Math.Ceiling((double)totalData / 8);
+
+            var startPage = Math.Max(1, page - 8);
+            var endPage = Math.Min(totalPages, page + 8);
+            _logger.LogWarning(startPage.ToString());
+            _logger.LogWarning(endPage.ToString());
+            // Create a PaginationViewModel object and store it in the ViewBag or ViewData
+            var pagination = new PaginationViewModel
+            {
+                CurrentPage = page,
+                TotalPages = totalPages,
+                StartPage = startPage,
+                EndPage = endPage
+            };
+
+            ViewBag.Pagination = pagination;
             ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
-            return View(books);
+            return View(PaginatedList<Book>.Create(books.AsQueryable(), page, 8));
         }
 
         // POST: AdminController/Create
