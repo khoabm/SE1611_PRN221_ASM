@@ -13,6 +13,7 @@ namespace Repository.Infrastructure
         private IAccountRepository _accountRepository;
         private IBookRepository _bookRepository;
         private IGenreRepository _genreRepository;
+        private IBookGenreRepository _bookGenreRepository;
 
         public UnitOfWork(BookSellingContext context)
         {
@@ -40,6 +41,7 @@ namespace Repository.Infrastructure
         public IBookRepository BookRepository => _bookRepository ??= new BookRepository(_context);
 
         public IGenreRepository GenreRepository => _genreRepository ??= new GenreRepository(_context);
+        public IBookGenreRepository BookGenreRepository => _bookGenreRepository ??= new BookGenreRepository(_context);
 
         public void Dispose()
         {
