@@ -9,6 +9,6 @@ namespace SE1611_PRN221_ASM.Models
         public string query { get; set; }
         public string[] genres { get; set; }
         public int size { get; set; }
-        public string sort { get; set; }
+        public string[] sortOptions { get; set; }
     }
 }

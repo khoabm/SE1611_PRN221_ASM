@@ -10,6 +10,7 @@ namespace SE1611_PRN221_ASM.Controllers
     public class BookController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private static string[] sortOptions = {"latest","oldest","price","rating"};
 
         public BookController(IUnitOfWork unitOfWork)
         {
@@ -26,6 +27,17 @@ namespace SE1611_PRN221_ASM.Controllers
             ,string sort="latest")
         {
             var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice,page,size,sort);
+            string[] bookSortOptions = new string[4];
+            bookSortOptions[0] = sort;
+            int j = 1;
+            for (int i = 0; i < 4; i++)
+            {
+                if (!sortOptions[i].Equals(sort))
+                {
+                    bookSortOptions[j] = sortOptions[i];
+                    j++;
+                }
+            }
             var totalPages = (int)Math.Ceiling((double)totalItems / size);
             var startPage = Math.Max(1, page - size);
             var endPage = Math.Min(totalPages, page + size);
@@ -43,7 +55,7 @@ namespace SE1611_PRN221_ASM.Controllers
                 minPrice = (int)minPrice,
                 query = query,
                 size = size,
-                sort = sort
+                sortOptions = bookSortOptions
             };
             ViewBag.Pagination = pagination;
             ViewBag.TotalItems = totalItems;
@@ -55,13 +67,33 @@ namespace SE1611_PRN221_ASM.Controllers
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
-            var book = _unitOfWork.BookRepository.GetById(id);
-            if (book == null) return NotFound();
-            var similarBooks = _unitOfWork.BookRepository.GetBooksWithTheSameGenres(book);
-            ViewBag.BookGenres = _unitOfWork.BookRepository.GetBookGenres(id);
-            ViewBag.SimilarBooks = similarBooks ;
-            
-            return View(book);
+            try
+            {
+                var book = _unitOfWork.BookRepository.GetById(id);
+                if (book == null) return RedirectToAction(nameof(Index));
+                else
+                {
+                    var similarBooks = _unitOfWork.BookRepository.GetBooksWithTheSameGenres(book);
+                    List<Comment> comments = _unitOfWork.CommentRepository.GetAllCommentOfABookNoPaging(id).ToList();
+                    if (comments.Count != 0)
+                    {
+                        book.AverageRating = Math.Ceiling(comments.Average(c => c.Rating).Value);
+                    }
+                    else
+                    {
+                        book.AverageRating = 0;
+                    }
+                    ViewBag.commentNum = comments.Count();
+                    ViewBag.BookGenres = _unitOfWork.BookRepository.GetBookGenres(id);
+                    ViewBag.SimilarBooks = similarBooks;
+                    return View(book);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.Write(e.Message);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: BookController/Create
