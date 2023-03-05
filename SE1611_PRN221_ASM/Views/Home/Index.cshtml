@@ -277,10 +277,10 @@
                 foreach (var item in ViewBag.BooksByDate)
                 {
                     <div class="post-prw-vert col">
-                        <a href="blog-post.html" class="post-prw-img image-hover-scale image-container" style="padding-bottom: 54.44%">
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId" class="post-prw-img image-hover-scale image-container" style="padding-bottom: 54.44%">
                             <img height="100" class="fade-up w-100 lazyload" alt="The High-Street Brand Fashion" data-src="@item.ImageLink">
                         </a>
-                        <h4 class="post-prw-title"><a href="blog-post.html">@item.Title</a></h4>
+                        <h4 class="post-prw-title"><a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId">@item.Title</a></h4>
                         <div class="post-prw-links">
                             <div class="post-prw-date">
                                 <i class="icon-calendar1"></i>

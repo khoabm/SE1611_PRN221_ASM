@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>@ViewData["Title"]</title>
-    <link rel="icon" type="image/x-icon" href="~/images/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="~/book-logo-1.ico" />
     <link href="~/css/vendor/bootstrap.min.css" rel="stylesheet">
     <link href="~/css/vendor/vendor.min.css" rel="stylesheet">
     <link href="~/css/style.css" rel="stylesheet">
@@ -130,6 +130,12 @@
                                         }
                                     </span>
                                 </a>
+                            </div>
+                            <div class="dropdn dropdn_account dropdn_fullheight">
+                                @if (userSession != null)
+                                {
+                                    <a asp-controller="Account" asp-action="Logout" class="dropdn-link"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+                                }
                             </div>
                         </div>
                     </div>
@@ -592,6 +598,12 @@
                                             }
                                         </span>
                                     </a>
+                                </div>
+                                <div class="dropdn dropdn_account dropdn_fullheight">
+                                    @if (userSession != null)
+                                    {
+                                        <a asp-controller="Account" asp-action="Logout" class="dropdn-link"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+                                    }
                                 </div>
                             </div>
                         </div>

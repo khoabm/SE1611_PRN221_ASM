@@ -172,22 +172,23 @@ namespace Repository.Repository
             }
         }
 
-        public async Task<Account> UpdateAccount(String email)
+        public async Task<Customer> UpdateAccount(Customer updatedCustomer)
         {
          
-            var account = new Account();
+            var customer = new Customer();
             try
             {
-                account = await FindAccountByEmail(email);
-                _context.Entry(account!).State = EntityState.Modified;
+                //account = await FindAccountByEmail(email);
+                _context.Customers.Entry(updatedCustomer).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+                Console.WriteLine("Success");
             }
             catch (Exception)
             {
 
                 throw new Exception();
             }
-            return account;
+            return updatedCustomer;
         }
     }
 }

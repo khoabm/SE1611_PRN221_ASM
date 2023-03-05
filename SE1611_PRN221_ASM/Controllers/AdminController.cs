@@ -11,7 +11,7 @@ using System.Text;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
-    
+
     public class AdminController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -103,17 +103,15 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: AdminController/Create
-        [HttpGet]
+        [HttpGet("/admin/book")]
         public ActionResult Create(int page = 1)
         {
             List<Book> books = _unitOfWork.BookRepository.GetAll().ToList();
             var totalData = books.Count;
-            var totalPages = (int)Math.Ceiling((double)totalData / 8);
+            var totalPages = (int)Math.Ceiling((double)totalData / 7);
+            var startPage = Math.Max(1, page - 7);
+            var endPage = Math.Min(totalPages, page + 7);
 
-            var startPage = Math.Max(1, page - 8);
-            var endPage = Math.Min(totalPages, page + 8);
-            _logger.LogWarning(startPage.ToString());
-            _logger.LogWarning(endPage.ToString());
             // Create a PaginationViewModel object and store it in the ViewBag or ViewData
             var pagination = new PaginationViewModel
             {
@@ -125,70 +123,159 @@ namespace SE1611_PRN221_ASM.Controllers
 
             ViewBag.Pagination = pagination;
             ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
-            return View(PaginatedList<Book>.Create(books.AsQueryable(), page, 8));
+            return View(PaginatedList<Book>.Create(books.AsQueryable(), page, 7));
         }
+        private bool IsPicture(IFormFile file)
+        {
+            // List of known picture file extensions
+            var pictureExtensions = new[] { ".jpg", ".jpeg", ".png", ".bmp" };
 
+            // Get the file extension of the uploaded file
+            var fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+            // Check if the file extension is in the list of known picture extensions
+            return pictureExtensions.Contains(fileExtension);
+        }
         // POST: AdminController/Create
-        [HttpPost]
+        [HttpPost("/admin/book")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string title, string author, string description, string publisher, string price, string quantity, int status, int[] genres, IFormFile picture)
         {
             try
             {
-                string bookauthor = title + author;
-                string imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
-                Book book = new Book();
-                book.Title = title;
-                book.Author = author;
-                book.Description = description;
-                book.Publisher = publisher;
-                book.Price = float.Parse(price.Replace(",",""));
-                book.QuantityLeft = int.Parse(quantity.Replace(",",""));
-                book.Status = Convert.ToInt16(status);
-                book.ImageLink = imgurl;
-                book.AddedDate = DateTime.UtcNow;
-                _unitOfWork.BookRepository.Create(book);
-                _unitOfWork.Save();
-                foreach (var genre in genres)
+                if (IsPicture(picture))
                 {
-                    _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
+                    string bookauthor = title + author;
+                    string imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
+                    Book book = new Book();
+                    book.Title = title;
+                    book.Author = author;
+                    book.Description = description;
+                    book.Publisher = publisher;
+                    book.Price = Math.Round(float.Parse(price.Replace(",", "")), 2);
+                    book.QuantityLeft = int.Parse(quantity.Replace(",", ""));
+                    book.Status = Convert.ToInt16(status);
+                    book.ImageLink = imgurl;
+                    book.AddedDate = DateTime.UtcNow;
+                    _unitOfWork.BookRepository.Create(book);
                     _unitOfWork.Save();
+                    foreach (var genre in genres)
+                    {
+                        _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
+                        _unitOfWork.Save();
+                    }
+                    //Console.WriteLine(file.FileName);
+                    return RedirectToAction(nameof(Create));
                 }
-                
-                //Console.WriteLine(file.FileName);
-                return RedirectToAction(nameof(Create));
+                else return RedirectToAction(nameof(Create));
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message.ToString());
                 return RedirectToAction(nameof(Create));
             }
         }
 
         // GET: AdminController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet("/admin/details")]
+        public ActionResult Edit(int id, int page = 1)
         {
-            return View();
+            Book book = _unitOfWork.BookRepository.GetById(id);
+            if (book != null)
+            {
+                var (comments, totalData) = _unitOfWork.CommentRepository.GetAllCommentOfABook(id, page);
+                var totalPages = (int)Math.Ceiling((double)totalData / 8);
+                var startPage = Math.Max(1, page - 8);
+                var endPage = Math.Min(totalPages, page + 8);
+                // Create a PaginationViewModel object and store it in the ViewBag or ViewData
+                var pagination = new PaginationViewModel
+                {
+                    CurrentPage = page,
+                    TotalPages = totalPages,
+                    StartPage = startPage,
+                    EndPage = endPage
+                };
+                ViewBag.BookGenres = _unitOfWork.BookRepository.GetBookGenres(id);
+                ViewBag.Pagination = pagination;
+                ViewBag.Book = book;
+                ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
+                ViewBag.Comments = comments;
+                return View();
+            }
+            else return RedirectToAction(nameof(Create));
         }
 
         // POST: AdminController/Edit/5
-        [HttpPost]
+        [HttpPost("/admin/details")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, string title, string author, string description, string publisher, string price, string quantity, int status, int[] genres, IFormFile? picture)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                Book book = _unitOfWork.BookRepository.GetById(id);
+                if (book != null)
+                {
+                    string bookauthor = title + author;
+                    string imgurl = book.ImageLink;
+                    if (picture != null)
+                    {
+                        if (IsPicture(picture))
+                        {
+                            imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
+                        }
+                        else return RedirectToAction(nameof(Edit),id);
+                    }
+                    book.Title = title;
+                    book.Author = author;
+                    book.Description = description;
+                    book.Publisher = publisher;
+                    book.Price = Math.Round(float.Parse(price.Replace(",", "")), 2);
+                    book.QuantityLeft = int.Parse(quantity.Replace(",", ""));
+                    book.Status = Convert.ToInt16(status);
+                    book.ImageLink = imgurl;
+                    _unitOfWork.BookRepository.Update(book);
+                    _unitOfWork.Save();
+                    List<BookGenre> bg = _unitOfWork.BookGenreRepository.GetAll().Where(bookgenre => bookgenre.BookId == id).ToList();
+                    foreach (var bookGenre in bg)
+                    {
+                        _unitOfWork.BookGenreRepository.Delete(bookGenre);
+                        _unitOfWork.Save();
+                    }
+                    foreach (var genre in genres)
+                    {
+                        _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
+                        _unitOfWork.Save();
+                    }
+                    //Update thanh cong ne
+                    return RedirectToAction(nameof(Create));
+                }
+                // book id = null
+                return RedirectToAction(nameof(Create));
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                Console.WriteLine(e.Message.ToString());
+                return RedirectToAction(nameof(Edit), id);
             }
         }
-
-        // GET: AdminController/Delete/5
+        [HttpPost("/admin/delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            return View();
+            Book book = _unitOfWork.BookRepository.GetById(id);
+            if (book != null)
+            {
+                List<BookGenre> bg = _unitOfWork.BookGenreRepository.GetAll().Where(bookgenre => bookgenre.BookId == id).ToList();
+                foreach (var bookGenre in bg)
+                {
+                    _unitOfWork.BookGenreRepository.Delete(bookGenre);
+                    _unitOfWork.Save();
+                }
+                _unitOfWork.BookRepository.Delete(book);
+                _unitOfWork.Save();
+                return RedirectToAction(nameof(Create));
+            }
+            return RedirectToAction(nameof(Create));
         }
 
         // POST: AdminController/Delete/5

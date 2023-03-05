@@ -10,9 +10,9 @@ namespace Repository.Repository.Interfaces
 {
     public interface IBookRepository : IRepositoryBase<Book>
     {
-        public (List<Book>, int totalItems) SearchBooks(string query, string[] genres, double minPrice, double maxPrice
-                                                        , int pageNum, int pageSize,string sort);
-        int CreateBookGenre(int bookId,int genreId);
+        public (List<Book>, int totalItems) SearchBooks(string query, string[] genres, double minPrice, double maxPrice, int pageNum, int pageSize, string sort); 
+        public (List<Book>, int totalItems) SearchBooksAdmin(string query, string[] genres, double minPrice, double maxPrice, int pageNum, int pageSize, string sort);
+        int CreateBookGenre(int bookId, int genreId);
         IEnumerable<Book> GetBooksOrderByAverageRating();
 
         IEnumerable<Book> GetBooksOrderByAddedDate();

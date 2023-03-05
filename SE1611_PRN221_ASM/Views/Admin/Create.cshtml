@@ -4,55 +4,21 @@
     Layout = "_AdminLayout";
     var genres = ViewBag.Genres as List<Genre>;
 }
-@section script{
-    <script>
-        function previewImage(event) {
-            var preview = document.getElementById('preview');
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function () {
-                preview.src = reader.result;
-            }
-            reader.readAsDataURL(file);
-        }
-        function addThousandSeparator(inputField) {
-            // Get input value and remove any non-numeric characters
-            let inputValue = inputField.value.replace(/\D/g, '');
-
-            // Add thousand separator to the input value
-            inputValue = Number(inputValue).toLocaleString('en-US');
-
-            // Update the input field with the formatted value
-            inputField.value = inputValue;
-        }
-    </script>
-
-}
 
 <!-- MAIN CONTENT-->
-<div class="main-content">
+<div class="main-content" style="padding-top:60px;">
+    <div class=" ection__content section__content--p30 d-flex mb-5" style="justify-content:end; width:98%;">
+        <form class="form-header" action="" method="POST">
+            <input class="au-input au-input--xl" type="text" name="search" placeholder="Search for datas &amp; reports...">
+            <button class="au-btn--submit" type="submit">
+                <i class="zmdi zmdi-search"></i>
+            </button>
+        </form>
+    </div>
     <div class="section__content section__content--p30">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row" id="FormCreate" style="display:none">
                 <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <strong>Add a new book</strong>
-                        </div>
-                        <div class="card-body card-block">
-                            <form asp-action="create" enctype="multipart/form-data" method="post" class="form-horizontal">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">
-                                        <label for="text-input" class=" form-control-label">Title</label>
-                                    </div>
-                                    <div class="col-12 col-md-9">
-                                        <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
-                                    </div>
-                                </div>
-                                <div><button type="submit">submit</button></div>
-                            </form>
-                        </div>
-                    </div>
                     <div class="card">
                         <div class="card-header">
                             <strong>Add a new book</strong>
@@ -66,7 +32,7 @@
                                         <label for="text-input" class=" form-control-label">Title</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control">
+                                        <input type="text" id="text-input" name="title" placeholder="The book title here" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -74,7 +40,7 @@
                                         <label for="text-input" class=" form-control-label">Author</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input type="text" id="text-input" name="author" placeholder="Who wrote this book for example" class="form-control">
+                                        <input type="text" id="text-input" name="author" placeholder="Who wrote this book for example" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -82,7 +48,7 @@
                                         <label for="textarea-input" class=" form-control-label">Description</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <textarea name="description" id="textarea-input" rows="5" placeholder="Quick peek of the book content" class="form-control"></textarea>
+                                        <textarea name="description" id="textarea-input" rows="5" placeholder="Quick peek of the book content" class="form-control" required></textarea>
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -90,7 +56,7 @@
                                         <label for="text-input" class=" form-control-label">Publisher</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input type="text" id="text-input" name="publisher" placeholder="What company does this book published by" class="form-control">
+                                        <input type="text" id="text-input" name="publisher" placeholder="What company does this book published by" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="row form-group ">
@@ -99,7 +65,7 @@
                                     </div>
                                     <div class="col-12 col-md-9 input-group">
                                         <div class="input-group-addon"><i class="fa fa-dollar"></i></div>
-                                        <input type="text" id="price" name="price" placeholder="How much does this book going to cost ..." class="form-control" onkeyup="addThousandSeparator(this)">
+                                        <input type="text" id="price" name="price" placeholder="How much does this book going to cost ..." class="form-control" onkeyup="addThousandSeparator(this)" required>
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -108,7 +74,7 @@
                                     </div>
                                     <div class="col-12 col-md-9 input-group">
                                         <div class="input-group-addon"><i class="fa fa-book"></i></div>
-                                        <input type="text" id="quantity" name="quantity" placeholder="How many of this book do you have" class="form-control" onkeyup="addThousandSeparator(this)">
+                                        <input type="text" id="quantity" name="quantity" placeholder="How many of this book do you have" class="form-control" onkeyup="addThousandSeparator(this)" required>
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -116,10 +82,9 @@
                                         <label for="select" class=" form-control-label">Status</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <select name="status" id="status" class="form-control">
-                                            <option value="0">Please select</option>
-                                            <option value="1">Active</option>
+                                        <select name="status" id="status" class="form-control" required>
                                             <option value="2">Disable</option>
+                                            <option value="1">Active</option>
                                         </select>
                                     </div>
                                 </div>
@@ -144,17 +109,17 @@
                                 </div>
                                 <div class="row form-group">
                                     <div class="col col-md-3">
-                                        <label for="file-input" class=" form-control-label">Book picture</label>
+                                        <label for="picture" class=" form-control-label">Book picture</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input type="file" id="file-input" name="picture" class="form-control-file" accept="image/*" onchange="previewImage(event)">
+                                        <input type="file" id="file-input" name="picture" class="form-control-file" accept=".jpg,.jpeg,.png,.bmp" onchange="previewImage(event)" required>
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-end">
                                     <button type="reset" class="btn btn-danger btn-sm">
                                         <i class="fa fa-ban"></i> Reset
                                     </button>
-                                    <button type="submit" class="btn btn-primary btn-sm">
+                                    <button type="submit" class="btn btn-primary btn-sm" id="SubmitForm">
                                         <i class="fa fa-dot-circle-o"></i> Submit
                                     </button>
                                 </div>
@@ -162,7 +127,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header">
@@ -175,6 +139,16 @@
                 </div>
             </div>
             <div class="row">
+                <div style="padding: 0 10px;" class="col-md-3 mb-3">
+                    <a href="#" id="CreateForm">
+                        <div class="card">
+                            <img style="max-width: 100%; max-height:50%;" src="https://firebasestorage.googleapis.com/v0/b/bookseller-5f813.appspot.com/o/book-cover%2F3d463db31f.jfif?alt=media&token=82ef2568-909b-4a2f-bb12-399b56fe4a7a" alt="Add new book" class="card-img-top" />
+                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; padding: 10px; text-align: center;" class="card-body">
+                                Click to add new book
+                            </div>
+                        </div>
+                    </a>
+                </div>
                 @foreach (var item in Model)
                 {
                     <div style="padding: 0 10px;" class="col-md-3 mb-3">
@@ -187,8 +161,10 @@
                                         <i class="fa fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 44px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                        <a class="dropdown-item" href="#">Edit</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
+                                        <a class="dropdown-item" asp-action="edit" asp-route-id=@item.BookId>Details</a>
+                                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#@item.BookId">
+                                            Delete
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -197,13 +173,13 @@
                                     </div>
                                 </div>
                                 @*<div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h5 style="margin-bottom: 0.5rem;">@item.Author</h5>
-                                        <p style="margin-bottom: 0.5rem;">$@item.Price</p>
-                                    </div>
-                                </div>
-                                <p class="card-text" style=" overflow: hidden; text-overflow: ellipsis;  max-height: 10%">@item.Description</p>
+                            <div class="row">
+                            <div class="col-md-12">
+                            <h5 style="margin-bottom: 0.5rem;">@item.Author</h5>
+                            <p style="margin-bottom: 0.5rem;">$@item.Price</p>
+                            </div>
+                            </div>
+                            <p class="card-text" style=" overflow: hidden; text-overflow: ellipsis;  max-height: 10%">@item.Description</p>
                             </div>*@
                                 <div>
                                     <div class="row">
@@ -275,4 +251,107 @@
         </div>
     </div>
 </div>
-<!-- END MAIN CONTENT-->
+@foreach (var item in Model)
+{
+    @*    <div class="modal fade" id="@item.BookId" tabindex="-1" role="dialog" aria-labelledby="smallmodalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="smallmodalLabel">Delete</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">×</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <p>Do you sure want to delete</p>
+    <h3>@item.Title</h3> by <h4>@item.Author</h4>
+    <p>This action cannot be undo</p>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    <button type="button" class="btn btn-danger">Confirm</button>
+    </div>
+    </div>
+    </div>
+    </div>*@
+    <div class="modal fade" id="@item.BookId" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="largeModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Do you sure want to delete:</p>
+                    <div>
+                        <h4 style="display:inline">@item.Title</h4> by <h5 style="display:inline">@item.Author</h5>
+                    </div>
+                    <p>This action cannot be undo</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" asp-action="delete" method="post">
+                        <input name="id" hidden value="@item.BookId" />
+                        <button type="submit" class="btn btn-danger">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section script{
+    <script>
+        function previewImage(event) {
+            var preview = document.getElementById('preview');
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function() {
+                preview.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+        function addThousandSeparator(inputField) {
+            // Get input value and remove any non-numeric characters except a decimal point
+            let inputValue = inputField.value.replace(/[^\d\.]/g, '');
+
+            // Split the input value into whole number and decimal parts
+            let parts = inputValue.split('.');
+
+            // Add thousand separator to the whole number part
+            parts[0] = Number(parts[0]).toLocaleString('en-US');
+
+            // Join the parts back together with a decimal point
+            let formattedValue = parts.join('.');
+
+            // Update the input field with the formatted value
+            inputField.value = formattedValue;
+        }
+    </script>
+    <script>
+        const slideBtn = document.getElementById("CreateForm");
+        const slideDiv = document.getElementById("FormCreate");
+
+        slideBtn.addEventListener('click', function() {
+            slideDiv.style.display = 'flex';
+            slideDiv.style.transition = 'all 0.5s ease';
+            slideDiv.style.transform = 'translateX(0)';
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#SubmitForm').click(function() {
+                checked = $("input[type=checkbox]:checked").length;
+
+                if (!checked) {
+                    alert("You must check at least one genres.");
+                    return false;
+                }
+
+            });
+        });
+    </script>
+
+}
+    <!-- END MAIN CONTENT-->

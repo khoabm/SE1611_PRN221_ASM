@@ -3,7 +3,20 @@
 @{
     ViewData["Title"] = "SignIn";
 }
+@section StarRating{
+    <style>
+        .input-group-addon.show-password {
+            cursor: pointer;
+            pointer-events: auto;
+            position: absolute;
+            right: 0;
+            top: 52%;
+            left: 90%;
+        }
 
+
+    </style>
+}
 <div class="holder breadcrumbs-wrap mt-0">
     <div class="container">
         <ul class="breadcrumbs">
@@ -26,7 +39,8 @@
                         </div>
 
                         <div class="form-group">
-                            <input asp-for="Password" id="Password" name="Password" type="password" class="form-control" placeholder="Password">
+                            <input style="padding-right: 50px;" asp-for="Password" id="Password" name="Password" type="password" class="form-control" placeholder="Password">
+                            <span class="input-group-addon show-password"><i class="fa fa-eye"></i></span>
                         </div>
                         <div class="text-center">
                             <a class="link-info text-decoration-underline" asp-controller="account" asp-action="signup">Don't have account yet? Go to <b>SignUp</b> <i class="fas fa-arrow-right"></i></a>
@@ -43,4 +57,17 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('.show-password').click(function () {
+            $(this).toggleClass('active');
+            var input = $(this).prev();
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+                $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                input.attr('type', 'password');
+                $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+    </script>
 }
