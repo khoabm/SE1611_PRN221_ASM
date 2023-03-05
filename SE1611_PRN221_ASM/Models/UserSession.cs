@@ -10,7 +10,6 @@
         public short Status { get; set; }
         public int RoleId { get; set; }
 
-
         public int CartItemCount { get; set; }
         public int FavoriteItemCount { get; set; }
     }

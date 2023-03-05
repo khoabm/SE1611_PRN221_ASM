@@ -31,6 +31,21 @@ namespace Repository.Repository
             return (PaginatedList<Comment>.Create(commentsByBook.AsQueryable(), page, Comment_PAGE_SIZE), totalItems);
         }
 
+        public IEnumerable<Comment> GetAllCommentOfABookNoPaging(int bookId)
+        {
+            var commentsByBook = new List<Comment>();
+            try
+            {
+                commentsByBook = _context.Comments.Include(c => c.Customer).ThenInclude(c => c.CustomerNavigation).Where(c => c.BookId == bookId).OrderByDescending(c => c.CommentDate).ToList();             
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception();
+            }
+            return commentsByBook;
+        }
+
         public void InsertComment(Comment comment)
         {
             try
