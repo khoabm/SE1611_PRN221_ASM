@@ -11,6 +11,9 @@ namespace Repository.Infrastructure
         IAccountRepository AccountRepository { get; }
         IBookRepository BookRepository { get; }
         IGenreRepository GenreRepository { get; }
+        IOrderRepository OrderRepository { get; }
+        IOrderDetailRepository OrderDetailRepository { get; }
+        ICustomerRepository CustomerRepository { get; }
         void Save();
     }
 }

@@ -31,6 +31,14 @@ namespace SE1611_PRN221_ASM.Controllers
         // GET: AdminController
         public ActionResult Index()
         {
+            var list = _unitOfWork.OrderRepository.GetAll();
+
+            return View(list);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateStatus(int id)
+        {
             return View();
         }
         private async Task<MemoryStream> ConvertToMemoryStreamAsync(IFormFile file)
@@ -185,6 +193,20 @@ namespace SE1611_PRN221_ASM.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditOrder(int id, short status)
+        {
+            Console.Write(status.ToString());
+            var order = _unitOfWork.OrderRepository.GetById(id);
+            order.Status = status;
+            _unitOfWork.OrderRepository.Update(order);
+            _unitOfWork.Save();
+
+            var list = _unitOfWork.OrderRepository.GetAll();
+
+            return View("Index",list);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
             return View("Index2", list);
         }
-
+       
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]

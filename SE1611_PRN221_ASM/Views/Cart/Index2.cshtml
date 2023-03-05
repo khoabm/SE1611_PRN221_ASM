@@ -73,6 +73,7 @@
                         </div>
                     </form>
                     <div class="text-center mt-1"><a asp-controller="Cart" asp-action="DeleteAll" class="btn btn--grey">Clear All</a></div>
+                    
                 </div>
                 <div class="col-lg-7 col-xl-5 mt-3 mt-md-0">
                     <div class="card-total">
@@ -83,7 +84,7 @@
                             <div class="col card-total-txt">Total</div>
                             <div class="col-auto card-total-price text-right">@($"{Model.Sum(c => c.Book.Price * c.Quantity):C}")</div>
                         </div>
-                        <a asp-controller="Cart" asp-action="Checkout" class="btn btn--full btn--lg"><span>Checkout</span></a>
+                        <button type="submit" form="checkout" class="btn btn--full btn--lg"><span>Checkout</span></button>
                         <div class="card-text-info text-right">
                             <h5>Standart shipping</h5>
                             <p><b>10 - 11 business days</b><br>1 item ships from the U.S. and will be delivered in 10 - 11 business days</p>
@@ -98,17 +99,26 @@
                                     <span class="toggle-arrow"><span></span><span></span></span>
                                 </h4>
                             </div>
+                            
                             <div id="collapse1" class="panel-collapse collapse show">
-                                <div class="panel-body">
+                                <form asp-action="Checkout" asp-controller="Order" id="checkout">
+                                    <input type="hidden" name="total" value="@(Model.Sum(c => c.Book.Price * c.Quantity))" />
+                                    <div class="panel-body">
                                     <label>Address:</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control--sm">
+                                        <input type="text" names="address" class="form-control form-control--sm">
                                     </div>
                                     <label>Phone:</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control--sm">
+                                            <input type="text" name="phone" class="form-control form-control--sm">
                                     </div>
                                 </div>
+                                </form>
+                                <button type="submit" class="btn btn--grey">
+                                    <a asp-controller="Order" asp-action="ListOrders">
+                                        <span>Back to Orders</span><i class="icon-refresh"></i>
+                                    </a>
+                                </button>
                             </div>
                         </div>
                     </div>

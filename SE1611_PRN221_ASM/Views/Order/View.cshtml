@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Repository.Entities.OrderDetail>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><span>Cart</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="page-title text-center">
+                <h1>Your Shopping Cart</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-11 col-xl-13">
+                    <form asp-controller="Cart" asp-action="UpdateCartItem" method="post">
+                        <div class="cart-table">
+                            <div class="cart-table-prd cart-table-prd--head py-1 d-none d-md-flex">
+                                <div class="cart-table-prd-image text-center">
+                                    Image
+                                </div>
+                                <div class="cart-table-prd-content-wrap">
+                                    <div class="cart-table-prd-info">Name</div>
+                                    <div class="cart-table-prd-qty">Qty</div>
+                                    <div class="cart-table-prd-price">Price</div>
+                                    <div class="cart-table-prd-action">&nbsp;</div>
+                                </div>
+                            </div>
+
+                            @foreach (var item in Model)
+                            {
+                                <div class="cart-table-prd">
+                                    <div class="cart-table-prd-image">
+                                        <a asp-controller="Book" asp-action="Details" asp-route-id="@item.Book.BookId">
+                                            <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="@item.Book.ImageLink" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="cart-table-prd-content-wrap">
+                                        <div class="cart-table-prd-info">
+                                            <div class="cart-table-prd-price">
+                                                <div class="price-new">@($"{item.Book.Price:C}")</div>
+                                            </div>
+                                            <h2 class="cart-table-prd-name"><a asp-controller="Book" asp-action="Details" asp-route-id="@item.Book.BookId">@item.Book.Title</a></h2>
+                                        </div>
+                                        <div class="cart-table-prd-qty">
+                                            <div class="qty qty-changer">
+                                                <div class="price-new">@item.Quantity</div>
+
+                                            </div>
+                                        </div>
+                                        <div class="cart-table-prd-price-total">@($"{item.Book.Price * item.Quantity:C}")</div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </form>
+                    <button type="submit" class="btn btn--grey">
+                        <a asp-controller="Order" asp-action="ListOrders">
+                            <span>Back to Orders</span><i class="icon-refresh"></i>
+                        </a>
+                    </button>
+
+                </div>
+                <div class="col-lg-7 col-xl-5 mt-3 mt-md-0">
+                    <div class="card-total">
+                        @*<div class="text-left">
+                        <button class="btn btn--grey"><span>UPDATE CART</span><i class="icon-refresh"></i></button>
+                        </div>*@
+                        <div class="row d-flex">
+                            <div class="col card-total-txt">Total</div>
+                            <div class="col-auto card-total-price text-right">@($"{Model.Sum(c => c.Book.Price * c.Quantity):C}")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Get all input elements and buttons
+        var inputs = document.querySelectorAll('.qty-input');
+        var increaseBtns = document.querySelectorAll('.increase');
+        var decreaseBtns = document.querySelectorAll('.decrease');
+
+        // Add event listeners to each button
+        for (var i = 0; i < increaseBtns.length; i++) {
+            increaseBtns[i].addEventListener('click', function () {
+                increaseQty(this);
+            });
+        }
+        for (var i = 0; i < decreaseBtns.length; i++) {
+            decreaseBtns[i].addEventListener('click', function () {
+                decreaseQty(this);
+            });
+        }
+
+        // Function to increase the quantity
+        function increaseQty(btn) {
+            var parent = btn.parentElement;
+            var input = parent.querySelector('.qty-input');
+            var max = parseInt(input.getAttribute('max'));
+            var value = parseInt(input.value);
+
+            if (!isNaN(max) && value < max) {
+                input.value = value + 1;
+            } else if (!isNaN(max) && value >= max) {
+                input.value = max;
+            }
+        }
+
+
+        // Function to decrease the quantity
+        function decreaseQty(btn) {
+            var parent = btn.parentElement;
+            var input = parent.querySelector('.qty-input');
+            var min = parseInt(input.getAttribute('min'));
+            var value = parseInt(input.value);
+
+            if (!isNaN(min) && value > min) {
+                input.value = value - 1;
+            }
+        }
+    </script>
+}
