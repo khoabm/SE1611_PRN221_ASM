@@ -119,8 +119,6 @@ namespace Repository.Repository
 
             List<Book> books = _context.Books.Include(b => b.Comments).Where(b => b.Status == 1).ToList();
 
-
-            List<Book> list = new List<Book>();
             //-----------------------------------
             //search by query title and author
             if (!string.IsNullOrEmpty(query))

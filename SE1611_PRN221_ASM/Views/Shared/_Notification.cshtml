@@ -22,8 +22,13 @@
         }
         toastr.success('@TempData["Success"]');
     </script>
-
+    <style>
+        .toast-success {
+            background-color: #17c6aa !important;
+        }
+    </style>
 }
+
 @if (TempData["Error"] != null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

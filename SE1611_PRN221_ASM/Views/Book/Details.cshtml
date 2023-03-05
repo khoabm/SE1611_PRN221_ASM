@@ -77,6 +77,7 @@
     }
 </style>
 }
+<partial name="_Notification"/>
 <div class="page-content">
     <div class="holder">
         <div class="container js-prd-gallery" id="prdGallery">
@@ -175,22 +176,16 @@
                                     <div class="btn-wishlist-wrap">
                                         @if (isFavorite)
                                         {
-                                            <a asp-controller="Favorite" asp-action="Delete" asp-route-id="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add js-remove-wishlist" title="Remove From Favorite"><i class="icon-heart-hover"></i></a>
+                                            <a asp-controller="Favorite" asp-action="Delete" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Remove From Favorite"><i class="icon-heart-hover"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-controller="Favorite" asp-action="AddToFavorite" asp-route-id="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add js-add-wishlist" title="Add To Favorite"><i class="icon-heart-stroke"></i></a>
+                                            <a asp-controller="Favorite" asp-action="Add" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Add To Favorite"><i class="icon-heart-stroke"></i></a>
                                         }
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        @if (TempData["Message"] != null)
-                        {
-                            <div class="alert alert-@TempData["MessageType"]" role="alert" style="background-color: #17c6aa">
-                                @TempData["Message"]
-                            </div>
-                        }
                     </div>
                 </div>
             </div>
@@ -215,12 +210,6 @@
                                     <div class="prd-big-squared-labels">
                                     </div>
                                 </a>
-                                <div class="prd-circle-labels">
-                                    <a href="#" class="circle-label-compare circle-label-wishlist--add js-add-wishlist mt-0" title="Add To Wishlist"><i class="icon-heart-stroke"></i></a><a href="#" class="circle-label-compare circle-label-wishlist--off js-remove-wishlist mt-0" title="Remove From Wishlist"><i class="icon-heart-hover"></i></a>
-                                    <a href="#" class="circle-label-qview js-prd-quickview prd-hide-mobile" data-src="ajax/ajax-quickview.html"><i class="icon-eye"></i><span>QUICK VIEW</span></a>
-
-                                </div>
-
                             </div>
                             <div class="prd-info">
                                 <div class="prd-info-wrap">
@@ -242,10 +231,6 @@
                                     </div>
                                 </div>
                                 <div class="prd-hovers">
-                                    <div class="prd-circle-labels">
-                                        <div><a href="#" class="circle-label-compare circle-label-wishlist--add js-add-wishlist mt-0" title="Add To Wishlist"><i class="icon-heart-stroke"></i></a><a href="#" class="circle-label-compare circle-label-wishlist--off js-remove-wishlist mt-0" title="Remove From Wishlist"><i class="icon-heart-hover"></i></a></div>
-                                        <div class="prd-hide-mobile"><a href="#" class="circle-label-qview js-prd-quickview" data-src="ajax/ajax-quickview.html"><i class="icon-eye"></i><span>QUICK VIEW</span></a></div>
-                                    </div>
                                     <div class="prd-price">
                                         <div class="price-new">$ @item.Price</div>
                                     </div>

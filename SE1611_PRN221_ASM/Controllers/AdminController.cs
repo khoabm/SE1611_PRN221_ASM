@@ -166,13 +166,19 @@ namespace SE1611_PRN221_ASM.Controllers
                         _unitOfWork.Save();
                     }
                     //Console.WriteLine(file.FileName);
+                    TempData["Success"] = "Book added";
                     return RedirectToAction(nameof(Create));
                 }
-                else return RedirectToAction(nameof(Create));
+                else
+                {
+                    TempData["Error"] = "Picture is wrong format";
+                    return RedirectToAction(nameof(Create));
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message.ToString());
+                TempData["Error"] = e.Message.ToString();
                 return RedirectToAction(nameof(Create));
             }
         }
@@ -291,6 +297,38 @@ namespace SE1611_PRN221_ASM.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
+        }
+
+        [HttpGet("/admin/book/search")]
+        public ActionResult Search(string query, int page = 1 )
+        {
+            try
+            {
+                var (books,totalItems) = _unitOfWork.BookRepository.SearchBooksAdmin(query, new string[0], 0, 1000000, page, 7, "latest");
+                var totalData = totalItems;
+                var totalPages = (int)Math.Ceiling((double)totalData / 7);
+                var startPage = Math.Max(1, page - 7);
+                var endPage = Math.Min(totalPages, page + 7);
+
+                // Create a PaginationViewModel object and store it in the ViewBag or ViewData
+                var pagination = new PaginationViewModel
+                {
+                    CurrentPage = page,
+                    TotalPages = totalPages,
+                    StartPage = startPage,
+                    EndPage = endPage
+                };
+                Console.WriteLine(pagination);
+                ViewBag.Pagination = pagination;
+                ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
+                return View("Create",PaginatedList<Book>.Create(books.AsQueryable(), page, 7));
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return RedirectToAction(nameof(Create));
+            }
+            
         }
     }
 }

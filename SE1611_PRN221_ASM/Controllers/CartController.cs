@@ -39,7 +39,7 @@ namespace SE1611_PRN221_ASM.Controllers
                 return View("EmptyCart");
             }
 
-            return View("Index2", list);
+            return View(list);
         }
 
 
@@ -97,8 +97,7 @@ namespace SE1611_PRN221_ASM.Controllers
             {
                 if (quantity == 0)
                 {
-                    TempData["Message"] = "Out of stocks.";
-                    TempData["MessageType"] = "error";
+                    TempData["Error"] = "This book is of stocks.";
                     string url1 = Request.Headers["Referer"].ToString();
                     return Redirect(url1);
                 }
@@ -109,8 +108,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
             _unitOfWork.Save();
 
-            TempData["Message"] = "Added to cart successfully.";
-            TempData["MessageType"] = "success";
+            TempData["Success"] = "Added to cart successfully.";
 
             // Get the URL of the previous page
             string url = Request.Headers["Referer"].ToString();
@@ -200,6 +198,31 @@ namespace SE1611_PRN221_ASM.Controllers
                 userSession.CartItemCount--;
                 HttpContext.Session.SetObject("UserSession", userSession);
             }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAll()
+        {
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+
+            if (userSession == null)
+            {
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyCart");
+            }
+
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+
+            int customerId = account.AccountId;
+
+            _unitOfWork.CartRepository.DeleteAll(customerId);
+            _unitOfWork.Save();
+
+            userSession.CartItemCount = 0;
+            HttpContext.Session.SetObject("UserSession", userSession);
 
             return RedirectToAction(nameof(Index));
         }

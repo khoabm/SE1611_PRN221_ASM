@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Entities;
 using Repository.Infrastructure;
 using SE1611_PRN221_ASM.Helper;
 using SE1611_PRN221_ASM.Models;
@@ -47,67 +48,80 @@ namespace SE1611_PRN221_ASM.Controllers
             return View();
         }
 
-        // GET: FavoriteController/Create
-        public ActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Add(int bookId)
         {
-            return View();
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+
+            if (userSession == null)
+            {
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyFavorite");
+            }
+
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+
+            int customerId = account.AccountId;
+
+            var existingFavorite = _unitOfWork.FavoriteRepository.GetByBookIdAndCustomerId(bookId, customerId);
+
+            if (existingFavorite != null)
+            {
+                TempData["Message"] = "This book is already in your favorites.";
+                return RedirectToAction("Index");
+            }
+
+            var favorite = new Favorite
+            {
+                BookId = bookId,
+                CustomerId = customerId
+            };
+
+            _unitOfWork.FavoriteRepository.Create(favorite);
+            _unitOfWork.Save();
+
+            userSession.FavoriteItemCount++;
+            HttpContext.Session.SetObject("UserSession", userSession);
+
+            TempData["Success"] = "Added to favorites successfully.";
+
+            string url = Request.Headers["Referer"].ToString();
+
+            return Redirect(url);
         }
 
-        // POST: FavoriteController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpGet]
+        public async Task<IActionResult> Delete(int bookId)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
 
-        // GET: FavoriteController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+            if (userSession == null)
+            {
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyFavorite");
+            }
 
-        // POST: FavoriteController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
 
-        // GET: FavoriteController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+            int customerId = account.AccountId;
+            var favoriteItem = _unitOfWork.FavoriteRepository.GetByBookIdAndCustomerId(bookId, customerId);
 
-        // POST: FavoriteController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
+            if (favoriteItem == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            _unitOfWork.FavoriteRepository.Delete(favoriteItem);
+            _unitOfWork.Save();
+
+            userSession.FavoriteItemCount--;
+            HttpContext.Session.SetObject("UserSession", userSession);
+
+            TempData["Success"] = "Removed book from favorites.";
+
+            string url = Request.Headers["Referer"].ToString();
+
+            return Redirect(url);
         }
     }
 }
