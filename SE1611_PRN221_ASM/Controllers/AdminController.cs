@@ -11,7 +11,7 @@ using System.Text;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
-    
+
     public class AdminController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -125,7 +125,17 @@ namespace SE1611_PRN221_ASM.Controllers
             ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
             return View(PaginatedList<Book>.Create(books.AsQueryable(), page, 7));
         }
+        private bool IsPicture(IFormFile file)
+        {
+            // List of known picture file extensions
+            var pictureExtensions = new[] { ".jpg", ".jpeg", ".png", ".bmp" };
 
+            // Get the file extension of the uploaded file
+            var fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+            // Check if the file extension is in the list of known picture extensions
+            return pictureExtensions.Contains(fileExtension);
+        }
         // POST: AdminController/Create
         [HttpPost("/admin/book")]
         [ValidateAntiForgeryToken]
@@ -133,28 +143,31 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             try
             {
-                string bookauthor = title + author;
-                string imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
-                Book book = new Book();
-                book.Title = title;
-                book.Author = author;
-                book.Description = description;
-                book.Publisher = publisher;
-                book.Price = float.Parse(price.Replace(",",""));
-                book.QuantityLeft = int.Parse(quantity.Replace(",",""));
-                book.Status = Convert.ToInt16(status);
-                book.ImageLink = imgurl;
-                book.AddedDate = DateTime.UtcNow;
-                _unitOfWork.BookRepository.Create(book);
-                _unitOfWork.Save();
-                foreach (var genre in genres)
+                if (IsPicture(picture))
                 {
-                    _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
+                    string bookauthor = title + author;
+                    string imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
+                    Book book = new Book();
+                    book.Title = title;
+                    book.Author = author;
+                    book.Description = description;
+                    book.Publisher = publisher;
+                    book.Price = Math.Round(float.Parse(price.Replace(",", "")), 2);
+                    book.QuantityLeft = int.Parse(quantity.Replace(",", ""));
+                    book.Status = Convert.ToInt16(status);
+                    book.ImageLink = imgurl;
+                    book.AddedDate = DateTime.UtcNow;
+                    _unitOfWork.BookRepository.Create(book);
                     _unitOfWork.Save();
+                    foreach (var genre in genres)
+                    {
+                        _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
+                        _unitOfWork.Save();
+                    }
+                    //Console.WriteLine(file.FileName);
+                    return RedirectToAction(nameof(Create));
                 }
-                
-                //Console.WriteLine(file.FileName);
-                return RedirectToAction(nameof(Create));
+                else return RedirectToAction(nameof(Create));
             }
             catch (Exception e)
             {
@@ -165,7 +178,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
         // GET: AdminController/Edit/5
         [HttpGet("/admin/details")]
-        public ActionResult Edit(int id, int page=1)
+        public ActionResult Edit(int id, int page = 1)
         {
             Book book = _unitOfWork.BookRepository.GetById(id);
             if (book != null)
@@ -195,7 +208,7 @@ namespace SE1611_PRN221_ASM.Controllers
         // POST: AdminController/Edit/5
         [HttpPost("/admin/details")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,string title, string author, string description, string publisher, string price, string quantity, int status, int[] genres, IFormFile? picture)
+        public async Task<IActionResult> Edit(int id, string title, string author, string description, string publisher, string price, string quantity, int status, int[] genres, IFormFile? picture)
         {
             try
             {
@@ -206,13 +219,17 @@ namespace SE1611_PRN221_ASM.Controllers
                     string imgurl = book.ImageLink;
                     if (picture != null)
                     {
-                        imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
+                        if (IsPicture(picture))
+                        {
+                            imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
+                        }
+                        else return RedirectToAction(nameof(Edit),id);
                     }
                     book.Title = title;
                     book.Author = author;
                     book.Description = description;
                     book.Publisher = publisher;
-                    book.Price = float.Parse(price.Replace(",", ""));
+                    book.Price = Math.Round(float.Parse(price.Replace(",", "")), 2);
                     book.QuantityLeft = int.Parse(quantity.Replace(",", ""));
                     book.Status = Convert.ToInt16(status);
                     book.ImageLink = imgurl;
@@ -229,16 +246,16 @@ namespace SE1611_PRN221_ASM.Controllers
                         _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
                         _unitOfWork.Save();
                     }
-
-                    //Console.WriteLine(file.FileName);
+                    //Update thanh cong ne
                     return RedirectToAction(nameof(Create));
                 }
+                // book id = null
                 return RedirectToAction(nameof(Create));
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message.ToString());
-                return RedirectToAction(nameof(Create));
+                return RedirectToAction(nameof(Edit), id);
             }
         }
         [HttpPost("/admin/delete")]
