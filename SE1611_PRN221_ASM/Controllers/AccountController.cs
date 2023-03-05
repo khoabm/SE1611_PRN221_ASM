@@ -162,7 +162,7 @@ namespace SE1611_PRN221_ASM.Controllers
                         account.Customer = new Customer
                         {
                             Name = account.Customer!.Name,
-                            Birthday = Convert.ToDateTime(birthDay),
+                            Birthday = Convert.ToDateTime(birthDay).Equals(default(DateTime)) ? null : Convert.ToDateTime(birthDay),
                             Status = (int)CustomerStatus.AVAILABLE,
                             Gender = gender
                         };
@@ -230,6 +230,12 @@ namespace SE1611_PRN221_ASM.Controllers
         public IActionResult LogOut()
         {
             HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> SendMail ()
+        {
+            await _unitOfWork.AccountRepository.SendConfirmationMail();
             return RedirectToAction("Index", "Home");
         }
 

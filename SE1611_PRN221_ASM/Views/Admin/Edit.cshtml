@@ -1,11 +1,14 @@
 ﻿@using Repository.Entities
 @{
     Layout = "_AdminLayout";
-    var genres = ViewBag.Genres as List<Genre>; // all genre cho checkbox
-    var book = ViewBag.Book; // book detail
-    var comments = ViewBag.Comments; // comment cua cuon sach
-    var pagination = ViewBag.Pagination; // phan trang
-    var bookGenres = ViewBag.BookGenres as List<Genre>; // genre cua cuon sach
+    var genres = ViewBag.Genres as List<Genre>;
+    var book = ViewBag.Book;
+    var comments = ViewBag.Comments;
+    var pagination = ViewBag.Pagination;
+    var bookGenres = ViewBag.BookGenres as List<Genre>;
+    Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en");
+    ViewData["Title"] = "Edit";
+
 }
 <div class="main-content">
     <div class="section__content section__content--p30">
@@ -147,6 +150,91 @@
                             </form>
                         </div>
                     </div>
+                    <div class="au-card au-card--no-shadow au-card--no-pad m-b-40">
+                        <div class="au-card-title" style="background-image:url('images/bg-title-02.jpg');">
+                            <div class="bg-overlay bg-overlay--blue"></div>
+                            <h3>
+                                <i class="zmdi zmdi-comment-text"></i>Comments
+                            </h3>
+                        </div>
+                        <div class="au-inbox-wrap">
+                            <div class="au-message">
+                                <div class="pb-5">
+                                    @if (ViewBag.Comments != null)
+                                    {
+                                        @foreach (var item in ViewBag.Comments)
+                                        {
+                                            <div>
+                                                <div class="au-message__item-inner">
+                                                    <div>
+                                                        <div class="text">
+                                                            <h5 class="name">@item.Customer.Name</h5>
+                                                            <i style="font-size:0.5rem;" class="font-weight-light font">@item.Customer.CustomerNavigation.Email</i>
+                                                            <p>@item.Content</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="au-message__item-time">
+                                                        <span>@item.CommentDate.ToString("MMMM d, yyyy")</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                                <div class="pagination-container">
+                                    <ul class="pagination justify-content-center">
+                                        @if (ViewBag.Pagination != null)
+                                        {
+                                            <li class="page-item @(ViewBag.Pagination.CurrentPage == 1 ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("details", new { page = ViewBag.Pagination.CurrentPage - 1, id = book.BookId })">Previous</a>
+                                            </li>
+
+                                            @if (ViewBag.Pagination.StartPage > 1)
+                                            {
+                                                <li class="page-item">
+                                                    <a class="page-link" href="@Url.Action("details", new { page = 1, id = Model.BookId})">1</a>
+                                                </li>
+
+                                                @if (ViewBag.Pagination.StartPage > 2)
+                                                {
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">...</span>
+                                                    </li>
+                                                }
+                                            }
+
+                                            @for (int i = ViewBag.Pagination.StartPage; i <= ViewBag.Pagination.EndPage; i++)
+                                            {
+                                                <li class="page-item @(ViewBag.Pagination.CurrentPage == i ? "active" : "")">
+                                                    <a class="page-link" href="@Url.Action("details", new { page = i, id = book.BookId})">@i</a>
+                                                </li>
+                                            }
+
+                                            @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages)
+                                            {
+                                                @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages - 1)
+                                                {
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">...</span>
+                                                    </li>
+                                                }
+
+                                                <li class="page-item">
+                                                    <a class="page-link" href="@Url.Action("details", new { page = ViewBag.Pagination.TotalPages, id = book.BookId})">@ViewBag.Pagination.TotalPages</a>
+                                                </li>
+                                            }
+
+                                            <li class="page-item @(ViewBag.Pagination.CurrentPage == ViewBag.Pagination.TotalPages ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("details", new { page = ViewBag.Pagination.CurrentPage + 1, id = book.BookId})">Next</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="card">
@@ -167,55 +255,8 @@
                     </div>
                 </div>
             </div>
-            <div class="pagination-container">
-                <ul class="pagination">
-                    @if (ViewBag.Pagination != null)
-                    {
-                        <li class="page-item @(ViewBag.Pagination.CurrentPage == 1 ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage - 1, query = ViewBag.Query })">Previous</a>
-                        </li>
 
-                        @if (ViewBag.Pagination.StartPage > 1)
-                        {
-                            <li class="page-item">
-                                <a class="page-link" href="@Url.Action("create", new { page = 1})">1</a>
-                            </li>
-
-                            @if (ViewBag.Pagination.StartPage > 2)
-                            {
-                                <li class="page-item disabled">
-                                    <span class="page-link">...</span>
-                                </li>
-                            }
-                        }
-
-                        @for (int i = ViewBag.Pagination.StartPage; i <= ViewBag.Pagination.EndPage; i++)
-                        {
-                            <li class="page-item @(ViewBag.Pagination.CurrentPage == i ? "active" : "")">
-                                <a class="page-link" href="@Url.Action("create", new { page = i})">@i</a>
-                            </li>
-                        }
-
-                        @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages)
-                        {
-                            @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages - 1)
-                            {
-                                <li class="page-item disabled">
-                                    <span class="page-link">...</span>
-                                </li>
-                            }
-
-                            <li class="page-item">
-                                <a class="page-link" href="@Url.Action("create", new { page = ViewBag.Pagination.TotalPages,})">@ViewBag.Pagination.TotalPages</a>
-                            </li>
-                        }
-
-                        <li class="page-item @(ViewBag.Pagination.CurrentPage == ViewBag.Pagination.TotalPages ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Action("create", new { page = ViewBag.Pagination.CurrentPage + 1})">Next</a>
-                        </li>
-                    }
-                </ul>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -225,7 +266,7 @@
             var preview = document.getElementById("preview");
             var file = event.target.files[0];
             var reader = new FileReader();
-            reader.onload = function() {
+            reader.onload = function () {
                 preview.src = reader.result;
             }
             reader.readAsDataURL(file);

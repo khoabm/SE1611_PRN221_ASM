@@ -20,7 +20,7 @@ namespace Repository.Repository
             int totalItems = 0; 
             try
             {
-                commentsByBook =  _context.Comments.Include(c => c.Customer).Where(c => c.BookId == bookId).OrderByDescending(c => c.CommentDate).ToList();
+                commentsByBook =  _context.Comments.Include(c => c.Customer).ThenInclude(c => c.CustomerNavigation).Where(c => c.BookId == bookId).OrderByDescending(c => c.CommentDate).ToList();
                 totalItems = commentsByBook.Count;
             }
             catch (Exception ex)

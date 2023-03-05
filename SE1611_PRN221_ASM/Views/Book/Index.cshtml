@@ -217,3 +217,17 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        function addThousandSeparator(inputField) {
+            // Get input value and remove any non-numeric characters
+            let inputValue = inputField.value.replace(/\D/g, '');
+
+            // Add thousand separator to the input value
+            inputValue = Number(inputValue).toLocaleString('en-US');
+
+            // Update the input field with the formatted value
+            inputField.value = inputValue;
+        }
+    </script>
+ }
