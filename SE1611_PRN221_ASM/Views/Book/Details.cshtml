@@ -176,22 +176,16 @@
                                     <div class="btn-wishlist-wrap">
                                         @if (isFavorite)
                                         {
-                                            <a asp-controller="Favorite" asp-action="Delete" asp-route-id="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add js-remove-wishlist" title="Remove From Favorite"><i class="icon-heart-hover"></i></a>
+                                            <a asp-controller="Favorite" asp-action="Delete" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Remove From Favorite"><i class="icon-heart-hover"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-controller="Favorite" asp-action="AddToFavorite" asp-route-id="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add js-add-wishlist" title="Add To Favorite"><i class="icon-heart-stroke"></i></a>
+                                            <a asp-controller="Favorite" asp-action="Add" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Add To Favorite"><i class="icon-heart-stroke"></i></a>
                                         }
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        @if (TempData["Message"] != null)
-                        {
-                            <div class="alert alert-@TempData["MessageType"]" role="alert" style="background-color: #17c6aa">
-                                @TempData["Message"]
-                            </div>
-                        }
                     </div>
                 </div>
             </div>

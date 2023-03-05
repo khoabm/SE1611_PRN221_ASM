@@ -1,62 +1,92 @@
 ﻿@model IEnumerable<Repository.Entities.Favorite>
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<div class="container">
-    <div class="dropdn-content minicart-drop cart-items">
-        <div class="dropdn-content-block">
-            <div class="dropdn-close"><a asp-controller="Home" asp-action="Index">Close</a></div>
+
+<partial name="_Notification" />
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><span>My account</span></li>
+            </ul>
         </div>
     </div>
-    <div class="title-wrap text-center">
-        <h2 class="h1-style">My Favorite Books</h2>
-        <div class="h-sub maxW-825">Check out the books that I've added to my favorites list</div>
-    </div>
-    <div class="prd-grid-wrap position-relative">
-        <div class="prd-grid data-to-show-4 data-to-show-lg-4 data-to-show-md-3 data-to-show-sm-2 data-to-show-xs-2 js-category-grid" data-grid-tab-content>
-            @foreach (var favorite in Model)
-            {
-                <div class="prd prd--style2 prd-labels--max prd-labels-shadow">
-                    <div class="prd-inside">
-                        <div class="prd-img-area">
-                            <a asp-controller="Book" asp-action="Details" asp-route-id="@favorite.Book.BookId" class="prd-img image-hover-scale image-container">
-                                <img data-src="@favorite.Book.ImageLink" alt="@favorite.Book.Title" class="js-prd-img lazyload fade-up">
-                                <div class="foxic-loader"></div>
-                                <div class="prd-big-squared-labels"></div>
-                            </a>
+    <div class="holder">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 aside aside--left">
+                    <div class="list-group">
+                        <a href="account-details.html" class="list-group-item">Account Details</a>
+                        <a href="account-addresses.html" class="list-group-item">My Addresses</a>
+                        <a href="account-wishlist.html" class="list-group-item active">My Favorite</a>
+                        <a href="account-history.html" class="list-group-item">My Order History</a>
+                        <a href="#" class="list-group-item disabled">My Reviews</a>
+                        <a href="#" class="list-group-item disabled">My Saved Tags</a>
+                        <a href="#" class="list-group-item disabled">Compare Products</a>
+                    </div>
+                </div>
+                <div class="col-md-14 aside">
+                    <h1 class="mb-3">My Favorite</h1>
+                    <div class="empty-wishlist js-empty-wishlist text-center py-3 py-sm-5 d-none" style="opacity: 0;">
+                        <h3>Your Wishlist is empty</h3>
+                        <div class="mt-5">
+                            <a href="index.html" class="btn">Continue shopping</a>
                         </div>
-                        <div class="prd-info">
-                            <div class="prd-info-wrap">
-                                <div class="prd-rating justify-content-center">
-                                    @for (int i = 0; i < 5; i++)
-                                    {
-                                        if (i < favorite.Book.AverageRating)
-                                        {
-                                            <i class="icon-star-fill fill"></i>
-                                        }
-                                        else
-                                        {
-                                            <i class="icon-star-fill"></i>
-                                        }
-                                    }
+                    </div>
+                    <div class="prd-grid-wrap position-relative">
+                        <div class="prd-grid prd-grid--wishlist data-to-show-3 data-to-show-lg-3 data-to-show-md-2 data-to-show-sm-2 data-to-show-xs-1">
+                            @foreach (var favorite in Model)
+                            {
+                                <div class="prd prd--in-wishlist prd--style2 prd-labels--max prd-labels-shadow ">
+                                    <div class="prd-inside">
+                                        <div class="prd-img-area">
+                                            <a asp-controller="Book" asp-action="Details" asp-route-id="@favorite.Book.BookId" class="prd-img image-hover-scale image-container">
+                                                <img data-src="@favorite.Book.ImageLink" alt="@favorite.Book.Title" class="js-prd-img lazyload fade-up">
+                                                <div class="foxic-loader"></div>
+                                                <div class="prd-big-squared-labels">
+                                                </div>
+                                            </a>
+                                            <div class="prd-circle-labels">
+                                                <a asp-controller="Favorite" asp-action="Delete" asp-route-bookId="@favorite.BookId" class="circle-label-compare circle-label-wishlist--off mt-0" title="Remove From Favorite"><i class="icon-heart-hover"></i></a>
+                                                @*<form asp-controller="Favorite" asp-action="Delete" method="post">
+                                                    <input type="hidden" name="id" value="@favorite.FavoriteId" />
+                                                    <button style="border: none; cursor: pointer; padding: 0;" type="submit" class="circle-label-compare circle-label-wishlist--off mt-0" title="Remove From Favorite"><i class="icon-heart-hover"></i></button>
+                                                </form>*@
+                                            </div>
+                                        </div>
+                                        <div class="prd-info">
+                                            <div class="prd-info-wrap">
+                                                <div class="prd-tag"><a asp-controller="Book" asp-action="Index" asp-route-query="@favorite.Book.Author!.Trim()">@favorite.Book.Author</a></div>
+                                                <h2 class="prd-title">
+                                                    <a asp-controller="Book" asp-action="Details" asp-route-id="@favorite.Book.BookId">@favorite.Book.Title</a>
+                                                </h2>
+                                                <div class="prd-description">
+                                                    @favorite.Book.Description
+                                                </div>
+                                            </div>
+                                            <div class="prd-hovers">
+                                                <div class="prd-price">
+                                                    <div class="price-new">$ @favorite.Book.Price</div>
+                                                </div>
+                                                <div class="prd-action">
+                                                    <div class="prd-action-left">
+                                                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                                            <input type="hidden" name="bookId" value="@favorite.BookId" />
+                                                            <input type="hidden" name="quantity" value="1" />
+                                                            <button type="submit" class="btn js-prd-addtocart">Add To Cart</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="prd-tag"><a href="#">@favorite.Book.Author</a></div>
-                                <h2 class="prd-title book-title"><a asp-controller="Book" asp-action="Details" asp-route-id="@favorite.Book.BookId">@favorite.Book.Title</a></h2>
-                                <div class="prd-description">
-                                    @favorite.Book.Description
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
-            }
-
+            </div>
         </div>
-        @*@if (TempData["Message"] != null)
-        {
-            <div style="height: 0"></div>
-        }*@
     </div>
 </div>
