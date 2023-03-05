@@ -8,6 +8,7 @@
     var bookGenres = ViewBag.BookGenres as List<Genre>;
     Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en");
     ViewData["Title"] = "Edit";
+
 }
 <div class="main-content">
     <div class="section__content section__content--p30">
@@ -135,14 +136,14 @@
                                         <label for="picture" class=" form-control-label">Book picture</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input type="file" id="file-input" name="picture" class="form-control-file" accept="image/*" onchange="previewImage(event)">
+                                        <input type="file" id="file-input" name="picture" class="form-control-file" accept=".jpg,.jpeg,.png,.bmp" onchange="previewImage(event)">
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-end">
-                                    <button type="reset" class="btn btn-danger btn-sm">
+                                    <button type="reset" class="btn btn-danger btn-sm" >
                                         <i class="fa fa-ban"></i> Reset
                                     </button>
-                                    <button type="submit" class="btn btn-primary btn-sm">
+                                    <button type="submit" class="btn btn-primary btn-sm" id="SubmitForm">
                                         <i class="fa fa-dot-circle-o"></i> Submit
                                     </button>
                                 </div>
@@ -270,12 +271,34 @@
             }
             reader.readAsDataURL(file);
         }
-
         function addThousandSeparator(inputField) {
-            let inputValue = inputField.value.replace(/\D/g, '');
-            inputValue = Number(inputValue).toLocaleString('en-US');
-            inputField.value = inputValue;
-        }
+            // Get input value and remove any non-numeric characters except a decimal point
+            let inputValue = inputField.value.replace(/[^\d\.]/g, '');
 
+            // Split the input value into whole number and decimal parts
+            let parts = inputValue.split('.');
+
+            // Add thousand separator to the whole number part
+            parts[0] = Number(parts[0]).toLocaleString('en-US');
+
+            // Join the parts back together with a decimal point
+            let formattedValue = parts.join('.');
+
+            // Update the input field with the formatted value
+            inputField.value = formattedValue;
+        }
+    </script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $('#SubmitForm').click(function() {
+                checked = $("input[type=checkbox]:checked").length;
+
+                if (!checked) {
+                    alert("You must check at least one genres.");
+                    return false;
+                }
+
+            });
+        });
     </script>
 }

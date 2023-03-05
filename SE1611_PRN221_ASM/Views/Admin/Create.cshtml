@@ -112,14 +112,14 @@
                                         <label for="picture" class=" form-control-label">Book picture</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input type="file" id="file-input" name="picture" class="form-control-file" accept="image/*" onchange="previewImage(event)" required>
+                                        <input type="file" id="file-input" name="picture" class="form-control-file" accept=".jpg,.jpeg,.png,.bmp" onchange="previewImage(event)" required>
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-end">
                                     <button type="reset" class="btn btn-danger btn-sm">
                                         <i class="fa fa-ban"></i> Reset
                                     </button>
-                                    <button type="submit" class="btn btn-primary btn-sm">
+                                    <button type="submit" class="btn btn-primary btn-sm" id="SubmitForm">
                                         <i class="fa fa-dot-circle-o"></i> Submit
                                     </button>
                                 </div>
@@ -313,14 +313,20 @@
             reader.readAsDataURL(file);
         }
         function addThousandSeparator(inputField) {
-            // Get input value and remove any non-numeric characters
-            let inputValue = inputField.value.replace(/\D/g, '');
+            // Get input value and remove any non-numeric characters except a decimal point
+            let inputValue = inputField.value.replace(/[^\d\.]/g, '');
 
-            // Add thousand separator to the input value
-            inputValue = Number(inputValue).toLocaleString('en-US');
+            // Split the input value into whole number and decimal parts
+            let parts = inputValue.split('.');
+
+            // Add thousand separator to the whole number part
+            parts[0] = Number(parts[0]).toLocaleString('en-US');
+
+            // Join the parts back together with a decimal point
+            let formattedValue = parts.join('.');
 
             // Update the input field with the formatted value
-            inputField.value = inputValue;
+            inputField.value = formattedValue;
         }
     </script>
     <script>
@@ -338,6 +344,19 @@
             $("#FormCreate").slideToggle("linear");
         })
     </script>
-    }
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#SubmitForm').click(function() {
+                checked = $("input[type=checkbox]:checked").length;
 
+                if (!checked) {
+                    alert("You must check at least one genres.");
+                    return false;
+                }
+
+            });
+        });
+    </script>
+
+}
     <!-- END MAIN CONTENT-->
