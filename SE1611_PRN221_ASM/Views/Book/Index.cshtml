@@ -9,7 +9,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+<partial name="_Notification"/>
 <div class="holder">
     <div class="container">
         <div class="filter-row">
@@ -19,7 +19,7 @@
                     <div class="select-label">SORT:</div>
                     <div class="select-wrapper select-wrapper-xxs">
                         <select class="form-control input-sm" name="sort" form="filter">
-                            <option value="latest">Latest</option>
+                            <option  value="latest" >Latest</option>
                             <option value="oldest">Oldest</option>
                             <option value="rating">Rating</option>
                             <option value="price">Price</option>
@@ -58,7 +58,7 @@
 
                                             @*else
                                                 {
-                                                    <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox">
+                                                <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox">
                                                 }*@
                                             <label for="@item.GenreId">@item.GenreName</label>
                                         </li>
@@ -111,9 +111,6 @@
                                             <div class="prd-big-squared-labels">
                                             </div>
                                         </a>
-                                        <div class="prd-circle-labels">
-                                            <a href="#" class="circle-label-compare circle-label-wishlist--add js-add-wishlist mt-0" title="Add To Wishlist"><i class="icon-heart-stroke"></i></a><a href="#" class="circle-label-compare circle-label-wishlist--off js-remove-wishlist mt-0" title="Remove From Wishlist"><i class="icon-heart-hover"></i></a>
-                                        </div>
                                     </div>
                                     <div class="prd-info">
                                         <div class="prd-info-wrap">
@@ -152,8 +149,10 @@
                                                 @Html.DisplayFor(modelItem => item.Description)
                                             </div>
                                             <div class="prd-action">
-                                                <form action="#">
-                                                    <button class="btn js-prd-addtocart" data-product='{"name": "Leather Pegged Pants", "path":"images/skins/fashion/products/product-01-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                                <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                                    <input type="hidden" name="bookId" value="@item.BookId" />
+                                                    <input type="hidden" name="quantity" value="1" />
+                                                    <button type="submit" class="btn js-prd-addtocart">Add To Cart</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -163,8 +162,10 @@
                                             </div>
                                             <div class="prd-action">
                                                 <div class="prd-action-left">
-                                                    <form action="#">
-                                                        <button class="btn js-prd-addtocart" data-product='{"name": "Leather Pegged Pants", "path":"images/skins/fashion/products/product-01-1.webp", "url":"product.html", "aspect_ratio":0.778}'>Add To Cart</button>
+                                                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                                        <input type="hidden" name="bookId" value="@item.BookId" />
+                                                        <input type="hidden" name="quantity" value="1" />
+                                                        <button type="submit" class="btn js-prd-addtocart">Add To Cart</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -180,21 +181,24 @@
                             @if (pagination.StartPage > 1)
                             {
                                 <li class="@(1 == pagination.CurrentPage ? "active" : "")">
-                                    <a href="?page=1&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                                    <a href="?page=1&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
+                            @($"&genres={g}")
                             }">First</a>
                                 </li>
                             }
                             @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
                             {
                                 <li class=" @(i == pagination.CurrentPage ? "active" : "")">
-                                    <a href="?page=@i&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                                    <a href="?page=@i&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
+                            @($"&genres={g}")
                             }">@i</a>
-                        </li>
-                    }
+                                </li>
+                            }
                             @if (pagination.EndPage < pagination.TotalPages)
                             {
                                 <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")">
-                                    <a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                                    <a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
+                            @($"&genres={g}")
                             }">@(pagination.TotalPages)</a>
                                 </li>
                             }
@@ -213,3 +217,17 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        function addThousandSeparator(inputField) {
+            // Get input value and remove any non-numeric characters
+            let inputValue = inputField.value.replace(/\D/g, '');
+
+            // Add thousand separator to the input value
+            inputValue = Number(inputValue).toLocaleString('en-US');
+
+            // Update the input field with the formatted value
+            inputField.value = inputValue;
+        }
+    </script>
+ }

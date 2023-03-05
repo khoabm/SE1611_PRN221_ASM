@@ -24,6 +24,7 @@ namespace Repository.Repository
     public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
         private readonly BookSellingContext _context;
+
         public AccountRepository(BookSellingContext context) : base(context)
         {
             _context = context;
@@ -59,7 +60,7 @@ namespace Repository.Repository
             return accounts;
         }
 
-        public async Task<(IEnumerable<Account> accounts, int totalPages)> SearchAccountsWithPagination(string orderBy, string status, int page, int pageSize, string query)
+        public async Task<(IEnumerable<Account> accounts, int totalPages)> SearchAccountsWithPagination(string orderBy, int page, int pageSize, string query)
         {
             var accounts = new List<Account>();
             int totalPages = 0;
@@ -67,15 +68,27 @@ namespace Repository.Repository
             {
                 accounts = await _context.Accounts
                             .Include(a => a.Customer)                        
-                            .Where((a => a.Email.Contains(query) 
-                            || a.Customer.Name.Contains(query) 
+                            .Where((a => query == "" || a.Email.Contains(query)
+                            || a.Customer!.Name!.Contains(query)
                             && a.RoleId != (int)RoleId.Admin))                          
                             .ToListAsync();
+                switch (orderBy)
+                {
+                    case "id":
+                        accounts = accounts.OrderBy(a => a.AccountId).ToList();
+                        break;
+                    case "name":
+                        accounts = accounts.OrderBy(a => a.Customer!.Name).ToList();
+                        break;
+                    default:
+                        break;
+                }
                 totalPages = accounts.Count();
                 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new Exception();
             }
             return (PaginatedList<Account>.Create(accounts.AsQueryable(), page, pageSize), totalPages);
@@ -89,14 +102,14 @@ namespace Repository.Repository
             try
             {
                 MailMessage message = new MailMessage();
-                message.From = new MailAddress("minhkhoa2706@gmail.com");
+                message.From = new MailAddress("glacier.hostel@gmail.com");
                 message.To.Add(new MailAddress("buiminhkhoa2706@gmail.com"));
                 message.Subject = "Your email subject";
                 message.Body = "Your email message body";
                 message.Priority = MailPriority.High;
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
                 smtpClient.EnableSsl = true;
-                smtpClient.Credentials = new System.Net.NetworkCredential("minhkhoa2706@gmail.com", "cvcuzvobzugveuop");
+                smtpClient.Credentials = new System.Net.NetworkCredential("glacier.hostel@gmail.com", "iimtervacdxzaxsj");
                 await smtpClient.SendMailAsync(message);
             }
             catch (Exception)
@@ -171,22 +184,23 @@ namespace Repository.Repository
             }
         }
 
-        public async Task<Account> UpdateAccount(String email)
+        public async Task<Customer> UpdateAccount(Customer updatedCustomer)
         {
-         
-            var account = new Account();
+
             try
             {
-                account = await FindAccountByEmail(email);
-                _context.Entry(account!).State = EntityState.Modified;
+                updatedCustomer.Status =(int) CustomerStatus.AVAILABLE;
+                //account = await FindAccountByEmail(email);
+                _context.Customers.Entry(updatedCustomer).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+                Console.WriteLine("Success");
             }
             catch (Exception)
             {
 
                 throw new Exception();
             }
-            return account;
+            return updatedCustomer;
         }
     }
 }

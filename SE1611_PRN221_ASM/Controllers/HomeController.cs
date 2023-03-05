@@ -1,5 +1,5 @@
 
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SE1611_PRN221_ASM.Helper;
 
@@ -45,8 +45,8 @@ namespace SE1611_PRN221_ASM.Controllers
                 Console.WriteLine(ex.Message);
                 throw new Exception();
             }
-                
-            
+
+
             return View(books);
         }
         [HttpGet]
@@ -54,10 +54,17 @@ namespace SE1611_PRN221_ASM.Controllers
         public IActionResult LoadBooks(string tab)
         {
             List<Book> books = new List<Book>();
-            
-            books = _unitOfWork.BookRepository.GetBooksOrderByCategory(tab).ToList();
-            _logger.LogWarning("Loading tabs: " + tab);
-            _logger.LogWarning("Current Data: " + books[0].Title);
+            try
+            {
+                books = _unitOfWork.BookRepository.GetBooksOrderByCategory(tab).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw;
+            }
+
+
             return PartialView("_ModelPartialView", books);
         }
         [SessionAuthorize]

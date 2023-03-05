@@ -61,27 +61,6 @@ namespace Repository.Repository
                                AverageRating = avgRating
                            }
                         ).OrderByDescending(b => b.AverageRating).Take(8).ToList();
-                //books = _context.Books
-                //    .Join(_context.Comments,
-                //        b => b.BookId,
-                //        cm => cm.BookId,
-                //        (b, cm) => new { Book = b, Rating = cm.Rating })
-                //    .GroupBy(x => x.Book)
-                //    .Select(g => new Book
-                //    {
-                //        BookId = g.Key.BookId,
-                //        Title = g.Key.Title,
-                //        Author = g.Key.Author,
-                //        Price = g.Key.Price,
-                //        QuantityLeft = g.Key.QuantityLeft,
-                //        ImageLink = g.Key.ImageLink,
-                //        Publisher = g.Key.Publisher,
-                //        Description = g.Key.Description,
-
-                //        AverageRating = g.Average(x => x.Rating) ?? 0
-                //    })
-                //    .OrderByDescending(b => b.AverageRating)
-                //    .ToList();
             }
             catch (Exception ex)
             {
@@ -99,8 +78,6 @@ namespace Repository.Repository
             try
             {
 
-                //String query = $" SELECT top 4 db.publisher, db.image_link, db.price, db.quantity_left, db.[status], db.title, db.[description] ,db.author,db.AddedDate, db.book_id, db.average, genre_name FROM ( SELECT b.publisher, b.image_link, b.price, b.quantity_left, b.[status], b.title, b.[description] ,b.author, b.AddedDate, b.book_id, AVG(cm.rating) as average FROM Books b join Comments cm on b.book_id = cm.book_id GROUP BY b.book_id, b.AddedDate, b.author, b.[description], b.publisher, b.image_link, b.price, b.quantity_left, b.[status], b.title ) as db join Book_genre bg on db.book_id = bg.book_id join Genres g on bg.genre_id = g.genre_id WHERE g.genre_name LIKE '%{categoryName}%' ORDER BY db.average";
-                //books = _context.Books.FromSqlRaw(query).ToList();
                 books = (from b in _context.Books
                          join bg in _context.BookGenres on b.BookId equals bg.BookId
                          join g in _context.Genres on bg.GenreId equals g.GenreId
@@ -142,14 +119,13 @@ namespace Repository.Repository
 
             List<Book> books = _context.Books.Include(b => b.Comments).Where(b => b.Status == 1).ToList();
 
-
-            List<Book> list = new List<Book>();
             //-----------------------------------
             //search by query title and author
             if (!string.IsNullOrEmpty(query))
             {
                 books = books.Where(b => b.Author.Contains(query, StringComparison.OrdinalIgnoreCase)
-                || b.Title.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+                || b.Title.Contains(query, StringComparison.OrdinalIgnoreCase) 
+                || b.Publisher.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             //filter by price
             books = books.Where(b => (b.Price <= maxPrice && b.Price >= minPrice)).ToList();
@@ -221,5 +197,53 @@ namespace Repository.Repository
             return books;
 
         }
+
+
+
+
+        public (List<Book>, int totalItems) SearchBooksAdmin(string query, string[] genres, double minPrice, double maxPrice
+                                                , int pageNum, int pageSize, string sort)
+
+        {
+
+            List<Book> books = _context.Books.Include(b => b.Comments).ToList();
+
+
+            //-----------------------------------
+            //search by query title and author
+            if (!string.IsNullOrEmpty(query))
+            {
+                books = books.Where(b => b.Author.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || b.Title.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            //filter by price
+            books = books.Where(b => (b.Price <= maxPrice && b.Price >= minPrice)).ToList();
+            //filter by genre
+            if (genres.Length > 0)
+            {
+                Console.WriteLine(genres);
+                List<BookGenre> bookGenres = _context.BookGenres.Where(bg => genres.Contains(bg.Genre.GenreName)).ToList();
+                books = books.Where(b => bookGenres.Any(bg => bg.BookId == b.BookId)).ToList();
+            }
+            foreach (var book in books)
+            {
+                if (book.Comments.Count > 0)
+                {
+                    double averageRating = book.Comments.Average(c => c.Rating!.Value);
+                    book.AverageRating = averageRating;
+                }
+                else { book.AverageRating = 0; }
+            }
+            //----------------------------
+            //sort
+            if (sort.Equals("latest")) books = books.OrderBy(b => b.AddedDate).ToList();
+            if (sort.Equals("oldest")) books = books.OrderByDescending(b => b.AddedDate).ToList();
+            if (sort.Equals("price")) books = books.OrderBy(b => b.Price).ToList();
+            ///
+            int totalItems = books.Count();
+
+            return (PaginatedList<Book>.Create(books.AsQueryable(), pageNum, pageSize), totalItems);
+        }
+
     }
 }

@@ -2,18 +2,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="dropdn-content minicart-drop cart-items" id="dropdnMinicart">
+@if (TempData["Message"]?.ToString() != "Please log in first.")
+{
+    <div class="dropdn-content minicart-drop cart-items justify-content-center d-flex flex-column align-items-right">
+        <div class="dropdn-content-block text-center">
+            @if (TempData["Message"]?.ToString() != "Please log in first.")
+            {
+                <div class="dropdn-close"><a asp-controller="Home" asp-action="Index">Close</a></div>
+            }
+        </div>
+    </div>
+}
+<div style="min-height:100vh" class="dropdn-content minicart-drop cart-items justify-content-center d-flex flex-column align-items-center" id="dropdnMinicart">
     <div class="dropdn-content-block text-center">
-        @if (TempData["Message"]?.ToString() != "Please log in first.")
-        {
-            <div class="dropdn-close"><a asp-controller="Home" asp-action="Index">Close</a></div>
-        }
         <h2>@TempData["Message"]?.ToString()</h2>
     </div>
     @if (TempData["Message"]?.ToString() == "Please log in first.")
-        {
-            <div class="text-center">
-                <a asp-controller="Account" asp-action="SignIn" class="btn btn-primary">Login</a>
-            </div>
-        }
+    {
+        <div class="text-center">
+            <a asp-controller="Account" asp-action="SignIn" class="btn btn-primary">Login</a>
+        </div>
+    }
 </div>

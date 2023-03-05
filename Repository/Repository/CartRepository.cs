@@ -26,5 +26,15 @@ namespace Repository.Repository
                 .Include(c => c.Book)
                 .ToList();
         }
+
+        public void DeleteAll(int customerId)
+        {
+            var cartItems = _context.Carts.Where(c => c.CustomerId == customerId).ToList();
+
+            foreach (var cartItem in cartItems)
+            {
+                _context.Carts.Remove(cartItem);
+            }
+        }
     }
 }
