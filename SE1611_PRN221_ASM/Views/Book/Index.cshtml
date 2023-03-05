@@ -19,10 +19,17 @@
                     <div class="select-label">SORT:</div>
                     <div class="select-wrapper select-wrapper-xxs">
                         <select class="form-control input-sm" name="sort" form="filter">
+<<<<<<< HEAD
                             @foreach (var item in searchModel.sortOptions)
                             {
                                 <option value="@item.ToString()">@item.ToString()</option>
                             }
+=======
+                            <option  value="latest" >Latest</option>
+                            <option value="oldest">Oldest</option>
+                            <option value="rating">Rating</option>
+                            <option value="price">Price</option>
+>>>>>>> 9fc21d60740f653f1b23a4ea4bec3ecbbb22154a
                         </select>
                     </div>
                 </div>

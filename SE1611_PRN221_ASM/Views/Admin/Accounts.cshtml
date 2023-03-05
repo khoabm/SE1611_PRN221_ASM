@@ -170,7 +170,7 @@
                                 <li class="list-inline-item">Accounts</li>
                             </ul>
                         </div>
-                        <form class="au-form-icon--sm" asp-action="accounts" method="GET">
+                        <form id="search-form" class="au-form-icon--sm" asp-action="accounts" method="GET">
                             <input name="query" class="au-input--w300 au-input--style2" type="text" placeholder="Search for datas &amp; reports..." value="@ViewBag.Query">
                             <button class="au-btn--submit2" type="submit">
                                 <i class="zmdi zmdi-search"></i>
@@ -206,23 +206,23 @@
                     <h3 class="title-5 m-b-35">data table</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            <div class="rs-select2--light rs-select2--md">
-                                <select class="js-select2" name="property">
-                                    <option value="all" selected="selected">All</option>
-                                    <option value="newest">Newest</option>
-                                    <option value="oldest">Oldest</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
                             <div class="rs-select2--light rs-select2--sm">
-                                <select class="js-select2" name="time">
-                                    <option value="all" selected="selected">All Types</option>
-                                    <option value="available">Available</option>
-                                    <option value="disable">Disable</option>
+                                <select form="search-form" class="js-select2" name="orderBy">
+                                    @if (ViewBag.OrderBy == "id")
+                                    {
+                                        <option selected value="id">By Id</option>
+                                        <option value="name">By Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="id">By Id</option>
+                                        <option selected value="name">By Name</option>
+                                    }
+
                                 </select>
                                 <div class="dropDownSelect2"></div>
                             </div>
-                            <button class="au-btn-filter">
+                            <button form="search-form" class="au-btn-filter">
                                 <i class="zmdi zmdi-filter-list"></i>filters
                             </button>
                         </div>
@@ -294,13 +294,13 @@
                                 @if (ViewBag.Pagination != null)
                                 {
                                     <li class="page-item @(ViewBag.Pagination.CurrentPage == 1 ? "disabled" : "")">
-                                        <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage - 1, query = ViewBag.Query })">Previous</a>
+                                        <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage - 1, query = ViewBag.Query, orderBy = ViewBag.OrderBy })">Previous</a>
                                     </li>
 
                                     @if (ViewBag.Pagination.StartPage > 1)
                                     {
                                         <li class="page-item">
-                                            <a class="page-link" href="@Url.Action("accounts", new { page = 1, query = ViewBag.Query })">1</a>
+                                            <a class="page-link" href="@Url.Action("accounts", new { page = 1, query = ViewBag.Query, orderBy = ViewBag.OrderBy })">1</a>
                                         </li>
 
                                         @if (ViewBag.Pagination.StartPage > 2)
@@ -314,7 +314,7 @@
                                     @for (int i = ViewBag.Pagination.StartPage; i <= ViewBag.Pagination.EndPage; i++)
                                     {
                                         <li class="page-item @(ViewBag.Pagination.CurrentPage == i ? "active" : "")">
-                                            <a class="page-link" href="@Url.Action("accounts", new { page = i, query = ViewBag.Query })">@i</a>
+                                            <a class="page-link" href="@Url.Action("accounts", new { page = i, query = ViewBag.Query, orderBy = ViewBag.OrderBy })">@i</a>
                                         </li>
                                     }
 
@@ -328,12 +328,12 @@
                                         }
 
                                         <li class="page-item">
-                                            <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.TotalPages, query = ViewBag.Query })">@ViewBag.Pagination.TotalPages</a>
+                                            <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.TotalPages, query = ViewBag.Query, orderBy = ViewBag.OrderBy })">@ViewBag.Pagination.TotalPages</a>
                                         </li>
                                     }
 
                                     <li class="page-item @(ViewBag.Pagination.CurrentPage == ViewBag.Pagination.TotalPages ? "disabled" : "")">
-                                        <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage + 1, query = ViewBag.Query })">Next</a>
+                                        <a class="page-link" href="@Url.Action("accounts", new { page = ViewBag.Pagination.CurrentPage + 1, query = ViewBag.Query, orderBy = ViewBag.OrderBy })">Next</a>
                                     </li>
                                 }
                             </ul>
