@@ -341,7 +341,6 @@ namespace SE1611_PRN221_ASM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditOrder(int id, short status)
         {
-            Console.Write(status.ToString());
             var order = _unitOfWork.OrderRepository.GetById(id);
             order.Status = status;
             _unitOfWork.OrderRepository.Update(order);

@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Repository.Entities;
 using Repository.Infrastructure;
 using SE1611_PRN221_ASM.Helper;
 using SE1611_PRN221_ASM.Models;
-using System.Net;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
     enum Status
     {
-       Pending,
-       Delivered
+       Pending=0,
+       Delivered=1
     }
     public class OrderController : Controller
     {

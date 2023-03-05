@@ -507,10 +507,19 @@
                                         <form asp-controller="Admin" asp-action="EditOrder" method="post">
                                             <input type="hidden" name="id" value="@item.OrderId" />
                                         <td>
-                                            <select value="@item.Status" name="status">
-                                                <option value="0" name="Pending">Pending</option>
-                                                <option value="1" name="Deliveried">Deliveried</option>
+                                            <select name="status">
+                                                    @if (item.Status == 0)
+                                                    {
+                                                    <option value="0">Pending</option>
+                                                    <option value="1" name="Deliveried">Deliveried</option>
+                                                    }else
+                                                    {
+                                                    <option value="1" name="Deliveried">Deliveried</option>
+                                                    <option value="0">Pending</option>
+                                                    }
+                                                    
                                             </select>
+
                                         </td>
                                         <td>@item.TotalAmount</td>
                                         <td>
@@ -519,12 +528,11 @@
                                                 <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button>
-                                        
-                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                    <i class="zmdi zmdi-delete"></i>
-                                                </button>
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                    <i class="zmdi zmdi-more"></i>
+                                                    <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
+                                                        <i class="zmdi zmdi-more">
+                                                        </i>
+                                                    </a>
                                                 </button>
                                             </div>
                                         </td>
