@@ -29,7 +29,7 @@
     <link rel="icon" type="image/x-icon" href="~/book-logo-1.ico" />
     <!-- Main CSS-->
     <link href="~/css/theme.css" rel="stylesheet" media="all">
-    @RenderSection("script", required: false)
+    
     @if (IsSectionDefined("StarRating"))
     {
         @RenderSection("StarRating")
@@ -68,9 +68,9 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="active">
-                            <a href="chart.html">
-                                <i class="fas fa-chart-bar"></i>Charts
+                        <li>
+                            <a asp-controller="admin" asp-action="create">
+                                <i class="fa fa-book"></i>Book management
                             </a>
                         </li>
                         <li>
@@ -268,6 +268,6 @@
     <!-- Main JS-->
     <script src="~/js/main.js"></script>
 
-
+    @RenderSection("script", required: false)
 </body>
 </html>
