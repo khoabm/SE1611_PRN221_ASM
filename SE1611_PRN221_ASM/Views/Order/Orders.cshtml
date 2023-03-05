@@ -36,20 +36,29 @@
                                         <td>@item.Address</td>
                                         <td>@item.Phone</td>
                                         <td>
-                                            <select value="@item.Status" id="selected">
-                                                <option value="0" >Pending</option>
-                                                <option value="1" >Deliveried</option>
+                                            <select name="status">
+                                                @if (item.Status == 0)
+                                                {
+                                                    <option value="0">Pending</option>
+                                                    <option value="1" name="Deliveried">Deliveried</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="1" name="Deliveried">Deliveried</option>
+                                                    <option value="0">Pending</option>
+                                                }
+
                                             </select>
                                         </td>
                                         <td>@item.TotalAmount</td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                            <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
                                                 <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
                                                     <i class="zmdi zmdi-more">
                                                     </i>
                                                 </a>
-                                                </button>
+                                            </button>
                                             </div>
                                         </td>
                                     </tr>
