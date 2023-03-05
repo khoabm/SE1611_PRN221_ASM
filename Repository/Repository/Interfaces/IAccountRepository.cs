@@ -16,7 +16,7 @@ namespace Repository.Repository.Interfaces
         Task<Account?> FindAccountByEmail(String email);
         Task<(IEnumerable<Account> accounts, int totalPages)> SearchAccountsWithPagination(String orderBy, String status, int page, int pageSize, String query);
         Task DisableAccount(int accountId);
-        Task<Account> UpdateAccount(String email);
+        Task<Customer> UpdateAccount(Customer customer);
         int CountData();
         
 

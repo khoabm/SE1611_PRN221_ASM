@@ -1,4 +1,4 @@
-﻿@model Repository.Entities.Account;
+﻿@model Repository.Entities.Customer;
 @using SE1611_PRN221_ASM.Helper
 @inject IHttpContextAccessor HttpContextAccessor
 
@@ -8,6 +8,7 @@
     var userSession = session.GetObject<UserSession>("UserSession");
 
 }
+<partial name="_Notification" />
 <div class="holder breadcrumbs-wrap mt-0">
     <div class="container">
         <ul class="breadcrumbs">
@@ -38,9 +39,10 @@
                             <div class="card-body">
                                 <h3>Personal Info</h3>
                                 <p>
-                                    <b>Full Name:</b>@Model.Customer!.Name<br>
-                                    <b>E-mail:</b> @Model.Email<br>
-                                    <b>Birthday:</b>@Model.Customer.Birthday?.ToString("MM/dd/yyyy")
+                                    <b>Full Name:</b>@Model.Name<br/>
+                                    <b>E-mail:</b>@userSession.Email<br/>
+                                    <b>Birthday:</b>@Model.Birthday?.ToString("MM/dd/yyyy")<br />
+                                    <b>Gender:</b>@((Model.Gender ?? string.Empty).Equals("M") ? "Male" : "Female")
                                 </p>
                                 <div class="mt-2 clearfix">
                                     <a href="#" class="link-icn js-show-form" data-form="#updateDetails"><i class="icon-pencil"></i>Edit</a>
@@ -51,6 +53,7 @@
                 </div>
                 <div class="card mt-3 d-none" id="updateDetails">
                     <form asp-action="update" method="post">
+                        <input type="hidden" asp-for="@Model.CustomerId" value="@Model.CustomerId" />
                         <div class="card-body">
                             <h3>Update Account Details</h3>
 
@@ -58,7 +61,7 @@
                                 <div class="col-sm-9">
                                     <label class="text-uppercase">Full Name:</label>
                                     <div class="form-group">
-                                        <input asp-for="Customer!.Name" type="text" class="form-control form-control--sm" placeholder="Full Name" value="@Model.Customer!.Name">
+                                        <input asp-for="@Model.Name" type="text" class="form-control form-control--sm" placeholder="Full Name" value="@Model.Name">
                                     </div>
                                 </div>
                             </div>
@@ -68,15 +71,33 @@
                                 <div class="col-sm-9">
                                     <label class="text-uppercase">E-mail:</label>
                                     <div class="form-group">
-                                        <input asp-for="Email" type="email" class="form-control form-control--sm" placeholder="Email" value="@Model.Email">
+                                        <input readonly type="email" class="form-control form-control--sm" placeholder="Email" value="@userSession.Email">
                                     </div>
                                 </div>
                                 <div class="col-sm-9">
                                     <label class="text-uppercase">Date Of Birth:</label>
                                     <div class="form-group">
-                                        @*@Html.TextBoxFor(m => m.Customer!.Birthday, "{0:MM/dd/yyyy}", new { type = "date", @class = "form-control " })*@
-                                        @Html.TextBoxFor(m => m.Customer.Birthday, "{0:MM/dd/yyyy}", new { type = "date", @class = "form-control datepicker", value = Model.Customer.Birthday.HasValue ? Model.Customer.Birthday?.ToString("MM-dd-yyyy") : "" })
+                                        @Html.TextBoxFor(m => m.Birthday, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control datepicker", value = Model.Birthday.HasValue ? Model.Birthday?.ToString("yyyy-MM-dd") : "" })
+
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="male" value="M"
+                                           checked="@((Model.Gender ?? "") == "M")"
+                                           asp-for="@Model.Gender" />
+                                    <label class="form-check-label" for="male">
+                                        Male
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="female" value="F"
+                                           checked="@((Model.Gender ?? "") == "F")"
+                                           asp-for="@Model.Gender" />
+                                    <label class="form-check-label" for="female">
+                                        Female
+                                    </label>
                                 </div>
                             </div>
                         </div>

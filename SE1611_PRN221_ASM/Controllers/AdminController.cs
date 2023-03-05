@@ -112,8 +112,6 @@ namespace SE1611_PRN221_ASM.Controllers
 
             var startPage = Math.Max(1, page - 8);
             var endPage = Math.Min(totalPages, page + 8);
-            _logger.LogWarning(startPage.ToString());
-            _logger.LogWarning(endPage.ToString());
             // Create a PaginationViewModel object and store it in the ViewBag or ViewData
             var pagination = new PaginationViewModel
             {
