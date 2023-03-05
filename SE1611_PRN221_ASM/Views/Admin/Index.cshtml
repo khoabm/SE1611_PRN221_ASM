@@ -495,7 +495,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr class="tr-shadow">
-                                        
+
                                         <td>
                                             @item.OrderId
                                         </td>
@@ -504,7 +504,7 @@
                                         </td>
                                         <td>@item.Address</td>
                                         <td>@item.Phone</td>
-                                        <form asp-controller="Admin" asp-action="EditOrder" method="post">
+                                        <form asp-controller="Admin" asp-action="EditOrder" method="post" id="Edit">
                                             <input type="hidden" name="id" value="@item.OrderId" />
                                         <td>
                                             <select name="status">
@@ -519,24 +519,24 @@
                                                     }
                                                     
                                             </select>
+                                            
 
                                         </td>
+                                        </form>
                                         <td>@item.TotalAmount</td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <a asp-controller="Admin" asp-action="EditOrder" asp-route-id="@item.OrderId">
-                                                <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit" form="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button>
-                                                </a>
+                                        
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
                                                 <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
-                                                    <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
                                                         <i class="zmdi zmdi-more"></i>
-                                                    </button>
                                                 </a>
+                                                </button>
                                             </div>
                                         </td>
-                                        </form>
                                     </tr>
                                     <tr class="spacer"></tr>
                                 }
