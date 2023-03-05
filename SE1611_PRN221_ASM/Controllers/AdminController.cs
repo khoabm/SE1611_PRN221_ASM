@@ -76,10 +76,10 @@ namespace SE1611_PRN221_ASM.Controllers
             return downloadUrl;
             // ...
         }
-        public async Task<IActionResult> Accounts(String orderBy, String status, int page = 1, [FromQuery] String query = "")
+        public async Task<IActionResult> Accounts(string orderBy = "id", int page = 1, string query = "")
         {
-            Console.WriteLine(query);
-            var (listOfAccounts, totalData) = await _unitOfWork.AccountRepository.SearchAccountsWithPagination(orderBy, status, page, 5, query);
+            if (query == null) query = "";
+            var (listOfAccounts, totalData) = await _unitOfWork.AccountRepository.SearchAccountsWithPagination(orderBy, page, 5, query);
 
             //int totalData = _unitOfWork.AccountRepository.CountData();
             // Calculate pagination data
@@ -99,6 +99,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
             ViewBag.Pagination = pagination;
             ViewBag.Query = query;
+            ViewBag.OrderBy = orderBy;
             return View(listOfAccounts);
         }
 

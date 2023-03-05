@@ -60,7 +60,7 @@ namespace Repository.Repository
             return accounts;
         }
 
-        public async Task<(IEnumerable<Account> accounts, int totalPages)> SearchAccountsWithPagination(string orderBy, string status, int page, int pageSize, string query)
+        public async Task<(IEnumerable<Account> accounts, int totalPages)> SearchAccountsWithPagination(string orderBy, int page, int pageSize, string query)
         {
             var accounts = new List<Account>();
             int totalPages = 0;
@@ -68,15 +68,27 @@ namespace Repository.Repository
             {
                 accounts = await _context.Accounts
                             .Include(a => a.Customer)                        
-                            .Where((a => a.Email.Contains(query) 
-                            || a.Customer.Name.Contains(query) 
+                            .Where((a => query == "" || a.Email.Contains(query)
+                            || a.Customer!.Name!.Contains(query)
                             && a.RoleId != (int)RoleId.Admin))                          
                             .ToListAsync();
+                switch (orderBy)
+                {
+                    case "id":
+                        accounts = accounts.OrderBy(a => a.AccountId).ToList();
+                        break;
+                    case "name":
+                        accounts = accounts.OrderBy(a => a.Customer!.Name).ToList();
+                        break;
+                    default:
+                        break;
+                }
                 totalPages = accounts.Count();
                 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new Exception();
             }
             return (PaginatedList<Account>.Create(accounts.AsQueryable(), page, pageSize), totalPages);
