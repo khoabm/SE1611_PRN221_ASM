@@ -7,5 +7,6 @@ namespace Repository.Repository.Interfaces
     {
         IEnumerable<Cart> GetCartByCustomerId(int customerId);
         Cart? GetByBookIdAndCustomerId(int bookId, int customerId);
+        void DeleteAll(int customerId);
     }
 }
