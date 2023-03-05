@@ -264,10 +264,23 @@
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button>
-                                                <button id="btnDisable" class="item" data-toggle="tooltip" data-placement="top" title="Disable"
-                                                        onclick="location.href='@Url.Action("Disable", "Admin",new { accountId = item.AccountId })'">
-                                                    <i class="fas fa-user-slash"></i>
-                                                </button>
+                                                @if (item.Customer.Status == 1)
+                                                {
+                                                    <button id="btnDisable" class="item" data-toggle="tooltip" data-placement="top" title="Disable">
+                                                        <a href="" data-toggle="modal" data-target="#@item.AccountId">
+                                                            <i class="fas fa-user-slash"></i>
+                                                        </a>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="btnDisable" class="item" data-toggle="tooltip" data-placement="top" title="Active">
+                                                        <a href="" data-toggle="modal" data-target="#@item.AccountId">
+                                                            <i class="fa fa-user"></i>
+                                                        </a>
+                                                    </button>
+                                                }
+
 
                                             </div>
                                         </td>
@@ -344,14 +357,48 @@
     </section>
 </div>
 
+@foreach (var item in Model)
+{
+    <div class="modal fade" id="@item.AccountId" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="largeModalLabel">Action for this account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                @if (item.Customer.Status == 1)
+                {
+                    <div class="modal-body">
+                        <p>Do you sure want to disable:</p>
+                        <div>
+                            <h4 style="display:inline">@item.Customer.Name</h4>
+                        </div>
+                        <p>This action cannot be undo</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-danger" onclick="location.href='@Url.Action("Disable", "Admin",new { accountId = item.AccountId })'" style="color:white">Confirm</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="modal-body">
+                        <p>Do you sure want to enable:</p>
+                        <div>
+                            <h4 style="display:inline">@item.Customer.Name</h4>
+                        </div>
+                        <p>This action cannot be undo</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-danger" onclick="location.href='@Url.Action("Disable", "Admin",new { accountId = item.AccountId })'" style="color:white">Confirm</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
 @*</div>*@
 <script src="~/vendor/jquery-3.2.1.min.js"></script>
-<script>
-
-    $("#btnDisable").click(function () {
-        console.log("hehe")
-        if (!confirm("Would you like to save this record?")) {
-            return false;
-        }
-    });
-</script>
