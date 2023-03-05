@@ -19,10 +19,10 @@
                     <div class="select-label">SORT:</div>
                     <div class="select-wrapper select-wrapper-xxs">
                         <select class="form-control input-sm" name="sort" form="filter">
-                            <option value="latest">Latest</option>
-                            <option value="oldest">Oldest</option>
-                            <option value="rating">Rating</option>
-                            <option value="price">Price</option>
+                            @foreach (var item in searchModel.sortOptions)
+                            {
+                                <option value="@item.ToString()">@item.ToString()</option>
+                            }
                         </select>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                     <form asp-action="Index" id="filter" method="GET">
                         @if (!String.IsNullOrEmpty(searchModel.query))
                         {
-                            <input type="hidden" id="query" name="query" value="@searchModel.query"></input>
+                            <input type="hidden" id="query" name="query" value="@searchModel.query">
                         }
 
                         <div class="sidebar-block filter-group-block open">
@@ -181,24 +181,25 @@
                             @if (pagination.StartPage > 1)
                             {
                                 <li class="@(1 == pagination.CurrentPage ? "active" : "")">
-                                    <a href="?page=1&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
-                            @($"&genres={g}")
+                                    <a href="?page=1&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
                             }">First</a>
                                 </li>
                             }
                             @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
                             {
                                 <li class=" @(i == pagination.CurrentPage ? "active" : "")">
-                                    <a href="?page=@i&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
-                            @($"&genres={g}")
+
+                                    <a href="?page=@i&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+
                             }">@i</a>
                                 </li>
                             }
                             @if (pagination.EndPage < pagination.TotalPages)
                             {
                                 <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")">
-                                    <a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sort&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
-                            @($"&genres={g}")
+
+                                    <a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+
                             }">@(pagination.TotalPages)</a>
                                 </li>
                             }

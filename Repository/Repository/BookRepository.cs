@@ -149,6 +149,7 @@ namespace Repository.Repository
             if (sort.Equals("latest")) books = books.OrderBy(b => b.AddedDate).ToList();
             if (sort.Equals("oldest")) books = books.OrderByDescending(b => b.AddedDate).ToList();
             if (sort.Equals("price")) books = books.OrderBy(b => b.Price).ToList();
+            if (sort.Equals("rating")) books = books.OrderByDescending(b => b.AverageRating).ToList();
             ///
             int totalItems = books.Count();
 

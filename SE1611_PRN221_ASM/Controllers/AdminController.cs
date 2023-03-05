@@ -164,7 +164,6 @@ namespace SE1611_PRN221_ASM.Controllers
                         _unitOfWork.BookRepository.CreateBookGenre(book.BookId, genre);
                         _unitOfWork.Save();
                     }
-                    //Console.WriteLine(file.FileName);
                     TempData["Success"] = "Book added";
                     return RedirectToAction(nameof(Create));
                 }
