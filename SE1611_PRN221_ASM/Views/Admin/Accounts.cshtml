@@ -249,7 +249,7 @@
                                         <td>
                                             <span class="block-email">@item.Email</span>
                                         </td>
-                                        <td class="desc">@item.Customer.Birthday.ToString()</td>
+                                        <td class="desc">@item.Customer.Birthday?.ToString("MM/dd/yyyy")</td>
                                         <td>@(item.Customer.Gender == "M" ? "Male" : "Female")</td>
                                         @if (item.Customer.Status == 1)
                                         {

@@ -324,14 +324,19 @@
         }
     </script>
     <script>
-        const slideBtn = document.getElementById("CreateForm");
-        const slideDiv = document.getElementById("FormCreate");
+        //const slideBtn = document.getElementById("CreateForm");
+        //const slideDiv = document.getElementById("FormCreate");
 
-        slideBtn.addEventListener('click', function() {
-            slideDiv.style.display = 'flex';
-            slideDiv.style.transition = 'all 0.5s ease';
-            slideDiv.style.transform = 'translateX(0)';
-        });
+        //slideBtn.addEventListener('click', function() {
+        //    slideDiv.style.display = 'flex';
+        //    slideDiv.style.transition = 'all 0.5s ease';
+        //    slideDiv.style.transform = 'translateX(0)';
+        //});
+        $("#CreateForm").unbind("click");
+        $("#CreateForm").click((e) => {
+            e.preventDefault();
+            $("#FormCreate").slideToggle("linear");
+        })
     </script>
     }
 

@@ -171,9 +171,9 @@ namespace SE1611_PRN221_ASM.Controllers
             if (book != null)
             {
                 var (comments, totalData) = _unitOfWork.CommentRepository.GetAllCommentOfABook(id, page);
-                var totalPages = (int)Math.Ceiling((double)totalData / 8);
-                var startPage = Math.Max(1, page - 8);
-                var endPage = Math.Min(totalPages, page + 8);
+                var totalPages = (int)Math.Ceiling((double)totalData / 3);
+                var startPage = Math.Max(1, page - 3);
+                var endPage = Math.Min(totalPages, page + 3);
                 // Create a PaginationViewModel object and store it in the ViewBag or ViewData
                 var pagination = new PaginationViewModel
                 {

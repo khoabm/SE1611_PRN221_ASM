@@ -40,7 +40,7 @@
                                 <h3>Personal Info</h3>
                                 <p>
                                     <b>Full Name:</b>@Model.Name<br/>
-                                    <b>E-mail:</b>@userSession.Email<br/>
+                                    <b>E-mail:</b>@userSession!.Email<br/>
                                     <b>Birthday:</b>@Model.Birthday?.ToString("MM/dd/yyyy")<br />
                                     <b>Gender:</b>@((Model.Gender ?? string.Empty).Equals("M") ? "Male" : "Female")
                                 </p>

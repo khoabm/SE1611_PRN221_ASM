@@ -1261,8 +1261,8 @@
     $(".animsition").animsition({
       inClass: 'fade-in',
       outClass: 'fade-out',
-      inDuration: 900,
-      outDuration: 900,
+      inDuration: 600,
+      outDuration: 600,
       linkElement: linkElement,
       loading: true,
       loadingParentElement: 'html',

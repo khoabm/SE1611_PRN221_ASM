@@ -90,14 +90,14 @@ namespace Repository.Repository
             try
             {
                 MailMessage message = new MailMessage();
-                message.From = new MailAddress("minhkhoa2706@gmail.com");
+                message.From = new MailAddress("glacier.hostel@gmail.com");
                 message.To.Add(new MailAddress("buiminhkhoa2706@gmail.com"));
                 message.Subject = "Your email subject";
                 message.Body = "Your email message body";
                 message.Priority = MailPriority.High;
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
                 smtpClient.EnableSsl = true;
-                smtpClient.Credentials = new System.Net.NetworkCredential("minhkhoa2706@gmail.com", "cvcuzvobzugveuop");
+                smtpClient.Credentials = new System.Net.NetworkCredential("glacier.hostel@gmail.com", "iimtervacdxzaxsj");
                 await smtpClient.SendMailAsync(message);
             }
             catch (Exception)
@@ -174,10 +174,10 @@ namespace Repository.Repository
 
         public async Task<Customer> UpdateAccount(Customer updatedCustomer)
         {
-         
-            var customer = new Customer();
+
             try
             {
+                updatedCustomer.Status =(int) CustomerStatus.AVAILABLE;
                 //account = await FindAccountByEmail(email);
                 _context.Customers.Entry(updatedCustomer).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
