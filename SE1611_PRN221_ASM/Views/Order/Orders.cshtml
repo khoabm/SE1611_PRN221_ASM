@@ -53,12 +53,15 @@
                                         <td>@item.TotalAmount</td>
                                         <td>
                                             <div class="table-data-feature">
-                                            <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
                                                 <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
+                                                    <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
+
                                                     <i class="zmdi zmdi-more">
+
                                                     </i>
+                                                    </button>
+
                                                 </a>
-                                            </button>
                                             </div>
                                         </td>
                                     </tr>

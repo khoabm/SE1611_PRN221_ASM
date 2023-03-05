@@ -524,16 +524,16 @@
                                         <td>@item.TotalAmount</td>
                                         <td>
                                             <div class="table-data-feature">
-                                                
+                                                <a asp-controller="Admin" asp-action="EditOrder" asp-route-id="@item.OrderId">
                                                 <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button>
-                                                <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                    <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
-                                                        <i class="zmdi zmdi-more">
-                                                        </i>
-                                                    </a>
-                                                </button>
+                                                </a>
+                                                <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
+                                                    <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                                        <i class="zmdi zmdi-more"></i>
+                                                    </button>
+                                                </a>
                                             </div>
                                         </td>
                                         </form>
