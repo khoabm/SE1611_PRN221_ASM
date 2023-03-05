@@ -11,7 +11,7 @@ using System.Text;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
-
+    [SessionAuthorize]
     public class AdminController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

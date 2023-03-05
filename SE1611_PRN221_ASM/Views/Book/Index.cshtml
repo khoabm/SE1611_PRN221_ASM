@@ -118,7 +118,7 @@
                                                 <div class="prd-rating">
                                                     @for (int i = 0; i < 5; i++)
                                                     {
-                                                        if (i < item.AverageRating)
+                                                        if (i < Math.Floor(item.AverageRating))
                                                         {
                                                             <i class="icon-star-fill fill"></i>
                                                         }
@@ -133,7 +133,7 @@
                                             <div class="prd-rating justify-content-center">
                                                 @for (int i = 0; i < 5; i++)
                                                 {
-                                                    if (i < item.AverageRating)
+                                                    if (i < Math.Floor(item.AverageRating))
                                                     {
                                                         <i class="icon-star-fill fill"></i>
                                                     }

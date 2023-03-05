@@ -23,61 +23,61 @@
     }
 }
 @section StarRating{
-<style>
-    .form-group {
-        display: flex;
-    }
-
-    .form-check-inline .rating {
-        display: none;
-    }
-
-    .form-check-inline span {
-        padding-right: 2%;
-        cursor: pointer;
-        color: transparent;
-    }
-
-        .form-check-inline span:before {
-            content: '\2606';
-            color: gold;
+    <style>
+        .form-group {
+            display: flex;
         }
 
-        .form-check-inline span:hover:before,
-        .form-check-inline span:hover ~ span:before {
+        .form-check-inline .rating {
+            display: none;
+        }
+
+        .form-check-inline span {
+            padding-right: 2%;
+            cursor: pointer;
+            color: transparent;
+        }
+
+            .form-check-inline span:before {
+                content: '\2606';
+                color: gold;
+            }
+
+            .form-check-inline span:hover:before,
+            .form-check-inline span:hover ~ span:before {
+                content: '\2605';
+                color: gold;
+            }
+
+        .form-check-inline .rating:checked ~ span:before {
             content: '\2605';
             color: gold;
         }
 
-    .form-check-inline .rating:checked ~ span:before {
-        content: '\2605';
-        color: gold;
-    }
+        .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
 
-    .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
+        .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
+        .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
 
-    .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
-    .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
+        .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
 
-    .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
-
-    .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
-    .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
-</style>
+        .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
+        .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
+            content: '\2605';
+            color: gold;
+        }
+    </style>
 }
-<partial name="_Notification"/>
+<partial name="_Notification" />
 <div class="page-content">
     <div class="holder">
         <div class="container js-prd-gallery" id="prdGallery">
@@ -214,9 +214,34 @@
                             <div class="prd-info">
                                 <div class="prd-info-wrap">
                                     <div class="prd-info-top">
-                                        <div class="prd-rating"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
+                                        <div class="prd-rating">
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                if (i < Math.Floor(item.AverageRating))
+                                                {
+                                                    <i class="icon-star-fill fill"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="icon-star-fill"></i>
+                                                }
+                                            }
+
+                                        </div>
                                     </div>
-                                    <div class="prd-rating justify-content-center"><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i><i class="icon-star-fill fill"></i></div>
+                                    <div class="prd-rating justify-content-center">
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            if (i < Math.Floor(item.AverageRating))
+                                            {
+                                                <i class="icon-star-fill fill"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="icon-star-fill"></i>
+                                            }
+                                        }
+                                    </div>
                                     <div class="prd-tag"><a href="#">@item.Author</a></div>
                                     <h2 class="prd-title"><a asp-controller="Book" asp-action="Index" asp-route-query="@item.Title">@item.Title</a></h2>
                                     <div class="prd-description">
@@ -288,7 +313,7 @@
                             {
                                 <div class="d-flex justify-content-center col-18" id="comment_section" style="display: none">
                                     <div class="text-center p-5" style="border:solid;min-width:50%;">
-                                        Log In Di Choi Oi Choi
+                                        Log In Before Post Comments
                                     </div>
                                 </div>
                             }
@@ -304,7 +329,7 @@
 </div>
 
 @section Scripts {
-<script>
+    <script>
         $(document).ready(function() {
         var qtyInput = $(".qty-input");
         var maxQuantity = parseInt(qtyInput.attr("data-max"));
@@ -428,5 +453,5 @@
 
         // Options
 
-</script>
+    </script>
 }

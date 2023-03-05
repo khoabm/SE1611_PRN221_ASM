@@ -182,10 +182,22 @@ namespace Repository.Repository
                                                 .Where(b => b.BookId != targetBook.BookId && _context.BookGenres
                                                     .Any(bg => bg.BookId == b.BookId && _context.BookGenres
                                                         .Any(tbg => tbg.BookId == targetBook.BookId && tbg.GenreId == bg.GenreId)))
+                                                .Include(b => b.Comments)
                                                 .ToList();
 
                 var similarBookList = similarBooks.Take(8).ToList();
+                
                 Console.WriteLine(similarBookList.Count);
+                foreach (var similarBook in similarBookList)
+                {
+                    if (similarBook.Comments.Count > 0)
+                    {
+                        double averageRating = similarBook.Comments.Average(c => c.Rating!.Value);
+                        similarBook.AverageRating = averageRating;
+                    }
+                    else { similarBook.AverageRating = 0; }
+                }
+                
                 books = similarBookList;
             }
             catch (Exception ex)

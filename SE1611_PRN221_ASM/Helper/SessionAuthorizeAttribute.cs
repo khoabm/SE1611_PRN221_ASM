@@ -16,13 +16,20 @@ namespace SE1611_PRN221_ASM.Helper
             var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<IAllowAnonymous>().Any();
 
             // Allow anonymous access if the action has [AllowAnonymous] attribute
-            if (allowAnonymous)
+            var session = context.HttpContext.Session.GetObject<UserSession>("UserSession");
+            if (session != null && session.RoleId == (int)RoleId.Admin)
             {
-                Console.WriteLine("Anonymous");
+                context.Result = new RedirectToRouteResult(
+                    new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Admin", action = "Index" }));
                 return;
             }
 
-            var session = context.HttpContext.Session.GetObject<UserSession>("UserSession");
+            if (allowAnonymous)
+            {
+                Console.WriteLine("Anonymous");                
+                return;
+            }
+
             if (session == null)
             {
                 context.Result = new RedirectToRouteResult(
