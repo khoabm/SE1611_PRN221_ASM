@@ -81,6 +81,7 @@ namespace SE1611_PRN221_ASM.Helper
             
             var session = context.HttpContext.Session.GetObject<UserSession>("UserSession");
 
+
             if (session != null && session.RoleId == (int)RoleId.Admin)
             {
                 // If user is an admin and the action has [AllowAnonymous], redirect to an error page
