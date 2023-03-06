@@ -70,9 +70,11 @@ namespace SE1611_PRN221_ASM.Controllers
             };
             order.OrderDetails = orderDetails;
             _unitOfWork.OrderRepository.Create(order);
-                     
             _unitOfWork.Save();
-            
+
+            userSession.CartItemCount = 0;
+            HttpContext.Session.SetObject("UserSession", userSession);
+
             return View("View",orderDetails);
         }
 

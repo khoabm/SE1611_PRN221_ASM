@@ -12,7 +12,7 @@
 <div class="holder breadcrumbs-wrap mt-0">
     <div class="container">
         <ul class="breadcrumbs">
-            <li><a href="index.html">Home</a></li>
+            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
             <li><span>My account</span></li>
         </ul>
     </div>
@@ -39,13 +39,13 @@
                             <div class="card-body">
                                 <h3>Personal Info</h3>
                                 <p>
-                                    <b>Full Name:</b>@Model.Name<br/>
-                                    <b>E-mail:</b>@userSession!.Email<br/>
-                                    <b>Birthday:</b>@Model.Birthday?.ToString("MM/dd/yyyy")<br />
-                                    <b>Gender:</b>@((Model.Gender ?? string.Empty).Equals("M") ? "Male" : "Female")
+                                    <b>Full Name: </b>@Model.Name<br/>
+                                    <b>E-mail: </b>@userSession!.Email<br/>
+                                    <b>Birthday: </b>@Model.Birthday?.ToString("MM/dd/yyyy")<br />
+                                    <b>Gender: </b>@((Model.Gender ?? string.Empty).Equals("M") ? "Male" : "Female")
                                 </p>
                                 <div class="mt-2 clearfix">
-                                    <a href="#" class="link-icn js-show-form" data-form="#updateDetails"><i class="icon-pencil"></i>Edit</a>
+                                    <a href="#" class="link-icn btn js-show-form" data-form="#updateDetails"><i class="icon-pencil"></i>Edit</a>
                                 </div>
                             </div>
                         </div>
