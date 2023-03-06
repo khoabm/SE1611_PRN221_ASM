@@ -9,7 +9,7 @@ using Repository.Repository;
 using SE1611_PRN221_ASM.Helper;
 using SE1611_PRN221_ASM.Models;
 using System.Security.Claims;
-
+using Bcrypt = BCrypt.Net.BCrypt;
 namespace SE1611_PRN221_ASM.Controllers
 {
     public class AccountController : Controller
@@ -239,6 +239,50 @@ namespace SE1611_PRN221_ASM.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        [SessionAuthorize]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("ChangePassword")]
+        [SessionAuthorize]
+        public async Task<IActionResult> ChangePasswordPost(string oldPassword, string password)
+        {
+            try
+            {
+                var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+                var user = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession!.Email);
+                if(user != null)
+                {
+                    
+                    if (Bcrypt.Verify(oldPassword, user.Password))
+                    {
+                        user.Password = Bcrypt.HashPassword(password);
+                        _unitOfWork.AccountRepository.Update(user);
+                        _unitOfWork.Save();
+                        TempData["Success"] = "Password change successful";
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Old password is incorect";
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = "User not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new Exception();
+            }
+            return RedirectToAction(nameof(ChangePassword));
+        }
 
         //[HttpGet]
         //public IActionResult SignInWithGoogle()

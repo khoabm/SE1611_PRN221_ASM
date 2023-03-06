@@ -15,26 +15,32 @@
                     <p class="text-danger">@TempData["SignUpError"]</p>
                     <form asp-action="SignUp">
                         <div class="form-group">
-                            <input asp-for="Email" type="email" class="form-control" placeholder="E-mail">
+                            <label for="email">Email</label>
+                            <input id="email" asp-for="Email" type="email" class="form-control" placeholder="E-mail">
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input asp-for="Customer!.Name" type="text" class="form-control" placeholder="Full Name">
+                            <label for="fullname">Full Name</label>
+                            <input id="fullname" asp-for="Customer!.Name" type="text" class="form-control" placeholder="Full Name">
                             <span asp-validation-for="Customer!.Name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input asp-for="Password" id="Password" name="Password" type="password" class="form-control" placeholder="Password">
+                            <label for="Password">Password</label>
+                            <input  asp-for="Password" id="Password" name="Password" type="password" class="form-control" placeholder="Password">
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label for="ConfirmPassword">Confirm Password</label>
                             <input data-val="true" data-val-equalto="Password and Confirmation Password must match." data-val-equalto-other="*.Password" id="ConfirmPassword" name="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
                             <span class="field-validation-valid error text-danger" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
                         </div>
                         <div class="form-group">
+                            <label for="Customer_Birthday">BirthDay</label>
                             @Html.TextBoxFor(m => m.Customer.Birthday, "{0:dd/MM/yyyy}", new { type = "date", @class = "form-control datepicker" })
                         </div>
                         <div class="form-group">
-                            <div class="form-check">
+                            <label for="gender">Gender</label>
+                            <div id="gender" class="form-check">
                                 <input class="form-check-input" type="radio" name="gender" id="male" value="M" checked>
                                 <label class="form-check-label" for="male">
                                     Male
@@ -98,43 +104,43 @@
     </div>
 </div>
 @*<div class="footer-sticky">
-    <div class="payment-notification-wrap js-pn" data-visible-time="3000" data-hidden-time="3000" data-delay="500"
-         data-from="Aberdeen,Bakersfield,Birmingham,Cambridge,Youngstown"
-         data-products='[{"productname":"Leather Pegged Pants", "productlink":"product.html","productimage":"images/skins/fashion/products/product-01-1.webp"},{"productname":"Black Fabric Backpack", "productlink":"product.html","productimage":"images/skins/fashion/products/product-28-1.webp"},{"productname":"Combined Chunky Sneakers", "productlink":"product.html","productimage":"images/skins/fashion/products/product-23-1.webp"}]'>
-        <div class="payment-notification payment-notification--squared">
-            <div class="payment-notification-inside">
-                <div class="payment-notification-container">
-                    <a href="#" class="payment-notification-image js-pn-link">
-                        <img src="images/products/product-01.html" class="js-pn-image" alt="">
-                    </a>
-                    <div class="payment-notification-content-wrapper">
-                        <div class="payment-notification-content">
-                            <div class="payment-notification-text">Someone purchased</div>
-                            <a href="product.html" class="payment-notification-name js-pn-name js-pn-link">
-                                Apple
-                                watch
-                            </a>
-                            <div class="payment-notification-bottom">
-                                <div class="payment-notification-when"><span class="js-pn-time">32</span> min ago</div>
-                                <div class="payment-notification-from">from <span class="js-pn-from">Riverside</span></div>
+        <div class="payment-notification-wrap js-pn" data-visible-time="3000" data-hidden-time="3000" data-delay="500"
+             data-from="Aberdeen,Bakersfield,Birmingham,Cambridge,Youngstown"
+             data-products='[{"productname":"Leather Pegged Pants", "productlink":"product.html","productimage":"images/skins/fashion/products/product-01-1.webp"},{"productname":"Black Fabric Backpack", "productlink":"product.html","productimage":"images/skins/fashion/products/product-28-1.webp"},{"productname":"Combined Chunky Sneakers", "productlink":"product.html","productimage":"images/skins/fashion/products/product-23-1.webp"}]'>
+            <div class="payment-notification payment-notification--squared">
+                <div class="payment-notification-inside">
+                    <div class="payment-notification-container">
+                        <a href="#" class="payment-notification-image js-pn-link">
+                            <img src="images/products/product-01.html" class="js-pn-image" alt="">
+                        </a>
+                        <div class="payment-notification-content-wrapper">
+                            <div class="payment-notification-content">
+                                <div class="payment-notification-text">Someone purchased</div>
+                                <a href="product.html" class="payment-notification-name js-pn-name js-pn-link">
+                                    Apple
+                                    watch
+                                </a>
+                                <div class="payment-notification-bottom">
+                                    <div class="payment-notification-when"><span class="js-pn-time">32</span> min ago</div>
+                                    <div class="payment-notification-from">from <span class="js-pn-from">Riverside</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="payment-notification-close"><i class="icon-close-bold"></i></div>
+                    <div class="payment-notification-qw prd-hide-mobile"><i class="icon-eye"></i></div>
                 </div>
-                <div class="payment-notification-close"><i class="icon-close-bold"></i></div>
-                <div class="payment-notification-qw prd-hide-mobile"><i class="icon-eye"></i></div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
-$(function () {
-    $('.datepicker').datepicker({
-        dateFormat: 'dd/mm/yy'
+    $(function () {
+        $('.datepicker').datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
     });
-});
 </script>
