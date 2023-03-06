@@ -9,7 +9,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<partial name="_Notification"/>
+<partial name="_Notification" />
 <div class="holder">
     <div class="container">
         <div class="filter-row">
@@ -19,17 +19,10 @@
                     <div class="select-label">SORT:</div>
                     <div class="select-wrapper select-wrapper-xxs">
                         <select class="form-control input-sm" name="sort" form="filter">
-<<<<<<< HEAD
                             @foreach (var item in searchModel.sortOptions)
                             {
                                 <option value="@item.ToString()">@item.ToString()</option>
                             }
-=======
-                            <option  value="latest" >Latest</option>
-                            <option value="oldest">Oldest</option>
-                            <option value="rating">Rating</option>
-                            <option value="price">Price</option>
->>>>>>> 9fc21d60740f653f1b23a4ea4bec3ecbbb22154a
                         </select>
                     </div>
                 </div>
@@ -188,7 +181,8 @@
                             @if (pagination.StartPage > 1)
                             {
                                 <li class="@(1 == pagination.CurrentPage ? "active" : "")">
-                                    <a href="?page=1&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                                    <a href="?page=1&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
+                            @($"&genres={g}")
                             }">First</a>
                                 </li>
                             }
@@ -196,7 +190,8 @@
                             {
                                 <li class=" @(i == pagination.CurrentPage ? "active" : "")">
 
-                                    <a href="?page=@i&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                                    <a href="?page=@i&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
+                            @($"&genres={g}")
 
                             }">@i</a>
                                 </li>
@@ -205,7 +200,8 @@
                             {
                                 <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")">
 
-                                    <a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){@($"&genres={g}")
+                                    <a class="page-link" href="?page=@pagination.TotalPages&query=@searchModel.query&sort=@searchModel.sortOptions[0]&minprice=@searchModel.minPrice&maxprice=@searchModel.maxPrice@foreach(var g in @searchModel.genres){
+                            @($"&genres={g}")
 
                             }">@(pagination.TotalPages)</a>
                                 </li>
@@ -226,16 +222,16 @@
     </div>
 </div>
 @section Scripts{
-    <script>
-        function addThousandSeparator(inputField) {
-            // Get input value and remove any non-numeric characters
-            let inputValue = inputField.value.replace(/\D/g, '');
+<script>
+    function addThousandSeparator(inputField) {
+        // Get input value and remove any non-numeric characters
+        let inputValue = inputField.value.replace(/\D/g, '');
 
-            // Add thousand separator to the input value
-            inputValue = Number(inputValue).toLocaleString('en-US');
+        // Add thousand separator to the input value
+        inputValue = Number(inputValue).toLocaleString('en-US');
 
-            // Update the input field with the formatted value
-            inputField.value = inputValue;
-        }
-    </script>
+        // Update the input field with the formatted value
+        inputField.value = inputValue;
+    }
+</script>
  }

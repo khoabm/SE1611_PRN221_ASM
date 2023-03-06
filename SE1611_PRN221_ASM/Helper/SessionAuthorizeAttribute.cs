@@ -17,12 +17,12 @@ namespace SE1611_PRN221_ASM.Helper
 
             // Allow anonymous access if the action has [AllowAnonymous] attribute
             var session = context.HttpContext.Session.GetObject<UserSession>("UserSession");
-            if (session != null && session.RoleId == (int)RoleId.Admin)
-            {
-                context.Result = new RedirectToRouteResult(
-                    new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Admin", action = "Index" }));
-                return;
-            }
+            //if (session != null && session.RoleId == (int)RoleId.Admin)
+            //{
+            //    context.Result = new RedirectToRouteResult(
+            //        new Microsoft.AspNetCore.Routing.RouteValueDictionary(new { controller = "Admin", action = "Index" }));
+            //    return;
+            //}
 
             if (allowAnonymous)
             {

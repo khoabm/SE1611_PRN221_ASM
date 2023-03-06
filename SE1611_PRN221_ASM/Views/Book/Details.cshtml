@@ -24,72 +24,70 @@
     }
 }
 @section StarRating{
-    <style>
-        .form-group {
-            display: flex;
+<style>
+    .form-group {
+        display: flex;
+    }
+
+    .form-check-inline .rating {
+        display: none;
+    }
+
+    .form-check-inline span {
+        padding-right: 2%;
+        cursor: pointer;
+        color: transparent;
+    }
+
+        .form-check-inline span:before {
+            content: '\2606';
+            color: gold;
         }
 
-        .form-check-inline .rating {
-            display: none;
-        }
-
-        .form-check-inline span {
-            padding-right: 2%;
-            cursor: pointer;
-            color: transparent;
-        }
-
-            .form-check-inline span:before {
-                content: '\2606';
-                color: gold;
-            }
-
-            .form-check-inline span:hover:before,
-            .form-check-inline span:hover ~ span:before {
-                content: '\2605';
-                color: gold;
-            }
-
-        .form-check-inline .rating:checked ~ span:before {
+        .form-check-inline span:hover:before,
+        .form-check-inline span:hover ~ span:before {
             content: '\2605';
             color: gold;
         }
 
-        .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
+    .form-check-inline .rating:checked ~ span:before {
+        content: '\2605';
+        color: gold;
+    }
 
-        .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
-        .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
+    .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
 
-        .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
+    .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
+    .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
 
-        .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
-        .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
-            content: '\2605';
-            color: gold;
-        }
-    </style>
+    .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
+
+    .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
+    .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
+        content: '\2605';
+        color: gold;
+    }
+</style>
 }
-<<<<<<< HEAD
-<partial name="_Notification" />
 
-    <partial name="_Notification" />
-    <div class="page-content">
-        <div class="holder">
-            <div class="container js-prd-gallery" id="prdGallery">
-                <div class="row prd-block prd-block-under prd-block--prv-bottom">
-                    <div class="col">
-                        <div class="js-prd-d-holder">
-                            <div class="prd-block_title-wrap">
-                                <div class="prd-block_reviews" data-toggle="tooltip" data-placement="top" title="Scroll To Reviews">
+<partial name="_Notification" />
+<div class="page-content">
+    <div class="holder">
+        <div class="container js-prd-gallery" id="prdGallery">
+            <div class="row prd-block prd-block-under prd-block--prv-bottom">
+                <div class="col">
+                    <div class="js-prd-d-holder">
+                        <div class="prd-block_title-wrap">
+                            <div class="prd-block_reviews" data-toggle="tooltip" data-placement="top" title="Scroll To Reviews">
                                 @for (int i = 0; i < 5; i++)
                                 {
                                     if (i < Model.AverageRating)
@@ -339,11 +337,30 @@
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function() {
-            var qtyInput = $(".qty-input");
-            var maxQuantity = parseInt(qtyInput.attr("data-max"));
-            var bookId = parseInt(qtyInput.attr("data-book-id"));
+<script>
+    $(document).ready(function() {
+        var qtyInput = $(".qty-input");
+        var maxQuantity = parseInt(qtyInput.attr("data-max"));
+        var bookId = parseInt(qtyInput.attr("data-book-id"));
+
+        // Get the quantity of the book in the cart
+        $.ajax({
+            url: "/Cart/GetCartQuantity",
+            type: "GET",
+            data: { bookId: bookId },
+            success: function(cartQuantity) {
+                var maxAllowedQuantity = maxQuantity - cartQuantity;
+
+                if (maxAllowedQuantity <= 0) {
+                    qtyInput.val(0);
+                } else {
+                    qtyInput.val(1);
+                }
+            }
+        });
+
+        $(".qty-input").on("change", function() {
+            var currentValue = parseInt(qtyInput.val());
 
             // Get the quantity of the book in the cart
             $.ajax({
@@ -353,115 +370,79 @@
                 success: function(cartQuantity) {
                     var maxAllowedQuantity = maxQuantity - cartQuantity;
 
+                    if (currentValue >= maxAllowedQuantity) {
+                        qtyInput.val(maxAllowedQuantity);
+                    }
                     if (maxAllowedQuantity <= 0) {
                         qtyInput.val(0);
-                    } else {
-                        qtyInput.val(1);
                     }
                 }
             });
-
-            $(".qty-input").on("change", function() {
-                var currentValue = parseInt(qtyInput.val());
-
-                // Get the quantity of the book in the cart
-                $.ajax({
-                    url: "/Cart/GetCartQuantity",
-                    type: "GET",
-                    data: { bookId: bookId },
-                    success: function(cartQuantity) {
-                        var maxAllowedQuantity = maxQuantity - cartQuantity;
-
-                        if (currentValue >= maxAllowedQuantity) {
-                            qtyInput.val(maxAllowedQuantity);
-                        }
-                        if (maxAllowedQuantity <= 0) {
-                            qtyInput.val(0);
-                        }
-                    }
-                });
-            });
-
-            $(".increase").on("click", function() {
-                var currentValue = parseInt(qtyInput.val());
-
-                // Get the quantity of the book in the cart
-                $.ajax({
-                    url: "/Cart/GetCartQuantity",
-                    type: "GET",
-                    data: { bookId: bookId },
-                    success: function(cartQuantity) {
-                        var maxAllowedQuantity = maxQuantity - cartQuantity;
-
-                        if (currentValue >= maxAllowedQuantity) {
-                            qtyInput.val(maxAllowedQuantity);
-                        }
-                        if (maxAllowedQuantity <= 0) {
-                            qtyInput.val(0);
-                        }
-                    }
-                });
-            });
         });
 
-        $(function() {
-            $(".js-add-wishlist, .js-remove-wishlist").click(function() {
-                var url = $(this).attr("href");
-                $.post(url, function(data) {
-                    if (data.success) {
-                        var isFavorite = data.isFavorite;
-                        var $heart = $(this).find(".icon-heart-hover, .icon-heart-stroke");
-                        if (isFavorite) {
-                            $heart.removeClass("icon-heart-stroke").addClass("icon-heart-hover");
-                        } else {
-                            $heart.removeClass("icon-heart-hover").addClass("icon-heart-stroke");
-                        }
-                    }
-                });
-                return false;
-            });
-        });
-        //star rating options
-        var options = {
-            max_value: 5,
-            step_size: 1,
-            initial_value: 1,
-            selected_symbol_type: 'fontawesome_star',
-            cursor: 'default',
+        $(".increase").on("click", function() {
+            var currentValue = parseInt(qtyInput.val());
 
-        }
-        //star rating init
-        let rating = 0;
-        $(".rating").rate(options);
-        $(".rating").on("change", function(ev, data) {
-            console.log(data.from, data.to);
-            rating = data.to;
-        });
-        $(document).ready(() => {
-            $('#post_comment').click((e) => {
-                e.preventDefault();
-                let comment = $('#comment').val();
-                if (comment.length == 0) {
-                    $('#comment').addClass('form-control--sm form-control--error');
-                    return;
+            // Get the quantity of the book in the cart
+            $.ajax({
+                url: "/Cart/GetCartQuantity",
+                type: "GET",
+                data: { bookId: bookId },
+                success: function(cartQuantity) {
+                    var maxAllowedQuantity = maxQuantity - cartQuantity;
+
+                    if (currentValue >= maxAllowedQuantity) {
+                        qtyInput.val(maxAllowedQuantity);
+                    }
+                    if (maxAllowedQuantity <= 0) {
+                        qtyInput.val(0);
+                    }
                 }
-                $.ajax({
-                    url: "/Comment/Test",
-                    type: "POST",
-                    data: { id: @Model.BookId, comment: comment, rating: rating, },
-                    success: function(result) {
-                        console.log(result);
+            });
+        });
+    });
 
-                        $("#partial_comment_container").html(result);
-                    },
-                    error: function() {
-                        console.log("Error loading partial view.");
-                    }
-                });
-            })
+    //star rating options
+    var options = {
+        max_value: 5,
+        step_size: 1,
+        initial_value: 1,
+        selected_symbol_type: 'fontawesome_star',
+        cursor: 'default',
+
+    }
+    //star rating init
+    let rating = 0;
+    $(".rating").rate(options);
+    $(".rating").on("change", function(ev, data) {
+        console.log(data.from, data.to);
+        rating = data.to;
+    });
+    $(document).ready(() => {
+        $('#post_comment').click((e) => {
+            e.preventDefault();
+            let comment = $('#comment').val();
+            if (comment.length == 0) {
+                $('#comment').addClass('form-control--sm form-control--error');
+                return;
+            }
+            $.ajax({
+                url: "/Comment/Test",
+                type: "POST",
+                data: { id: @Model.BookId, comment: comment, rating: rating, },
+                success: function(result) {
+                    console.log(result);
+
+                    $("#partial_comment_container").html(result);
+                },
+                error: function() {
+                    console.log("Error loading partial view.");
+                }
+            });
         })
+    })
 
-                // Options
+            // Options
 
-    </script>
+</script>
 }
