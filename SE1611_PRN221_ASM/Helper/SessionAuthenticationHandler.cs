@@ -27,7 +27,7 @@ namespace SE1611_PRN221_ASM.Helper
             }
 
             // Create a ClaimsIdentity with the necessary claims
-            var claims = new[] { new Claim("email", userSession.Email)};
+            var claims = new[] { new Claim("email", userSession.Email), new Claim(ClaimTypes.NameIdentifier, userSession.Email) };
             var identity = new ClaimsIdentity(claims, Scheme.Name);
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, Scheme.Name);

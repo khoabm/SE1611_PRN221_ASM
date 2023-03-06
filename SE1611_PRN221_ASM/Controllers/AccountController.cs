@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -79,9 +80,9 @@ namespace SE1611_PRN221_ASM.Controllers
                 if (account == null) return RedirectToAction(nameof(Index));
                 customer = account.Customer;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
                 throw new Exception();
             }
             return View("AccountDetails", customer);
@@ -283,37 +284,44 @@ namespace SE1611_PRN221_ASM.Controllers
             }
             return RedirectToAction(nameof(ChangePassword));
         }
+        //SIGNALR MOCK
+        public IActionResult MockSendData(string email, string message)
+        {
+            _hubContext.Clients.User(email).SendAsync("ReceiveMessage", message);
+            return RedirectToAction(nameof(Index));
+        }
+        //GOOGLE SIGNIN
+        [AllowAnonymous]
+        public IActionResult Login(string returnUrl = "/")
+        {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleSignIn", "Home", null, Request.Scheme, Request.Host.ToString())
+            }, "Google");
+        }
 
-        //[HttpGet]
-        //public IActionResult SignInWithGoogle()
-        //{
+        [SessionAuthorize]
+        public async Task<IActionResult> GoogleSignIn()
+        {
+            // Set session data
+            var result = await HttpContext.AuthenticateAsync("Google");
+            if (result.Succeeded)
+            {
+                var gender = result.Principal.FindFirstValue(ClaimTypes.Gender);
+                _logger.LogWarning(gender);
+                UserSession userSession = new UserSession
+                {
+                    Email = result.Principal.FindFirstValue(ClaimTypes.Email),
+                    Password = "",
+                    FullName = "Khoa Bui",
+                    Gender = "M",
+                    BirthDay = new DateTime(2002, 06, 27),
+                    RoleId = 2,
+                };
+                HttpContext.Session.SetObject("UserSession", userSession);
+            }
 
-        //    var authenticationProperties = new AuthenticationProperties
-        //    {
-        //        RedirectUri = Url.Action("","/signin-google")
-        //    };
-        //    Console.WriteLine("Google ne`");
-        //    return Challenge(new AuthenticationProperties {RedirectUri = "/signin-google" }, GoogleDefaults.AuthenticationScheme);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> HandleGoogleSignIn()
-        //{
-        //    var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-        //    Console.WriteLine("Handle google signin");
-        //    if (!authenticateResult.Succeeded)
-        //    {
-        //        Console.WriteLine("AUTHENTICATED FAILED");
-        //        // Handle the sign-in failure
-        //    }
-
-        //    var email = authenticateResult.Principal.FindFirst(ClaimTypes.Email)?.Value;
-
-        //    // Sign in the user
-        //    // ...
-
-        //    return RedirectToAction(nameof(HomeController.Index), "Home");
-        //}
-
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

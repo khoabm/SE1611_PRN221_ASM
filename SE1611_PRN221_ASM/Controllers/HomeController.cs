@@ -9,6 +9,8 @@ using Repository.Infrastructure;
 using SE1611_PRN221_ASM.Models;
 using System.Diagnostics;
 using Repository.Entities;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
@@ -77,6 +79,36 @@ namespace SE1611_PRN221_ASM.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [AllowAnonymous]
+        public IActionResult Login(string returnUrl = "/")
+        {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleSignIn", "Home", null, Request.Scheme, Request.Host.ToString())
+            }, "Google");
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleSignIn()
+        {
+            // Set session data
+            var result = await HttpContext.AuthenticateAsync("Google");
+            if (result.Succeeded)
+            {
+                UserSession userSession = new UserSession
+                {
+                    Email = result.Principal.FindFirstValue(ClaimTypes.Email),
+                    Password = "",
+                    FullName = "Khoa Bui",
+                    Gender = "M",
+                    BirthDay = new DateTime(2002, 06, 27),
+                    RoleId = 2,
+                };
+                HttpContext.Session.SetObject("UserSession", userSession);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

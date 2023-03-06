@@ -3,76 +3,84 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <div class="page-content--bgf7">
-    <!-- DATA TABLE-->
-    <section class="p-t-20">
+    <div class="holder breadcrumbs-wrap mt-0">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    
-                    <div class="table-responsive table-responsive-data2">
-                        <table class="table table-data2">
-                            <thead>
-                                <tr>
-                                    <th>OrderId</th>
-                                    <th>Customer Name</th>
-                                    <th>Address</th>
-                                    <th>Phone</th>
-                                    <th>status</th>
-                                    <th>price</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr class="tr-shadow">
-                                        <td>
-                                            @item.OrderId
-                                        </td>
-                                        <td>
-                                            @item.CustomerId
-                                        </td>
-                                        <td>@item.Address</td>
-                                        <td>@item.Phone</td>
-                                        <td>
-                                            <select name="status">
-                                                @if (item.Status == 0)
-                                                {
-                                                    <option value="0">Pending</option>
-                                                    <option value="1" name="Deliveried">Deliveried</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="1" name="Deliveried">Deliveried</option>
-                                                    <option value="0">Pending</option>
-                                                }
+            <ul class="breadcrumbs">
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><span>Orders</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="page-title text-center">
+                <h1>Your Order</h1>
+            </div>
+            <!-- DATA TABLE-->
+            <section class="p-t-20">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
 
-                                            </select>
-                                        </td>
-                                        <td>@item.TotalAmount</td>
-                                        <td>
-                                            <div class="table-data-feature">
-                                                <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
-                                                    <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
+                            <div class="table-responsive table-responsive-data2">
+                                <table class="table table-data2">
+                                    <thead>
+                                        <tr>
+                                            <th>OrderId</th>
+                                            <th>Address</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Total Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr class="tr-shadow">
+                                                <td>
+                                                    @item.OrderId
+                                                </td>
+                                                <td>@item.Address</td>
+                                                <td>@item.Phone</td>
+                                                <td>
+                                                    @if (item.Status == 0)
+                                                    {
+                                                        <span class="status--process" value="0" style="color:red">Pending</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="status--process" value="1" style="color:green">Deliveried</span>
+                                                    }
+                                                </td>
+                                                <td>@item.PlaceDate</td>
+                                                <td>@item.TotalAmount</td>
+                                                <td>
+                                                    <div class="table-data-feature">
+                                                        <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
+                                                            <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="More">
 
-                                                    <i class="zmdi zmdi-more">
+                                                                <i class="zmdi zmdi-more">
 
-                                                    </i>
-                                                    </button>
+                                                                </i>
+                                                            </button>
 
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="spacer"></tr>
-                                }
-                            </tbody>
-                        </table>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="spacer"></tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
-    </section>
+    </div>
 </div>
-
