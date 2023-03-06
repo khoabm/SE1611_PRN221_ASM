@@ -1,7 +1,11 @@
 ﻿@model IEnumerable<Repository.Entities.Account>
+@using SE1611_PRN221_ASM.Helper
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewData["Title"] = "Index";
+    var session = HttpContextAccessor.HttpContext.Session;
+    var userSession = session.GetObject<UserSession>("UserSession");
 }
 
 <partial name="_Notification" />
@@ -10,52 +14,55 @@
 <button type="button" id="sendButton" value="Send message">Send</button>
 
 <div id="messages"></div>
-
+<div>
+    <p>Sign in with:</p>
+    <button class="btn btn-primary" onclick="location.href='@Url.Action("Login", "Home", new { provider = "Google" })'">Google</button>
+</div>
 @section Scripts{
-<script>
-    var connection = new signalR.HubConnectionBuilder().withUrl('/notificationHub').build();
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl('/notificationHub').build();
 
-    try {
-        connection.on('UserConnected', (connectionId) => {
-            console.log(connectionId);
-        });
-    } catch (e) {
-        console.error(e);
-    }
-
-    try {
-        connection.on('UserDisconnected', (connectionId) => {
-            console.log(connectionId);
-        });
-    } catch (e) {
-        console.error(e);
-    }
-
-    connection.start().catch((e) => {
-        return console.error(e);
-    });
-
-    try {
-        document.getElementById("sendButton").addEventListener("click", (e) => {
-            e.preventDefault();
-            var message = document.getElementById("message").value;
-            var connectionId = document.getElementById("connectionId").value;
-            console.log(message +" "+ connectionId);
-            connection.invoke("NotifyOrderStatusChanged", connectionId).catch((err) => {
-                console.error(err.toString());
+        try {
+            connection.on('UserConnected', (connectionId) => {
+                console.log(connectionId);
             });
+        } catch (e) {
+            console.error(e);
+        }
+
+        try {
+            connection.on('UserDisconnected', (connectionId) => {
+                console.log(connectionId);
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        connection.start().catch((e) => {
+            return console.error(e);
         });
 
-        connection.on("ReceiveMessage", function (message) {
-            var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, '&gt;');
-            var div = document.createElement('div');
-            div.innerHTML = msg + "<hr />";
-            document.getElementById("messages").appendChild(div);
-        });
-    } catch (e) {
-        console.error(e);
-    }
-</script>
+        try {
+            document.getElementById("sendButton").addEventListener("click", (e) => {
+                e.preventDefault();
+                var message = document.getElementById("message").value;
+                var connectionId = document.getElementById("connectionId").value;
+                console.log(message + " " + connectionId);
+                connection.invoke("NotifyOrderStatusChanged", "minhkhoa2706@gmail.com").catch((err) => {
+                    console.error(err.toString());
+                });
+            });
+
+            connection.on("ReceiveMessage", function (message) {
+                var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, '&gt;');
+                var div = document.createElement('div');
+                div.innerHTML = msg + "<hr />";
+                document.getElementById("messages").appendChild(div);
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    </script>
 
 }
 
