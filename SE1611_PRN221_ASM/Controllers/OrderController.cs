@@ -74,6 +74,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
             userSession.CartItemCount = 0;
             HttpContext.Session.SetObject("UserSession", userSession);
+            TempData["Success"] = "Checkout successfully.";
 
             return View("View",orderDetails);
         }
