@@ -1,4 +1,5 @@
 ﻿using Repository.Entities;
+using Repository.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repository.Interfaces
 {
-    public interface IAccountRepository
+    public interface IAccountRepository : IRepositoryBase<Account>
     {
         Task SignUp(Account account);
         Task<Account> SignIn(Account account);
