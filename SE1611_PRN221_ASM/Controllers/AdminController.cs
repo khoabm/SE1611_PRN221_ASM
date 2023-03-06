@@ -33,7 +33,11 @@ namespace SE1611_PRN221_ASM.Controllers
         public ActionResult Index()
         {
             var list = _unitOfWork.OrderRepository.GetAll();
-
+            foreach(var o in list)
+            {
+                var customer = _unitOfWork.CustomerRepository.GetById(o.CustomerId);
+                o.Customer = customer;
+            }
             return View(list);
         }
         [HttpPost]

@@ -56,8 +56,8 @@ builder.Services.AddAuthentication(options =>
         {
             // get the user's email address from the claims
             var email = context.Identity.FindFirst(ClaimTypes.Email)?.Value;
-            //var gender = context.Identity.FindFirst("gender");
-            var genderClaim = context.User.FindFirst(ClaimTypes.Gender);
+            var gender = context.Identity.FindFirst("gender");
+
             Console.WriteLine(email);
             Console.WriteLine(gender);
             // add a custom claim to the user's identity

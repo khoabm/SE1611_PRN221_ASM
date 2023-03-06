@@ -95,7 +95,7 @@
                             <div class="col-auto card-total-price text-right">@($"{Model.Sum(c => c.Book.Price * c.Quantity):C}")</div>
                         </div>
                         <button type="submit" class="btn btn--full btn--lg"><span>Checkout</span></button>
-                            <input type="hidden" name="total" value=@Model.Sum(c => c.Book.Price * c.Quantity)/>
+                            <input type="hidden" name="total" value="@Model.Sum(c => c.Book.Price * c.Quantity)" />
                         <div class="card-text-info text-right">
                             <h5>Standart shipping</h5>
                             <p><b>10 - 11 business days</b><br>1 item ships from the U.S. and will be delivered in 10 - 11 business days</p>
@@ -114,11 +114,11 @@
                                 <div class="panel-body">
                                     <label>Address:</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control--sm" name="address">
+                                        <input type="text" class="form-control form-control--sm" name="address" required>
                                     </div>
                                     <label>Phone:</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control--sm" name="phone">
+                                        <input type="text" class="form-control form-control--sm" name="phone" required>
                                     </div>
                                 </div>
                             </div>
