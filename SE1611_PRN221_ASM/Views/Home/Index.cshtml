@@ -30,7 +30,7 @@
                             <div class="bnslider-text-content-flex ">
                                 <div class="bnslider-vert w-s-60 w-ms-100" style="padding: 0px">
                                     <div class="bnslider-text order-1 mt-0 bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5">Bring books of your own mind</div>
-                                    <div class="bnslider-text order-2 mt-sm bnslider-text--xs text-center data-ini" data-animation="fadeInUp" data-animation-delay="1000" data-fontcolor="#7c7c7c" data-fontweight="400" data-fontline="1.5">Books Seller</div>
+                                    <div class="bnslider-text order-2 mt-sm bnslider-text--xs text-center data-ini" data-animation="fadeInUp" data-animation-delay="1000" data-fontcolor="#fdf9f0" data-fontweight="400" data-fontline="1.5">Books Seller</div>
                                 </div>
                             </div>
                         </div>
@@ -145,6 +145,7 @@
                 </div>
             </div>
         </div>
+
         <div class="prd-grid-wrap">
             <div class="prd-grid data-to-show-4 data-to-show-md-3 data-to-show-sm-2 data-to-show-xs-2 js-category-grid" id="partial-view-container">
                 @*@Html.Partial("_ModelPartialView")*@
@@ -160,8 +161,8 @@
 <div class="holder">
     <div class="container">
         <div class="title-wrap text-center">
-            <h2 class="h1-style">Most Favorite</h2>
-            <div class="h-sub maxW-825">Go to check for our best</div>
+            <h2 class="h1-style"><a>Highest rating</a></h2>
+            <div class="h-sub maxW-825"><a asp-action="Index" asp-controller="Book" asp-route-sort="rating">Go to check for our best</a></div>
         </div>
         <div class="prd-grid-wrap position-relative">
             <div class="prd-grid data-to-show-4 data-to-show-lg-4 data-to-show-md-3 data-to-show-sm-2 data-to-show-xs-2 js-category-grid" data-grid-tab-content>
@@ -243,7 +244,8 @@
 <div class="holder holder-mt-medium">
     <div class="container">
         <div class="title-wrap text-center ">
-            <h2 class="h1-style text-center"><a href="#" title="View all">Latest From Us</a></h2>
+            <h2 class="h1-style text-center"><a title="View all">Latest From Us</a></h2>
+            <div class="h-sub maxW-825" style="margin-bottom:1rem"><a asp-action="Index" asp-controller="Book" asp-route-sort="latest">Go to check our latest books</a></div>
             <span></span>
             <div class="carousel-arrows" style="margin:0 auto 65px; width:50px;"></div>
         </div>

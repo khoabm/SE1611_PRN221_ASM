@@ -39,7 +39,7 @@ namespace SE1611_PRN221_ASM.Controllers
                 booksByDate = _unitOfWork.BookRepository.GetBooksOrderByAddedDate().ToList();
                 //Console.WriteLine(books2.Count);
                 genresByBook = _unitOfWork.GenreRepository.GetGenresOrderByNumberOfBooks().ToList();
-                ViewBag.BooksByDate = booksByDate;
+                ViewBag.BooksByDate = booksByDate.Take(6);
                 ViewBag.GenresByBook = genresByBook;
             }
             catch (Exception ex)
