@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<Repository.Entities.Favorite>
 
-
+@{
+    ViewData["Title"] = "Favorite";
+    var pagination = ViewBag.Pagination as PaginationViewModel;
+    var pageSize = ViewBag.PageSize;
+}
 
 <partial name="_Notification" />
 <div class="page-content">
@@ -52,7 +56,7 @@
                                                 @*<form asp-controller="Favorite" asp-action="Delete" method="post">
                                                     <input type="hidden" name="id" value="@favorite.FavoriteId" />
                                                     <button style="border: none; cursor: pointer; padding: 0;" type="submit" class="circle-label-compare circle-label-wishlist--off mt-0" title="Remove From Favorite"><i class="icon-heart-hover"></i></button>
-                                                </form>*@
+                                                    </form>*@
                                             </div>
                                         </div>
                                         <div class="prd-info">
@@ -84,6 +88,47 @@
                                 </div>
                             }
                         </div>
+                        @if (pagination != null && pagination.TotalPages > 1)
+                        {
+                            <ul class="pagination" style="display: flex; justify-content: center; align-items: center;list-style: none;padding: 0;margin: 20px 0;">
+                                @if (pagination.StartPage > 1)
+                                {
+                                    <li class="@(1 == pagination.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = pageSize })">1</a>
+                                    </li>
+                                    @if (pagination.StartPage > 2)
+                                    {
+                                        <li>
+                                            <span>...</span>
+                                        </li>
+                                    }
+                                }
+                                @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
+                                {
+                                    <li class=" @(i == pagination.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = pageSize })">@i</a>
+                                    </li>
+                                    @if (i < pagination.EndPage && i + 1 < pagination.TotalPages && i + 1 > pagination.EndPage)
+                                    {
+                                        <li>
+                                            <span>...</span>
+                                        </li>
+                                    }
+                                }
+                                @if (pagination.EndPage < pagination.TotalPages)
+                                {
+                                    @if (pagination.EndPage < pagination.TotalPages - 1)
+                                    {
+                                        <li>
+                                            <span>...</span>
+                                        </li>
+                                    }
+                                    <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = pagination.TotalPages, pageSize = pageSize })">@pagination.TotalPages</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
                     </div>
                 </div>
             </div>
