@@ -21,6 +21,11 @@ namespace Repository.Repository
         Admin = 1,
         Customer = 2,
     }
+    public enum AccountType
+    {
+        EMAIL = 1,
+        GOOGLE = 2,
+    }
     public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
         private readonly BookSellingContext _context;
@@ -67,10 +72,10 @@ namespace Repository.Repository
             try
             {
                 accounts = await _context.Accounts
-                            .Include(a => a.Customer)                        
+                            .Include(a => a.Customer)
                             .Where((a => query == "" || a.Email.Contains(query)
                             || a.Customer!.Name!.Contains(query)
-                            && a.RoleId != (int)RoleId.Admin))                          
+                            && a.RoleId != (int)RoleId.Admin))
                             .ToListAsync();
                 switch (orderBy)
                 {
@@ -84,7 +89,7 @@ namespace Repository.Repository
                         break;
                 }
                 totalPages = accounts.Count();
-                
+
             }
             catch (Exception ex)
             {
@@ -128,11 +133,12 @@ namespace Repository.Repository
 
                 var existingAccount = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.Email == account.Email);
                 if (existingAccount != null && Bcrypt.Verify(account.Password, existingAccount.Password))
-                {      
-                        returnAccount.Email = existingAccount.Email;
-                        returnAccount.Password = existingAccount.Password;
-                        returnAccount.RoleId = existingAccount.RoleId;
-                        returnAccount.Customer = existingAccount.Customer;
+                {
+                    returnAccount.Email = existingAccount.Email;
+                    returnAccount.Password = existingAccount.Password;
+                    returnAccount.RoleId = existingAccount.RoleId;
+                    returnAccount.AccountType = existingAccount.AccountType;
+                    returnAccount.Customer = existingAccount.Customer;
                 }
 
             }
@@ -170,7 +176,7 @@ namespace Repository.Repository
             try
             {
                 var account = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.AccountId == accountId);
-                if(account != null)
+                if (account != null)
                 {
                     account.Customer!.Status = (int)CustomerStatus.DISABLE;
                 }
@@ -189,15 +195,15 @@ namespace Repository.Repository
 
             try
             {
-                updatedCustomer.Status =(int) CustomerStatus.AVAILABLE;
+                updatedCustomer.Status = (int)CustomerStatus.AVAILABLE;
                 //account = await FindAccountByEmail(email);
                 _context.Customers.Entry(updatedCustomer).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 Console.WriteLine("Success");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
                 throw new Exception();
             }
             return updatedCustomer;

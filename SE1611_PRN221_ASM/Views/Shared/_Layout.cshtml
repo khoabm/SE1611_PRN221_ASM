@@ -50,8 +50,8 @@
             <div class="container">
                 <div class="row">
                     @*                        <div class="col-auto show-mobile">
-                    <div class="menu-toggle"> <a href="#" class="mobilemenu-toggle"><i class="icon-menu"></i></a> </div>
-                    </div>*@
+                        <div class="menu-toggle"> <a href="#" class="mobilemenu-toggle"><i class="icon-menu"></i></a> </div>
+                        </div>*@
                     <div class="col-auto hdr-logo">
                         <a asp-controller="Home" asp-action="Index" class="logo"><img style="max-height:40px" src="https://raw.githubusercontent.com/khoabm/A-Corner-Of-Books/main/ACornerOfBooks/src/main/webapp/User/imgs/book-logo-1.jpg" alt="Logo"></a>
                     </div>
@@ -67,7 +67,7 @@
                                 <a href="#">About us</a>
                             </li>
                             <li>
-                                <a href="#l">Contact</a>
+                                <a asp-controller="Home" asp-action="ContactUs">Contact</a>
                             </li>
                         </ul>
                     </div>
@@ -130,8 +130,8 @@
                                     </a>
                                 </div>
                                 @*                                <div class="dropdn dropdn_account dropdn_fullheight">
-                            <a asp-controller="Account" asp-action="Logout" class="dropdn-link"><i class="fas fa-sign-out-alt fa-2x"></i></a>
-                            </div>*@
+                                    <a asp-controller="Account" asp-action="Logout" class="dropdn-link"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+                                    </div>*@
                             }
                         </div>
                     </div>
@@ -143,7 +143,7 @@
     <div class="header-side-panel">
         <div class="dropdn-content account-drop" id="dropdnAccount">
             <div class="dropdn-content-block">
-                <div class="dropdn-close"><span class="js-dropdn-close">Close</span></div>
+                <div class="dropdn-close"><span class="js-dropdn-close">Close<i class="icon-close-thin"></i></span></div>
                 @if (userSession == null)
                 {
                     <div class="dropdn-form-wrapper" style="text-align:center">
@@ -177,62 +177,65 @@
                 {
                     <div>
                         <ul>
-                            <h3 class="h-lined">Hello @userSession.FullName</h3>
-                            <li><a asp-controller="Account" asp-action="Details"><span>Account details</span></a></li>
-                            <li><a asp-controller="Account" asp-action="ChangePassword">Change Password</a></li>
-                            <li><a asp-controller="Favorite" asp-action="Index">My Favorite</a></li>
-                            <li><a asp-controller="Order" asp-action="ListOrders">My Order History</a></li>
-                            <li> <a asp-controller="Account" asp-action="Logout"><span>Logout</span><i class="fas fa-sign-out-alt fa-2x"></i></a></li>
+                            <li><h3 class="h-lined">Hello, @userSession.FullName</h3></li>
+                            <li><a asp-controller="Account" asp-action="Details"><span>Account Details </span> <i class="icon-user"></i></a></li>
+                            @if (userSession.AccountType == 1)
+                            {
+                                <li><a asp-controller="Account" asp-action="ChangePassword"><span>Change Password </span> <i class="icon-pencil"></i></a></li>
+                            }
+                            <li><a asp-controller="Favorite" asp-action="Index"><span>My Favorite </span> <i class="icon-heart"></i></a></li>
+                            <li><a asp-controller="Order" asp-action="ListOrders"><span>My Order History </span> <i class="icon-shopping-basket"></i></a></li>
+                            <li> <a asp-controller="Account" asp-action="Logout"><span>Logout </span><i class="icon-login"></i></a></li>
                         </ul>
                     </div>
                 }
             </div>
             <div class="drop-overlay js-dropdn-close"></div>
         </div>
-@*        <div class="dropdn-content minicart-drop" id="dropdnMinicart">
-            <div class="dropdn-content-block">
-                <div class="dropdn-close"><span class="js-dropdn-close">Close</span></div>
-                <div class="minicart-drop-content js-dropdn-content-scroll ps ps--theme_default" data-ps-id="8de590af-0be6-e9ff-ca9e-6a4e8bb1f932">
-                    <div class="minicart-prd row">
-                        <div class="minicart-prd-image image-hover-scale-circle col">
-                            <a href="product.html"><img class="fade-up lazyloaded" src="images/skins/fashion/products/product-16-1.webp" data-src="images/skins/fashion/products/product-16-1.webp" alt=""></a>
-                        </div>
-                        <div class="minicart-prd-info col">
-                            <div class="minicart-prd-tag">FOXic</div>
-                            <h2 class="minicart-prd-name"><a href="#">Cascade Casual Shirt</a></h2>
-                            <div class="minicart-prd-qty"><span class="minicart-prd-qty-label">Quantity:</span><span class="minicart-prd-qty-value">1</span></div>
-                            <div class="minicart-prd-price prd-price">
-                                <div class="price-old">$200.00</div>
-                                <div class="price-new">$180.00</div>
+        @*        <div class="dropdn-content minicart-drop" id="dropdnMinicart">
+                <div class="dropdn-content-block">
+                    <div class="dropdn-close"><span class="js-dropdn-close">Close</span></div>
+                    <div class="minicart-drop-content js-dropdn-content-scroll ps ps--theme_default" data-ps-id="8de590af-0be6-e9ff-ca9e-6a4e8bb1f932">
+                        <div class="minicart-prd row">
+                            <div class="minicart-prd-image image-hover-scale-circle col">
+                                <a href="product.html"><img class="fade-up lazyloaded" src="images/skins/fashion/products/product-16-1.webp" data-src="images/skins/fashion/products/product-16-1.webp" alt=""></a>
+                            </div>
+                            <div class="minicart-prd-info col">
+                                <div class="minicart-prd-tag">FOXic</div>
+                                <h2 class="minicart-prd-name"><a href="#">Cascade Casual Shirt</a></h2>
+                                <div class="minicart-prd-qty"><span class="minicart-prd-qty-label">Quantity:</span><span class="minicart-prd-qty-value">1</span></div>
+                                <div class="minicart-prd-price prd-price">
+                                    <div class="price-old">$200.00</div>
+                                    <div class="price-new">$180.00</div>
+                                </div>
+                            </div>
+                            <div class="minicart-prd-action">
+                                <a href="#" class="js-product-remove" data-line-number="2"><i class="icon-recycle"></i></a>
                             </div>
                         </div>
-                        <div class="minicart-prd-action">
-                            <a href="#" class="js-product-remove" data-line-number="2"><i class="icon-recycle"></i></a>
+                        <div class="minicart-empty js-minicart-empty d-none">
+                            <div class="minicart-empty-text">Your cart is empty</div>
+                            <div class="minicart-empty-icon">
+                                <i class="icon-shopping-bag"></i>
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 306 262" style="enable-background:new 0 0 306 262;" xml:space="preserve"><path class="st0" d="M78.1,59.5c0,0-37.3,22-26.7,85s59.7,237,142.7,283s193,56,313-84s21-206-69-240s-249.4-67-309-60C94.6,47.6,78.1,59.5,78.1,59.5z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__scrollbar-y-rail" style="top: 0px; right: 0px;"><div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div>
+                    </div>
+                    <div class="minicart-drop-fixed js-hide-empty">
+                        <div class="loader-horizontal-sm js-loader-horizontal-sm" data-loader-horizontal=""><span></span></div>
+                        <div class="minicart-drop-total js-minicart-drop-total row no-gutters align-items-center">
+                            <div class="minicart-drop-total-txt col-auto heading-font">Subtotal</div>
+                            <div class="minicart-drop-total-price col" data-header-cart-total="">$340</div>
+                        </div>
+                        <div class="minicart-drop-actions">
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn--md btn--grey"><i class="icon-basket"></i><span>Cart Page</span></a>
+                            <a href="checkout.html" class="btn btn--md"><i class="icon-checkout"></i><span>Check out</span></a>
                         </div>
                     </div>
-                    <div class="minicart-empty js-minicart-empty d-none">
-                        <div class="minicart-empty-text">Your cart is empty</div>
-                        <div class="minicart-empty-icon">
-                            <i class="icon-shopping-bag"></i>
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 306 262" style="enable-background:new 0 0 306 262;" xml:space="preserve"><path class="st0" d="M78.1,59.5c0,0-37.3,22-26.7,85s59.7,237,142.7,283s193,56,313-84s21-206-69-240s-249.4-67-309-60C94.6,47.6,78.1,59.5,78.1,59.5z"></path></svg>
-                        </div>
-                    </div>
-                    <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__scrollbar-y-rail" style="top: 0px; right: 0px;"><div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div>
                 </div>
-                <div class="minicart-drop-fixed js-hide-empty">
-                    <div class="loader-horizontal-sm js-loader-horizontal-sm" data-loader-horizontal=""><span></span></div>
-                    <div class="minicart-drop-total js-minicart-drop-total row no-gutters align-items-center">
-                        <div class="minicart-drop-total-txt col-auto heading-font">Subtotal</div>
-                        <div class="minicart-drop-total-price col" data-header-cart-total="">$340</div>
-                    </div>
-                    <div class="minicart-drop-actions">
-                        <a asp-controller="Cart" asp-action="Index" class="btn btn--md btn--grey"><i class="icon-basket"></i><span>Cart Page</span></a>
-                        <a href="checkout.html" class="btn btn--md"><i class="icon-checkout"></i><span>Check out</span></a>
-                    </div>
-                </div>
-            </div>
-            <div class="drop-overlay js-dropdn-close"></div>
-        </div>*@
+                <div class="drop-overlay js-dropdn-close"></div>
+            </div>*@
     </div>
     <div class="page-content">
         @RenderBody()
@@ -285,36 +288,36 @@
                             <div class="collapsed-content">
                                 <ul>
                                     <li>E-mail: <a href="#">Cornerofbooks@companny.com</a></li>
-                                    <li>098-773--0862</li>
+                                    <li>(+84) 98-773-0862</li>
                                     <li>123, Fake Street, Fake Towns, Fake Building</li>
                                 </ul>
                             </div>
                             @*<ul class="social-list">
-                            <li>
-                            <a href="#" class="icon icon-facebook"></a>
-                            </li>
-                            <li>
-                            <a href="#" class="icon icon-twitter"></a>
-                            </li>
-                            <li>
-                            <a href="#" class="icon icon-google"></a>
-                            </li>
-                            <li>
-                            <a href="#" class="icon icon-vimeo"></a>
-                            </li>
-                            <li>
-                            <a href="#" class="icon icon-youtube"></a>
-                            </li>
-                            <li>
-                            <a href="#" class="icon icon-pinterest"></a>
-                            </li>
-                            </ul>*@
+                                <li>
+                                <a href="#" class="icon icon-facebook"></a>
+                                </li>
+                                <li>
+                                <a href="#" class="icon icon-twitter"></a>
+                                </li>
+                                <li>
+                                <a href="#" class="icon icon-google"></a>
+                                </li>
+                                <li>
+                                <a href="#" class="icon icon-vimeo"></a>
+                                </li>
+                                <li>
+                                <a href="#" class="icon icon-youtube"></a>
+                                </li>
+                                <li>
+                                <a href="#" class="icon icon-pinterest"></a>
+                                </li>
+                                </ul>*@
                             @*<div class="d-lg-none mt-3">
-                            <div class="box-coupon">
-                            <div class="box-coupon-icon"><i class="icon-scissors"></i></div>
-                            <div class="box-coupon-text"><span class="custom-color">FOXIC</span> THEME</div>
-                            </div>
-                            </div>*@
+                                <div class="box-coupon">
+                                <div class="box-coupon-icon"><i class="icon-scissors"></i></div>
+                                <div class="box-coupon-text"><span class="custom-color">FOXIC</span> THEME</div>
+                                </div>
+                                </div>*@
                         </div>
                     </div>
                     <div class="col-lg col-xl">

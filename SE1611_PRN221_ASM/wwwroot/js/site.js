@@ -49,8 +49,8 @@ function loadTab(tab) {
  Side bar collapse in search
  */
 $(document).ready(function () {
-    $('.sidebar-block_title').unbind('click');
-    $('.sidebar-block_title').click(function () {
+    $('.sidebar-block_genres').unbind('click');
+    $('.sidebar-block_genres').click(function () {
         $(this).next('.sidebar-block_content').find('ul.category-list.clearfix').slideToggle();
         if ($(this).closest('.sidebar-block').hasClass('open')) {
             $(this).closest('.sidebar-block').removeClass('open')

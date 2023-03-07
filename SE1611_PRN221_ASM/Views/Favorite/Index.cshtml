@@ -1,9 +1,13 @@
 ﻿@model IEnumerable<Repository.Entities.Favorite>
-
+@using SE1611_PRN221_ASM.Helper
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Favorite";
     var pagination = ViewBag.Pagination as PaginationViewModel;
     var pageSize = ViewBag.PageSize;
+    var session = HttpContextAccessor.HttpContext.Session;
+
+    var userSession = session.GetObject<UserSession>("UserSession");
 }
 
 <partial name="_Notification" />
@@ -22,7 +26,10 @@
                 <div class="col-md-4 aside aside--left">
                     <div class="list-group">
                         <a asp-controller="Account" asp-action="Details" class="list-group-item ">Account Details</a>
-                        <a asp-controller="Account" asp-action="ChangePassword" class="list-group-item">Change Password</a>
+                        @if (userSession.AccountType == 1)
+                        {
+                            <a asp-controller="Account" asp-action="ChangePassword" class="list-group-item">Change Password</a>
+                        }
                         <a asp-controller="Favorite" asp-action="Index" class="list-group-item active">My Favorite</a>
                         <a asp-controller="Order" asp-action="ListOrders" class="list-group-item">My Order History</a>
                     </div>

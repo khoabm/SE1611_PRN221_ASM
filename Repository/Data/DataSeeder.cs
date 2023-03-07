@@ -545,6 +545,7 @@ namespace Repository.Data
                         Email = "admin@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 1,
+                        AccountType = 1
                     },
                     new Account()
                     {
@@ -552,6 +553,7 @@ namespace Repository.Data
                         Email = "khoabm@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     },
                     new Account()
                     {
@@ -559,6 +561,7 @@ namespace Repository.Data
                         Email = "khaitq@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     },
                     new Account()
                     {
@@ -566,6 +569,7 @@ namespace Repository.Data
                         Email = "mainh@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }, 
                     new Account()
                     {
@@ -573,6 +577,7 @@ namespace Repository.Data
                         Email = "dangvungocan@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }, 
                     new Account()
                     {
@@ -580,6 +585,7 @@ namespace Repository.Data
                         Email = "duongthekhang@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }, 
                     new Account()
                     {
@@ -587,6 +593,7 @@ namespace Repository.Data
                         Email = "giangphuongthao@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }, 
                     new Account()
                     {
@@ -594,6 +601,7 @@ namespace Repository.Data
                         Email = "letrandao@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }, 
                     new Account()
                     {
@@ -601,6 +609,7 @@ namespace Repository.Data
                         Email = "ngoquocbao@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }, 
                     new Account()
                     {
@@ -608,6 +617,7 @@ namespace Repository.Data
                         Email = "hoanghuyentrang@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }, 
                     new Account()
                     {
@@ -615,6 +625,7 @@ namespace Repository.Data
                         Email = "hoangtung@gmail.com",
                         Password = BCrypt.Net.BCrypt.HashPassword("123456"),
                         RoleId = 2,
+                        AccountType = 1
                     }
                 );
         }

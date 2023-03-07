@@ -69,8 +69,8 @@ namespace SE1611_PRN221_ASM.Controllers
 
             return PartialView("_ModelPartialView", books);
         }
-        [SessionAuthorize]
-        public IActionResult Privacy()
+        [AllowAnonymous]
+        public IActionResult ContactUs()
         {
             return View();
         }

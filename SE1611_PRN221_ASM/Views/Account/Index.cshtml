@@ -18,6 +18,14 @@
     <p>Sign in with:</p>
     <button class="btn btn-primary" onclick="location.href='@Url.Action("Login", "Home", new { provider = "Google" })'">Google</button>
 </div>
+
+@if (userSession != null)
+{
+<p>@userSession.Email</p>
+<p>@userSession.FullName</p>
+<p>@userSession.Gender</p>
+<p>@userSession.BirthDay</p>
+}
 @section Scripts{
     <script>
         var connection = new signalR.HubConnectionBuilder().withUrl('/notificationHub').build();

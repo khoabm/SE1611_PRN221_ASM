@@ -161,7 +161,7 @@
 <div class="holder">
     <div class="container">
         <div class="title-wrap text-center">
-            <h2 class="h1-style"><a>Highest rating</a></h2>
+            <h2 class="h1-style"><a asp-action="Index" asp-controller="Book" asp-route-sort="rating">Highest rating</a></h2>
             <div class="h-sub maxW-825"><a asp-action="Index" asp-controller="Book" asp-route-sort="rating">Go to check for our best</a></div>
         </div>
         <div class="prd-grid-wrap position-relative">
@@ -244,7 +244,7 @@
 <div class="holder holder-mt-medium">
     <div class="container">
         <div class="title-wrap text-center ">
-            <h2 class="h1-style text-center"><a title="View all">Latest From Us</a></h2>
+            <h2 class="h1-style text-center"><a asp-action="Index" asp-controller="Book" asp-route-sort="latest" title="View all">Latest From Us</a></h2>
             <div class="h-sub maxW-825" style="margin-bottom:1rem"><a asp-action="Index" asp-controller="Book" asp-route-sort="latest">Go to check our latest books</a></div>
             <span></span>
             <div class="carousel-arrows" style="margin:0 auto 65px; width:50px;"></div>
