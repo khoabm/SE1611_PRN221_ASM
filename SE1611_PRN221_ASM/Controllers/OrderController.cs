@@ -8,24 +8,80 @@ namespace SE1611_PRN221_ASM.Controllers
 {
     enum Status
     {
-       Pending=0,
-       Delivered=1
+        Pending = 0,
+        Accepted = 1,
+        Delivering= 2,
+        Deliveried = 3
     }
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        
+        private static string[] sortOptions = { "latest", "oldest"};
+
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         // GET: OrderController
-        public ActionResult ListOrders()
-        {
-            var list = _unitOfWork.OrderRepository.GetAll();
+        //public ActionResult ListOrders()
+        //{
+        //    var list = _unitOfWork.OrderRepository.GetAll();
 
-            return View("Orders",list);
+        //    return View("Orders",list);
+        //}
+
+        public async Task<IActionResult> ListOrders(string query
+            , double minPrice = 0
+            , double maxPrice = 1000000000
+            , int page = 1
+            , int size = 9
+            , string sort = "latest")
+        {
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+
+            int customerId = account.AccountId;
+
+            var (orders, totalItems) = _unitOfWork.OrderRepository.SearchOrdersCustomer(query, minPrice, maxPrice, page, size, sort, customerId);
+            //string[] orderSortOptions = new string[2];
+            //orderSortOptions[0] = sort;
+            //int j = 1;
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    if (!sortOptions[j].Equals(sort))
+            //    {
+            //        orderSortOptions[j] = sortOptions[i];
+            //        j++;
+            //    }
+            //}
+            var totalPages = (int)Math.Ceiling((double)totalItems / size);
+            var startPage = Math.Max(1, page - size);
+            var endPage = Math.Min(totalPages, page + size);
+            var pagination = new PaginationViewModel
+            {
+                CurrentPage = page,
+                TotalPages = totalPages,
+                StartPage = startPage,
+                EndPage = endPage
+            };
+            var searchModel = new SearchModel
+            {
+                maxPrice = (int)maxPrice,
+                minPrice = (int)minPrice,
+                query = query,
+                size = size
+            };
+            ViewBag.Pagination = pagination;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.SearchModel = searchModel;
+            ViewBag.Sort = sort;
+            foreach (var o in orders)
+            {
+                var customer = _unitOfWork.CustomerRepository.GetById(o.CustomerId);
+                o.Customer = customer;
+            }
+            return View("Orders",orders);
         }
 
         // GET: OrderController/Details/5
@@ -45,6 +101,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
             int customerId = account.AccountId;
             var cart = _unitOfWork.CartRepository.GetCartByCustomerId(customerId);
+
             var orderDetails = new List<OrderDetail>();
             foreach (var cartItem in cart)
             {
@@ -55,8 +112,11 @@ namespace SE1611_PRN221_ASM.Controllers
                     BookId = cartItem.BookId,
                     Price = cartItem.Book.Price,
                 };
+                var book = _unitOfWork.BookRepository.GetById(orderDetail.BookId);
+                book.QuantityLeft -= cartItem.Quantity;
                 orderDetails.Add(orderDetail);
-                _unitOfWork.CartRepository.Delete(cartItem);   
+                _unitOfWork.CartRepository.Delete(cartItem);
+                _unitOfWork.BookRepository.Update(book);
             }
             var order = new Order
             {

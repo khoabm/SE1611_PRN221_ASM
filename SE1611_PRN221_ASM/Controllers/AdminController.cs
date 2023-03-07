@@ -16,6 +16,8 @@ namespace SE1611_PRN221_ASM.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<AccountController> _logger;
+        private static string[] sortOptions = { "latest", "oldest" };
+
 
         private static String ApiKey = "AIzaSyCIaH3IzEahld6Nt_kb8EmPxgZ1hqZ-4GQ";
         private static String Bucket = "bookseller-5f813.appspot.com";
@@ -30,15 +32,53 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: AdminController
-        public ActionResult Index()
+        public ActionResult Index(string query
+            , double minPrice = 0
+            , double maxPrice = 1000000000
+            , int page = 1
+            , int size = 9
+            , string sort = "latest")
         {
             var list = _unitOfWork.OrderRepository.GetAll();
-            foreach(var o in list)
+            var (orders, totalItems) = _unitOfWork.OrderRepository.SearchOrders(query, minPrice, maxPrice, page, size, sort);
+            //string[] orderSortOptions = new string[2];
+            //orderSortOptions[0] = sort;
+            //int j = 1;
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    if (!sortOptions[j].Equals(sort))
+            //    {
+            //        orderSortOptions[j] = sortOptions[i];
+            //        j++;
+            //    }
+            //}
+            var totalPages = (int)Math.Ceiling((double)totalItems / size);
+            var startPage = Math.Max(1, page - size);
+            var endPage = Math.Min(totalPages, page + size);
+            var pagination = new PaginationViewModel
+            {
+                CurrentPage = page,
+                TotalPages = totalPages,
+                StartPage = startPage,
+                EndPage = endPage
+            };
+            var searchModel = new SearchModel
+            {
+                maxPrice = (int)maxPrice,
+                minPrice = (int)minPrice,
+                query = query,
+                size = size
+            };
+            ViewBag.Pagination = pagination;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.SearchModel = searchModel;
+            ViewBag.Sort = sort;
+            foreach (var o in orders)
             {
                 var customer = _unitOfWork.CustomerRepository.GetById(o.CustomerId);
                 o.Customer = customer;
             }
-            return View(list);
+            return View(orders);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -241,7 +281,7 @@ namespace SE1611_PRN221_ASM.Controllers
                         {
                             imgurl = await UploadToFirebase(picture, bookauthor, Path.GetExtension(picture.FileName));
                         }
-                        else return RedirectToAction(nameof(Edit),id);
+                        else return RedirectToAction(nameof(Edit), id);
                     }
                     book.Title = title;
                     book.Author = author;
@@ -311,11 +351,11 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         [HttpGet("/admin/book/search")]
-        public ActionResult Search(string query, int page = 1 )
+        public ActionResult Search(string query, int page = 1)
         {
             try
             {
-                var (books,totalItems) = _unitOfWork.BookRepository.SearchBooksAdmin(query, new string[0], 0, 1000000, page, 7, "latest");
+                var (books, totalItems) = _unitOfWork.BookRepository.SearchBooksAdmin(query, new string[0], 0, 1000000, page, 7, "latest");
                 var totalData = totalItems;
                 var totalPages = (int)Math.Ceiling((double)totalData / 7);
                 var startPage = Math.Max(1, page - 7);
@@ -332,14 +372,14 @@ namespace SE1611_PRN221_ASM.Controllers
                 Console.WriteLine(pagination);
                 ViewBag.Pagination = pagination;
                 ViewBag.Genres = _unitOfWork.GenreRepository.GetAll().ToList();
-                return View("Create",PaginatedList<Book>.Create(books.AsQueryable(), page, 7));
+                return View("Create", PaginatedList<Book>.Create(books.AsQueryable(), page, 7));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return RedirectToAction(nameof(Create));
             }
-            
+
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -352,7 +392,7 @@ namespace SE1611_PRN221_ASM.Controllers
 
             var list = _unitOfWork.OrderRepository.GetAll();
 
-            return View("Index",list);
+            return View("Index", list);
         }
     }
 }

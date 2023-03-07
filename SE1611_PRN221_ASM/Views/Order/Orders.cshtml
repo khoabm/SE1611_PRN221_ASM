@@ -1,5 +1,9 @@
-﻿@model IEnumerable<Repository.Entities.Order>
+﻿@using Repository.Entities
+@model IEnumerable<Repository.Entities.Order>
 @{
+    ViewData["Title"] = "View";
+    var pagination = ViewBag.Pagination as PaginationViewModel;
+    var searchModel = ViewBag.SearchModel as SearchModel;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,7 +27,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    
+                            <div class="table-data__tool-left">
+                                <div class="rs-select2--light rs-select2--md">
+                                    <form asp-controller="Order" asp-action="ListOrder" id="ViewOrder">
+                                        <select class="js-select2" name="sort">
+                                            @if (ViewBag.Sort == "latest")
+                                            {
+                                                <option selected value="latest">Latest</option>
+                                                <option value="oldest">Oldest</option>
+                                            }
+                                            @if (ViewBag.Sort == "oldest")
+                                            {
+                                                <option value="latest">Latest</option>
+                                                <option selected value="oldest">Oldest</option>
+                                            }
+                                        </select>
+                                        <div class="dropDownSelect2"></div>
+                                    </form>
+                                </div>
+                                <button class="au-btn-filter" type="submit" form="ViewOrder">
+                                    <i class="zmdi zmdi-filter-list"></i>filters
+                                </button>
+                            </div>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2">
                             <thead>
@@ -75,11 +100,61 @@
                                 }
                             </tbody>
                         </table>
+                                <div class="pagination-container">
+                                    <ul class="pagination">
+                                        @if (ViewBag.Pagination != null)
+                                        {
+                                            <li class="page-item @(ViewBag.Pagination.CurrentPage == 1 ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.Pagination.CurrentPage - 1, query = ViewBag.Query, sort = ViewBag.Sort })">Previous</a>
+                                            </li>
+
+                                            @if (ViewBag.Pagination.StartPage > 1)
+                                            {
+                                                <li class="page-item">
+                                                    <a class="page-link" href="@Url.Action("Index", new { page = 1, query = ViewBag.Query, sort = ViewBag.Sort })">1</a>
+                                                </li>
+
+                                                @if (ViewBag.Pagination.StartPage > 2)
+                                                {
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">...</span>
+                                                    </li>
+                                                }
+                                            }
+
+                                            @for (int i = ViewBag.Pagination.StartPage; i <= ViewBag.Pagination.EndPage; i++)
+                                            {
+                                                <li class="page-item @(ViewBag.Pagination.CurrentPage == i ? "active" : "")">
+                                                    <a class="page-link" href="@Url.Action("Index", new { page = i, query = ViewBag.Query, sort = ViewBag.Sort })">@i</a>
+                                                </li>
+                                            }
+
+                                            @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages)
+                                            {
+                                                @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages - 1)
+                                                {
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">...</span>
+                                                    </li>
+                                                }
+
+                                                <li class="page-item">
+                                                    <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.Pagination.TotalPages, query = ViewBag.Query, sort = ViewBag.Sort })">@ViewBag.Pagination.TotalPages</a>
+                                                </li>
+                                            }
+
+                                            <li class="page-item @(ViewBag.Pagination.CurrentPage == ViewBag.Pagination.TotalPages ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.Pagination.CurrentPage + 1, query = ViewBag.Query, sort = ViewBag.Sort })">Next</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+            
     </div>
 </div>
 </div>
