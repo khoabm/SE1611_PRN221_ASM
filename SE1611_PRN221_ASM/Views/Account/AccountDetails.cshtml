@@ -12,7 +12,7 @@
 <div class="holder breadcrumbs-wrap mt-0">
     <div class="container">
         <ul class="breadcrumbs">
-            <li><a href="index.html">Home</a></li>
+            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
             <li><span>My account</span></li>
         </ul>
     </div>
@@ -23,12 +23,12 @@
             <div class="col-md-4 aside aside--left">
                 <div class="list-group">
                     <a asp-controller="Account" asp-action="Details" class="list-group-item active">Account Details</a>
-                    <a asp-controller="Account" asp-action="ChangePassword" class="list-group-item">Change Password</a>
+                    @if (userSession!.AccountType == 1)
+                    {
+                        <a asp-controller="Account" asp-action="ChangePassword" class="list-group-item">Change Password</a>
+                    }
                     <a asp-controller="Favorite" asp-action="Index" class="list-group-item">My Favorite</a>
-                    <a href="account-history.html" class="list-group-item">My Order History</a>
-                    <a href="#" class="list-group-item disabled">My Reviews</a>
-                    <a href="#" class="list-group-item disabled">My Saved Tags</a>
-                    <a href="#" class="list-group-item disabled">Compare Products</a>
+                    <a asp-controller="Order" asp-action="ListOrders" class="list-group-item">My Order History</a>
                 </div>
             </div>
             <div class="col-md-14 aside">
@@ -39,13 +39,13 @@
                             <div class="card-body">
                                 <h3>Personal Info</h3>
                                 <p>
-                                    <b>Full Name:</b>@Model.Name<br/>
-                                    <b>E-mail:</b>@userSession!.Email<br/>
-                                    <b>Birthday:</b>@Model.Birthday?.ToString("MM/dd/yyyy")<br />
-                                    <b>Gender:</b>@((Model.Gender ?? string.Empty).Equals("M") ? "Male" : "Female")
+                                    <b>Full Name: </b>@Model.Name<br />
+                                    <b>E-mail: </b>@userSession!.Email<br />
+                                    <b>Birthday: </b>@Model.Birthday?.ToString("MM/dd/yyyy")<br />
+                                    <b>Gender: </b>@((Model.Gender ?? string.Empty).Equals("M") ? "Male" : ((Model.Gender ?? string.Empty).Equals("F") ? "Female" : ""))
                                 </p>
                                 <div class="mt-2 clearfix">
-                                    <a href="#" class="link-icn js-show-form" data-form="#updateDetails"><i class="icon-pencil"></i>Edit</a>
+                                    <a href="#" class="link-icn btn js-show-form" data-form="#updateDetails"><i class="icon-pencil"></i>Edit</a>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +53,6 @@
                 </div>
                 <div class="card mt-3 d-none" id="updateDetails">
                     <form asp-action="update" method="post">
-                        <input type="hidden" asp-for="@Model.CustomerId" value="@Model.CustomerId" />
                         <div class="card-body">
                             <h3>Update Account Details</h3>
 

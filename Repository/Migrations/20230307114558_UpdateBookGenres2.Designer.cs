@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Entities;
 
@@ -11,9 +12,11 @@ using Repository.Entities;
 namespace Repository.Migrations
 {
     [DbContext(typeof(BookSellingContext))]
-    partial class BookSellingContextModelSnapshot : ModelSnapshot
+    [Migration("20230307114558_UpdateBookGenres2")]
+    partial class UpdateBookGenres2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

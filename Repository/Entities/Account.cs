@@ -12,6 +12,7 @@ public partial class Account
     public string Password { get; set; } = null!;
 
     public int RoleId { get; set; }
+    public short AccountType { get; set; }
 
     public virtual Customer? Customer { get; set; }
 

@@ -82,7 +82,7 @@ namespace Repository.Repository
                          join bg in _context.BookGenres on b.BookId equals bg.BookId
                          join g in _context.Genres on bg.GenreId equals g.GenreId
                          join cm in _context.Comments on b.BookId equals cm.BookId into cmGroup
-                         where g.GenreName.Contains(categoryName)
+                         where g.GenreName.Equals(categoryName)
                          let average = cmGroup.Average(cm => cm.Rating)
                          orderby average descending
 

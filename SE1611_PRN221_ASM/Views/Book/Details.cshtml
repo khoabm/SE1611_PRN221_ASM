@@ -25,57 +25,9 @@
 }
 @section StarRating{
 <style>
-    .form-group {
-        display: flex;
-    }
-
-    .form-check-inline .rating {
-        display: none;
-    }
-
-    .form-check-inline span {
-        padding-right: 2%;
-        cursor: pointer;
-        color: transparent;
-    }
-
-        .form-check-inline span:before {
-            content: '\2606';
-            color: gold;
-        }
-
-        .form-check-inline span:hover:before,
-        .form-check-inline span:hover ~ span:before {
-            content: '\2605';
-            color: gold;
-        }
-
-    .form-check-inline .rating:checked ~ span:before {
-        content: '\2605';
-        color: gold;
-    }
-
-    .form-group:has(input[id="2"]:checked) input[id='1'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
-
-    .form-group:has(input[id="3"]:checked) input[id='1'] + span:before,
-    .form-group:has(input[id="3"]:checked) input[id='2'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
-
-    .form-group:has(input[id="2"]:hover) input[id='1'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
-
-    .form-group:has(input[id="3"]:hover) input[id='1'] + span:before,
-    .form-group:has(input[id="3"]:hover) input[id='2'] + span:before {
-        content: '\2605';
-        color: gold;
-    }
+blockquote::after{
+    content: none;
+}
 </style>
 }
 
@@ -320,10 +272,10 @@
                             }
                             else
                             {
-                                <div class="d-flex justify-content-center col-18" id="comment_section" style="display: none">
-                                    <div class="text-center p-5" style="border:solid;min-width:50%;">
-                                        Log In Before Post Comments
-                                    </div>
+                                <div class="col-18" id="comment_section" style="display: none">
+                                    <blockquote class="text-center p-5">
+                                        <a asp-controller="Account" asp-action="SignIn">Log In Before Comment</a>
+                                    </blockquote>
                                 </div>
                             }
                         </div>
@@ -397,6 +349,7 @@
                     }
                     if (maxAllowedQuantity <= 0) {
                         qtyInput.val(0);
+
                     }
                 }
             });

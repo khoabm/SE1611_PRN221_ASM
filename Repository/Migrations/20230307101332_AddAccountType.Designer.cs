@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Entities;
 
@@ -11,9 +12,11 @@ using Repository.Entities;
 namespace Repository.Migrations
 {
     [DbContext(typeof(BookSellingContext))]
-    partial class BookSellingContextModelSnapshot : ModelSnapshot
+    [Migration("20230307101332_AddAccountType")]
+    partial class AddAccountType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +71,7 @@ namespace Repository.Migrations
                             AccountId = 1,
                             AccountType = (short)1,
                             Email = "admin@gmail.com",
-                            Password = "$2a$11$vMBjodhcUy5vOcRYOfu02.wz810YysFrHOBKa5Kq5DSBS29MoJLVW",
+                            Password = "$2a$11$aHrgPIrDD7/v4SJm/gS5/OQwImI6dxG.UIRGHRFwkVbJDRY9nlfWC",
                             RoleId = 1
                         },
                         new
@@ -76,7 +79,7 @@ namespace Repository.Migrations
                             AccountId = 2,
                             AccountType = (short)1,
                             Email = "khoabm@gmail.com",
-                            Password = "$2a$11$ymdioOZMhly81x8HOMeqUu4j4oZHkJM/Z78ontam4tKmcfio4/Os2",
+                            Password = "$2a$11$8UQpJoZB3k5Dt6f2WyxXAubNGZCKNcq2W9QATEIOmtBD/479gNi86",
                             RoleId = 2
                         },
                         new
@@ -84,7 +87,7 @@ namespace Repository.Migrations
                             AccountId = 3,
                             AccountType = (short)1,
                             Email = "khaitq@gmail.com",
-                            Password = "$2a$11$M.EV9MeRgPd4lnTMXSlZYedYq4jQf3NJYvsERLlohDvLe7cBCGwhi",
+                            Password = "$2a$11$8YH3HGQEH4vaajxBiSdnjuIpAs1XAwtrv/INDt/N8tqGhySH3/m4y",
                             RoleId = 2
                         },
                         new
@@ -92,7 +95,7 @@ namespace Repository.Migrations
                             AccountId = 4,
                             AccountType = (short)1,
                             Email = "mainh@gmail.com",
-                            Password = "$2a$11$gz/xeqPy.0UoqggUBtmCOOfDbg4xXa0yay6ondWEHVGtafkQSFeZ6",
+                            Password = "$2a$11$dmbx58/nhew6Fzs4qITRO.OPvQpN9YZYUnMX6TWEn.9bAEoGhQBsW",
                             RoleId = 2
                         },
                         new
@@ -100,7 +103,7 @@ namespace Repository.Migrations
                             AccountId = 5,
                             AccountType = (short)1,
                             Email = "dangvungocan@gmail.com",
-                            Password = "$2a$11$tODVCpYfjotcuB0YeZb98OSmH5tn5IZ295MXF27DDPPiPUVbJipPO",
+                            Password = "$2a$11$f1FDuApKFd/Gice7JBDYBOyV6AhdlRGDd09N7V5POWIG2oMjfNmSG",
                             RoleId = 2
                         },
                         new
@@ -108,7 +111,7 @@ namespace Repository.Migrations
                             AccountId = 6,
                             AccountType = (short)1,
                             Email = "duongthekhang@gmail.com",
-                            Password = "$2a$11$f.kLwjnxXDu1sExPsDrth.kxD8ROg/VQXzWzgAdVescKUDpxQVcEi",
+                            Password = "$2a$11$9gWAmq74vvrN9UbNbbUnIuJASGzjXLFlHTZD84lV8KawInTxLmfGG",
                             RoleId = 2
                         },
                         new
@@ -116,7 +119,7 @@ namespace Repository.Migrations
                             AccountId = 7,
                             AccountType = (short)1,
                             Email = "giangphuongthao@gmail.com",
-                            Password = "$2a$11$bN7KNsUKNqbF6OxLJ8aiS.H/t3hwaVSjngomzH1o2d4nwPIOjGJgi",
+                            Password = "$2a$11$rQfL9nV7idjDXBcD6MOqretT442tQOHxresAC/v5O32iu0wRQ3rRa",
                             RoleId = 2
                         },
                         new
@@ -124,7 +127,7 @@ namespace Repository.Migrations
                             AccountId = 8,
                             AccountType = (short)1,
                             Email = "letrandao@gmail.com",
-                            Password = "$2a$11$gNucaMA61Mgho5ijH7wprOnA2gwptDO7d56eFG.X.iqwjtzYeLeoa",
+                            Password = "$2a$11$TnMl4CL0ffWRCr/Foxfy4OO5wRPJr0or2/rDBS382s98WpgQYcwqa",
                             RoleId = 2
                         },
                         new
@@ -132,7 +135,7 @@ namespace Repository.Migrations
                             AccountId = 9,
                             AccountType = (short)1,
                             Email = "ngoquocbao@gmail.com",
-                            Password = "$2a$11$..dKs54L16bZCWu3.2T6IODp6o3wyDSoCHKsGPTLvX4iEViNCJJzi",
+                            Password = "$2a$11$l7H4laSQ4aSJCL5o2OnIwOnXpzi51Kbk8u54a82XBYpx7g.hrveia",
                             RoleId = 2
                         },
                         new
@@ -140,7 +143,7 @@ namespace Repository.Migrations
                             AccountId = 10,
                             AccountType = (short)1,
                             Email = "hoanghuyentrang@gmail.com",
-                            Password = "$2a$11$Z.NFysx9DpG02L.SmY3mkOk099Ic4I8E77H7LHNz5fQYo900l2Zf2",
+                            Password = "$2a$11$PaT9NtIGP4wV9anzTmD24.meymjkZtpYZuTa/t1jNYxVatzJZzw5q",
                             RoleId = 2
                         },
                         new
@@ -148,7 +151,7 @@ namespace Repository.Migrations
                             AccountId = 11,
                             AccountType = (short)1,
                             Email = "hoangtung@gmail.com",
-                            Password = "$2a$11$fDLa2GSpFEpdXD.Zq0K3cOc.PX9MgkAiPp8h6iPMfUZh2WoOAvpzm",
+                            Password = "$2a$11$WY/kmiWk1H7zVKwq0NHeZOdMmwXYBB3cHRJC2QBUd3dokKdZlXTKG",
                             RoleId = 2
                         });
                 });
@@ -747,336 +750,6 @@ namespace Repository.Migrations
                             BookGenreId = 2,
                             BookId = 2,
                             GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 3,
-                            BookId = 1,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 4,
-                            BookId = 3,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 5,
-                            BookId = 6,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 6,
-                            BookId = 7,
-                            GenreId = 3
-                        },
-                        new
-                        {
-                            BookGenreId = 7,
-                            BookId = 8,
-                            GenreId = 4
-                        },
-                        new
-                        {
-                            BookGenreId = 8,
-                            BookId = 9,
-                            GenreId = 5
-                        },
-                        new
-                        {
-                            BookGenreId = 9,
-                            BookId = 10,
-                            GenreId = 6
-                        },
-                        new
-                        {
-                            BookGenreId = 10,
-                            BookId = 11,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 11,
-                            BookId = 12,
-                            GenreId = 9
-                        },
-                        new
-                        {
-                            BookGenreId = 12,
-                            BookId = 13,
-                            GenreId = 8
-                        },
-                        new
-                        {
-                            BookGenreId = 13,
-                            BookId = 13,
-                            GenreId = 10
-                        },
-                        new
-                        {
-                            BookGenreId = 14,
-                            BookId = 13,
-                            GenreId = 5
-                        },
-                        new
-                        {
-                            BookGenreId = 15,
-                            BookId = 14,
-                            GenreId = 10
-                        },
-                        new
-                        {
-                            BookGenreId = 16,
-                            BookId = 15,
-                            GenreId = 5
-                        },
-                        new
-                        {
-                            BookGenreId = 17,
-                            BookId = 15,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 18,
-                            BookId = 19,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 19,
-                            BookId = 39,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 20,
-                            BookId = 39,
-                            GenreId = 9
-                        },
-                        new
-                        {
-                            BookGenreId = 21,
-                            BookId = 16,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            BookGenreId = 22,
-                            BookId = 16,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 23,
-                            BookId = 17,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            BookGenreId = 24,
-                            BookId = 17,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 25,
-                            BookId = 18,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            BookGenreId = 26,
-                            BookId = 18,
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            BookGenreId = 27,
-                            BookId = 20,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 28,
-                            BookId = 21,
-                            GenreId = 3
-                        },
-                        new
-                        {
-                            BookGenreId = 29,
-                            BookId = 21,
-                            GenreId = 8
-                        },
-                        new
-                        {
-                            BookGenreId = 30,
-                            BookId = 22,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 31,
-                            BookId = 22,
-                            GenreId = 5
-                        },
-                        new
-                        {
-                            BookGenreId = 32,
-                            BookId = 23,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            BookGenreId = 33,
-                            BookId = 23,
-                            GenreId = 3
-                        },
-                        new
-                        {
-                            BookGenreId = 34,
-                            BookId = 24,
-                            GenreId = 3
-                        },
-                        new
-                        {
-                            BookGenreId = 35,
-                            BookId = 24,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            BookGenreId = 36,
-                            BookId = 24,
-                            GenreId = 8
-                        },
-                        new
-                        {
-                            BookGenreId = 37,
-                            BookId = 25,
-                            GenreId = 3
-                        },
-                        new
-                        {
-                            BookGenreId = 38,
-                            BookId = 25,
-                            GenreId = 8
-                        },
-                        new
-                        {
-                            BookGenreId = 39,
-                            BookId = 26,
-                            GenreId = 3
-                        },
-                        new
-                        {
-                            BookGenreId = 40,
-                            BookId = 26,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            BookGenreId = 41,
-                            BookId = 27,
-                            GenreId = 9
-                        },
-                        new
-                        {
-                            BookGenreId = 42,
-                            BookId = 28,
-                            GenreId = 9
-                        },
-                        new
-                        {
-                            BookGenreId = 43,
-                            BookId = 31,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 44,
-                            BookId = 31,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 45,
-                            BookId = 32,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 46,
-                            BookId = 33,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 47,
-                            BookId = 34,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 48,
-                            BookId = 35,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 49,
-                            BookId = 36,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 50,
-                            BookId = 36,
-                            GenreId = 9
-                        },
-                        new
-                        {
-                            BookGenreId = 51,
-                            BookId = 36,
-                            GenreId = 4
-                        },
-                        new
-                        {
-                            BookGenreId = 52,
-                            BookId = 37,
-                            GenreId = 1
-                        },
-                        new
-                        {
-                            BookGenreId = 53,
-                            BookId = 37,
-                            GenreId = 6
-                        },
-                        new
-                        {
-                            BookGenreId = 54,
-                            BookId = 38,
-                            GenreId = 4
-                        },
-                        new
-                        {
-                            BookGenreId = 55,
-                            BookId = 38,
-                            GenreId = 5
-                        },
-                        new
-                        {
-                            BookGenreId = 56,
-                            BookId = 40,
-                            GenreId = 2
-                        },
-                        new
-                        {
-                            BookGenreId = 57,
-                            BookId = 40,
-                            GenreId = 7
                         });
                 });
 

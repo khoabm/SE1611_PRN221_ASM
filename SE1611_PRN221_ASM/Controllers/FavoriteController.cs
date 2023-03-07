@@ -17,7 +17,7 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: FavoriteController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 9)
         {
             var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
 
@@ -38,6 +38,21 @@ namespace SE1611_PRN221_ASM.Controllers
                 return View("EmptyFavorite");
             }
 
+            var totalItems = list.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            list = list.Skip((page - 1) * pageSize).Take(pageSize);
+            var startPage = Math.Max(1, page - pageSize);
+            var endPage = Math.Min(totalPages, page + pageSize);
+            var pagination = new PaginationViewModel
+            {
+                CurrentPage = page,
+                TotalPages = totalPages,
+                StartPage = startPage,
+                EndPage = endPage
+            };
+            ViewBag.Pagination = pagination;
+            ViewBag.PageSize = pageSize;
+            
             return View(list);
         }
 

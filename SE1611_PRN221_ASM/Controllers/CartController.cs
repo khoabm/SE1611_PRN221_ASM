@@ -97,7 +97,7 @@ namespace SE1611_PRN221_ASM.Controllers
             {
                 if (quantity == 0)
                 {
-                    TempData["Error"] = "This book is of stocks.";
+                    TempData["Error"] = "You have exceeded your purchase limit.";
                     string url1 = Request.Headers["Referer"].ToString();
                     return Redirect(url1);
                 }

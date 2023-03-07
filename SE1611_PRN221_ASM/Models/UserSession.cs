@@ -9,7 +9,7 @@
         public DateTime? BirthDay { get; set; }
         public short Status { get; set; }
         public int RoleId { get; set; }
-
+        public int AccountType { get; set; }
         public int CartItemCount { get; set; }
         public int FavoriteItemCount { get; set; }
     }

@@ -1,6 +1,14 @@
 ﻿@model IEnumerable<Repository.Entities.Favorite>
+@using SE1611_PRN221_ASM.Helper
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Favorite";
+    var pagination = ViewBag.Pagination as PaginationViewModel;
+    var pageSize = ViewBag.PageSize;
+    var session = HttpContextAccessor.HttpContext.Session;
 
-
+    var userSession = session.GetObject<UserSession>("UserSession");
+}
 
 <partial name="_Notification" />
 <div class="page-content">
@@ -17,13 +25,13 @@
             <div class="row">
                 <div class="col-md-4 aside aside--left">
                     <div class="list-group">
-                        <a href="account-details.html" class="list-group-item">Account Details</a>
-                        <a href="account-addresses.html" class="list-group-item">My Addresses</a>
-                        <a href="account-wishlist.html" class="list-group-item active">My Favorite</a>
-                        <a href="account-history.html" class="list-group-item">My Order History</a>
-                        <a href="#" class="list-group-item disabled">My Reviews</a>
-                        <a href="#" class="list-group-item disabled">My Saved Tags</a>
-                        <a href="#" class="list-group-item disabled">Compare Products</a>
+                        <a asp-controller="Account" asp-action="Details" class="list-group-item ">Account Details</a>
+                        @if (userSession.AccountType == 1)
+                        {
+                            <a asp-controller="Account" asp-action="ChangePassword" class="list-group-item">Change Password</a>
+                        }
+                        <a asp-controller="Favorite" asp-action="Index" class="list-group-item active">My Favorite</a>
+                        <a asp-controller="Order" asp-action="ListOrders" class="list-group-item">My Order History</a>
                     </div>
                 </div>
                 <div class="col-md-14 aside">
@@ -52,7 +60,7 @@
                                                 @*<form asp-controller="Favorite" asp-action="Delete" method="post">
                                                     <input type="hidden" name="id" value="@favorite.FavoriteId" />
                                                     <button style="border: none; cursor: pointer; padding: 0;" type="submit" class="circle-label-compare circle-label-wishlist--off mt-0" title="Remove From Favorite"><i class="icon-heart-hover"></i></button>
-                                                </form>*@
+                                                    </form>*@
                                             </div>
                                         </div>
                                         <div class="prd-info">
@@ -84,6 +92,47 @@
                                 </div>
                             }
                         </div>
+                        @if (pagination != null && pagination.TotalPages > 1)
+                        {
+                            <ul class="pagination" style="display: flex; justify-content: center; align-items: center;list-style: none;padding: 0;margin: 20px 0;">
+                                @if (pagination.StartPage > 1)
+                                {
+                                    <li class="@(1 == pagination.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = pageSize })">1</a>
+                                    </li>
+                                    @if (pagination.StartPage > 2)
+                                    {
+                                        <li>
+                                            <span>...</span>
+                                        </li>
+                                    }
+                                }
+                                @for (int i = pagination.StartPage; i <= pagination.EndPage; i++)
+                                {
+                                    <li class=" @(i == pagination.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = pageSize })">@i</a>
+                                    </li>
+                                    @if (i < pagination.EndPage && i + 1 < pagination.TotalPages && i + 1 > pagination.EndPage)
+                                    {
+                                        <li>
+                                            <span>...</span>
+                                        </li>
+                                    }
+                                }
+                                @if (pagination.EndPage < pagination.TotalPages)
+                                {
+                                    @if (pagination.EndPage < pagination.TotalPages - 1)
+                                    {
+                                        <li>
+                                            <span>...</span>
+                                        </li>
+                                    }
+                                    <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = pagination.TotalPages, pageSize = pageSize })">@pagination.TotalPages</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
                     </div>
                 </div>
             </div>

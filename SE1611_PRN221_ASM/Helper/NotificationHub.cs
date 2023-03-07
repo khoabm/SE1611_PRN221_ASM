@@ -11,14 +11,14 @@ namespace SE1611_PRN221_ASM.Helper
             await Clients.User(userId).SendAsync("ReceiveMessage", message);
         }
 
-        public Task NotifyOrderStatusChanged(string connectionId)
+        public Task NotifyOrderStatusChanged(string userId)
         {
             //,string message
             //Console.WriteLine(Context.User.Identity.Name);
             //var userId = Context.User.FindFirst("email")?.Value;
             //Console.WriteLine("Notificate to: " + userId+"Length"+userId.Length);
-            Console.WriteLine(connectionId);
-            return Clients.Client(connectionId).SendAsync("ReceiveMessage", "ga` qua z");
+            Console.WriteLine(userId);
+            return Clients.User(userId).SendAsync("ReceiveMessage", "ga` qua z");
         }
 
         public override async Task OnConnectedAsync()

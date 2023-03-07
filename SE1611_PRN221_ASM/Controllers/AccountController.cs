@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -79,9 +81,9 @@ namespace SE1611_PRN221_ASM.Controllers
                 if (account == null) return RedirectToAction(nameof(Index));
                 customer = account.Customer;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
                 throw new Exception();
             }
             return View("AccountDetails", customer);
@@ -127,6 +129,7 @@ namespace SE1611_PRN221_ASM.Controllers
                         Gender = loginAccount.Customer.Gender!,
                         BirthDay = loginAccount.Customer.Birthday,
                         RoleId = loginAccount.RoleId,
+                        AccountType = loginAccount.AccountType
                     };
                     var cartItemCount = _unitOfWork.CartRepository.GetCartByCustomerId(loginAccount.Customer.CustomerId).Count();
                     var favoriteItemCount = _unitOfWork.FavoriteRepository.GetFavoriteByCustomerId(loginAccount.Customer.CustomerId).Count();
@@ -150,25 +153,25 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             try
             {
+                var existAccount = await _unitOfWork.AccountRepository.FindAccountByEmail(account.Email);
+                if (existAccount != null)
+                {
+                    TempData["SignUpError"] = "Account already exist";
+                    return RedirectToAction(nameof(SignUp));
+                }
+                else
+                {
+                    account.Customer = new Customer
+                    {
+                        Name = account.Customer!.Name,
+                        Birthday = Convert.ToDateTime(birthDay).Equals(default(DateTime)) ? null : Convert.ToDateTime(birthDay),
+                        Status = (int)CustomerStatus.AVAILABLE,
+                        Gender = gender
+                    };
+                    account.AccountType = (int)AccountType.EMAIL;
+                    await _unitOfWork.AccountRepository.SignUp(account);
+                }
 
-                    var existAccount = await _unitOfWork.AccountRepository.FindAccountByEmail(account.Email);
-                    if (existAccount != null)
-                    {
-                        TempData["SignUpError"] = "Account already exist";
-                        return RedirectToAction(nameof(SignUp));
-                    }
-                    else
-                    {
-                        account.Customer = new Customer
-                        {
-                            Name = account.Customer!.Name,
-                            Birthday = Convert.ToDateTime(birthDay).Equals(default(DateTime)) ? null : Convert.ToDateTime(birthDay),
-                            Status = (int)CustomerStatus.AVAILABLE,
-                            Gender = gender
-                        };
-                        await _unitOfWork.AccountRepository.SignUp(account);
-                    }
-                
                 //await _unitOfWork.AccountRepository.SendConfirmationMail();
                 return RedirectToAction(nameof(SignIn));
             }
@@ -186,9 +189,22 @@ namespace SE1611_PRN221_ASM.Controllers
 
             try
             {
-                Console.WriteLine($"{customer.CustomerId} {customer.Birthday.ToString()} {customer.Name}  {customer.Gender}");
                 var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
-                var updatedAccount = await _unitOfWork.AccountRepository.UpdateAccount(customer);
+                //Get the user from email on session
+                var user = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession!.Email);
+                //Return if null
+                if (user == null)
+                {
+                    TempData["Error"] = "Update failed";
+                    return RedirectToAction(nameof(Details));
+                }
+
+                //Add data for update customer
+                user.Customer!.Name = customer.Name;
+                user.Customer!.Birthday = customer.Birthday;
+                user.Customer!.Gender = customer.Gender;
+
+                var updatedAccount = await _unitOfWork.AccountRepository.UpdateAccount(user.Customer);
                 if (updatedAccount != null)
                 {
                     UserSession updatedUserSession = new UserSession
@@ -201,7 +217,7 @@ namespace SE1611_PRN221_ASM.Controllers
                         RoleId = userSession.RoleId
                     };
 
-                    HttpContext.Session.SetObject("UserSession", updatedUserSession); 
+                    HttpContext.Session.SetObject("UserSession", updatedUserSession);
                     TempData["Success"] = "Update successful";
                 }
             }
@@ -227,13 +243,18 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // POST: AccountController/Delete/5
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
             HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Delete the authentication cookie
+            Response.Cookies.Delete(CookieAuthenticationDefaults.AuthenticationScheme);
+            Response.Cookies.Delete(GoogleDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
-        public async Task<IActionResult> SendMail ()
+        public async Task<IActionResult> SendMail()
         {
             await _unitOfWork.AccountRepository.SendConfirmationMail();
             return RedirectToAction("Index", "Home");
@@ -243,6 +264,13 @@ namespace SE1611_PRN221_ASM.Controllers
         [SessionAuthorize]
         public IActionResult ChangePassword()
         {
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+            if(userSession != null)
+            {
+                if(userSession.AccountType == 2) {
+                return RedirectToAction(nameof(Details));
+                }
+            }
             return View();
         }
 
@@ -256,9 +284,9 @@ namespace SE1611_PRN221_ASM.Controllers
             {
                 var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
                 var user = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession!.Email);
-                if(user != null)
+                if (user != null)
                 {
-                    
+
                     if (Bcrypt.Verify(oldPassword, user.Password))
                     {
                         user.Password = Bcrypt.HashPassword(password);
@@ -283,37 +311,99 @@ namespace SE1611_PRN221_ASM.Controllers
             }
             return RedirectToAction(nameof(ChangePassword));
         }
+        //SIGNALR MOCK
+        public IActionResult MockSendData(string email, string message)
+        {
+            _hubContext.Clients.User(email).SendAsync("ReceiveMessage", message);
+            return RedirectToAction(nameof(Index));
+        }
+        //GOOGLE SIGNIN
+        [AllowAnonymous]
+        public IActionResult Login(string returnUrl = "/")
+        {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleSignIn", "Account", null, Request.Scheme, Request.Host.ToString())
+            }, "Google");
+        }
 
-        //[HttpGet]
-        //public IActionResult SignInWithGoogle()
-        //{
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleSignIn()
+        {
+            // Set session data
+            try
+            {
+                var result = await HttpContext.AuthenticateAsync("Google");
+                if (result.Succeeded)
+                {
+                    //var gender = result.Principal.FindFirstValue("gender");
 
-        //    var authenticationProperties = new AuthenticationProperties
-        //    {
-        //        RedirectUri = Url.Action("","/signin-google")
-        //    };
-        //    Console.WriteLine("Google ne`");
-        //    return Challenge(new AuthenticationProperties {RedirectUri = "/signin-google" }, GoogleDefaults.AuthenticationScheme);
-        //}
+                    //Console.WriteLine("ACCOUNT CONTROLLER " + gender);
+                    var googleEmail = result.Principal.FindFirstValue(ClaimTypes.Email);
+                    var existingAccount = await _unitOfWork.AccountRepository.FindAccountByEmail(googleEmail);
+                    if (existingAccount != null)
+                    {
+                        if (existingAccount.AccountType == (int)AccountType.EMAIL)
+                        {
+                            TempData["Error"] = "This email has been used";
+                            return RedirectToAction(nameof(SignIn));
+                        }
+                        else
+                        {
+                            UserSession userSession = new UserSession
+                            {
+                                Email = existingAccount.Email,
+                                Password = existingAccount.Password,
+                                FullName = existingAccount.Customer!.Name!,
+                                Gender = existingAccount.Customer!.Gender!,
+                                BirthDay = existingAccount.Customer.Birthday,
+                                RoleId = existingAccount.RoleId,
+                                AccountType = existingAccount.AccountType
+                            };
+                            HttpContext.Session.SetObject("UserSession", userSession);
+                        }
+                    }
+                    else
+                    {
+                        string email = result.Principal.FindFirstValue(ClaimTypes.Email);
+                        string password = "";
+                        int roleId = (int)RoleId.Customer;
+                        short accountType = (int)AccountType.GOOGLE;
+                        string customerName = result.Principal.FindFirstValue(ClaimTypes.Name);
+                        short status = (int)CustomerStatus.AVAILABLE;
+                        Account newAccount = new Account
+                        {
+                            Email = email,
+                            Password = password,
+                            RoleId = roleId,
+                            AccountType = accountType,
+                            Customer = new Customer
+                            {
+                                Name = customerName,
+                                Status = status
+                            }
+                        };
+                        await _unitOfWork.AccountRepository.SignUp(newAccount);
+                        UserSession userSession = new UserSession
+                        {
+                            Email = newAccount.Email,
+                            Password = newAccount.Password,
+                            FullName = newAccount.Customer!.Name!,
+                            Gender = newAccount.Customer!.Gender!,
+                            BirthDay = newAccount.Customer.Birthday,
+                            RoleId = newAccount.RoleId,
+                            AccountType = newAccount.AccountType
+                        };
+                        HttpContext.Session.SetObject("UserSession", userSession);
+                    }
+                }
 
-        //[HttpGet]
-        //public async Task<IActionResult> HandleGoogleSignIn()
-        //{
-        //    var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-        //    Console.WriteLine("Handle google signin");
-        //    if (!authenticateResult.Succeeded)
-        //    {
-        //        Console.WriteLine("AUTHENTICATED FAILED");
-        //        // Handle the sign-in failure
-        //    }
-
-        //    var email = authenticateResult.Principal.FindFirst(ClaimTypes.Email)?.Value;
-
-        //    // Sign in the user
-        //    // ...
-
-        //    return RedirectToAction(nameof(HomeController.Index), "Home");
-        //}
-
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

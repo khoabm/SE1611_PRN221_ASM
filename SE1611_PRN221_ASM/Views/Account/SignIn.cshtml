@@ -13,8 +13,27 @@
             top: 52%;
             left: 90%;
         }
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            opacity: 0.8;
+        }
 
+            .separator::before,
+            .separator::after {
+                content: '';
+                flex: 1;
+                border-bottom: 1px solid #000;
+            }
 
+            .separator:not(:empty)::before {
+                margin-right: .25em;
+            }
+
+            .separator:not(:empty)::after {
+                margin-left: .25em;
+            }
     </style>
 }
 <div class="holder breadcrumbs-wrap mt-0">
@@ -49,6 +68,10 @@
                             <button class="btn">Sign In</button>
                         </div>
                     </form>
+                    <div style="opacity:0.8;" class="separator">or continue with</div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("Login", "Account", new { provider = "Google" })'">Google</button>
+                    </div>
                 </div>
             </div>
         </div>
