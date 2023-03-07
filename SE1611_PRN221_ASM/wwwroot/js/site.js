@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     $(".title-tabs-text").unbind('click');
 
-    loadTab('fiction');
+    loadTab('history');
     $(".title-tabs-text").click(function (e) {
         e.preventDefault();
         $(".title-tabs-text").closest('h2').removeClass('active');
