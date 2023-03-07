@@ -8,24 +8,39 @@ namespace SE1611_PRN221_ASM.Controllers
 {
     enum Status
     {
-       Pending=0,
-       Delivered=1
+        Pending = 0,
+        Delivered = 1
     }
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        
+
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         // GET: OrderController
-        public ActionResult ListOrders()
+        public async Task<IActionResult> ListOrders()
         {
-            var list = _unitOfWork.OrderRepository.GetAll();
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
 
-            return View("Orders",list);
+            if (userSession == null)
+            {
+                TempData["Message"] = "Please log in first.";
+                return View("EmptyOrder");
+            }
+
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+            int customerId = account.AccountId;
+            var list = _unitOfWork.OrderRepository.GetOrderByCustomerId(customerId);
+            if (list == null || !list.Any())
+            {
+                TempData["Message"] = "Looks like you haven't made any orders yet! Start shopping now.";
+                return View("EmptyOrder");
+            }
+
+            return View("Index", list);
         }
 
         // GET: OrderController/Details/5
@@ -33,7 +48,7 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             var orders = _unitOfWork.OrderDetailRepository.GetOrderDetailByOrderId(id);
 
-            return View("View",orders);
+            return View("View", orders);
         }
 
         [HttpPost]
@@ -56,7 +71,7 @@ namespace SE1611_PRN221_ASM.Controllers
                     Price = cartItem.Book.Price,
                 };
                 orderDetails.Add(orderDetail);
-                _unitOfWork.CartRepository.Delete(cartItem);   
+                _unitOfWork.CartRepository.Delete(cartItem);
             }
             var order = new Order
             {
@@ -76,7 +91,7 @@ namespace SE1611_PRN221_ASM.Controllers
             HttpContext.Session.SetObject("UserSession", userSession);
             TempData["Success"] = "Checkout successfully.";
 
-            return View("View",orderDetails);
+            return View("View", orderDetails);
         }
 
         // POST: OrderController/Create
@@ -95,7 +110,7 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
 
-        
+
 
         // POST: OrderController/Edit/5
         [HttpPost]
