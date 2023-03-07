@@ -1,7 +1,11 @@
-﻿@model IEnumerable<Repository.Entities.Order>
+﻿@using Repository.Entities
+@model IEnumerable<Repository.Entities.Order>
+
 @{
-    Layout = "_AdminLayout";
-    var statistics = ViewBag.Statistics as StatisticsViewModel;
+    ViewData["Title"] = "View";
+    var pagination = ViewBag.Pagination as PaginationViewModel;
+    var searchModel = ViewBag.SearchModel as SearchModel;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <!-- END HEADER DESKTOP-->
@@ -367,23 +371,27 @@
                     <h3 class="title-5 m-b-35">data table</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
+                            
                             <div class="rs-select2--light rs-select2--md">
-                                <select class="js-select2" name="property">
-                                    <option selected="selected">All Properties</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
+                                <form asp-controller="Admin" asp-action="Index" id="ViewOrder">
+                                <select class="js-select2" name="sort">
+                                    @if (ViewBag.Sort == "latest")
+                                    {
+                                        <option selected value="latest">Latest</option>
+                                        <option value="oldest">Oldest</option>
+                                    }
+                                    @if (ViewBag.Sort == "oldest")
+                                    {
+                                        <option value="latest">Latest</option>
+                                        <option selected value="oldest">Oldest</option>
+                                    }
                                 </select>
-                                <div class="dropDownSelect2"></div>
+                                    <div class="dropDownSelect2"></div>
+                                </form>
+                                
                             </div>
-                            <div class="rs-select2--light rs-select2--sm">
-                                <select class="js-select2" name="time">
-                                    <option selected="selected">Today</option>
-                                    <option value="">3 Days</option>
-                                    <option value="">1 Week</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                            <button class="au-btn-filter">
+                            
+                            <button class="au-btn-filter" type="submit" form="ViewOrder">
                                 <i class="zmdi zmdi-filter-list"></i>filters
                             </button>
                         </div>
@@ -434,13 +442,31 @@
                                             <select name="status">
                                                     @if (item.Status == 0)
                                                     {
-                                                    <option value="0">Pending</option>
-                                                    <option value="1" name="Deliveried">Deliveried</option>
+                                                    <option value="0" selected name="Pending">Pending</option>
+                                                    <option value="1" name="Accepted">Accepted</option>
+                                                    <option value="2" name="Delivering ">Delivering </option>
+                                                    <option value="3" name="Deliveried">Deliveried</option>
                                                     }
-                                                    else
+                                                    @if (item.Status == 1)
                                                     {
-                                                    <option value="1" name="Deliveried">Deliveried</option>
-                                                    <option value="0">Pending</option>
+                                                    <option value="0" name="Pending">Pending</option>
+                                                    <option value="1" selected name="Accepted">Accepted</option>
+                                                    <option value="2" name="Delivering ">Delivering </option>
+                                                    <option value="3" name="Deliveried">Deliveried</option>
+                                                    }
+                                                    @if (item.Status == 2)
+                                                    {
+                                                    <option value="0" name="Pending">Pending</option>
+                                                    <option value="1" name="Accepted">Accepted</option>
+                                                    <option value="2" selected name="Delivering ">Delivering </option>
+                                                    <option value="3" name="Deliveried">Deliveried</option>
+                                                    }
+                                                    @if (item.Status == 3)
+                                                    {
+                                                    <option value="0" name="Pending">Pending</option>
+                                                    <option value="1" name="Accepted">Accepted</option>
+                                                    <option value="2" name="Delivering ">Delivering </option>
+                                                    <option value="3" selected name="Deliveried">Deliveried</option>
                                                     }
 
                                             </select>
@@ -466,6 +492,55 @@
                                 }
                             </tbody>
                         </table>
+                        <div class="pagination-container">
+                            <ul class="pagination">
+                                @if (ViewBag.Pagination != null)
+                                {
+                                    <li class="page-item @(ViewBag.Pagination.CurrentPage == 1 ? "disabled" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.Pagination.CurrentPage - 1, query = ViewBag.Query, sort = ViewBag.Sort })">Previous</a>
+                                    </li>
+
+                                    @if (ViewBag.Pagination.StartPage > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("Index", new { page = 1, query = ViewBag.Query, sort = ViewBag.Sort })">1</a>
+                                        </li>
+
+                                        @if (ViewBag.Pagination.StartPage > 2)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+                                    }
+
+                                    @for (int i = ViewBag.Pagination.StartPage; i <= ViewBag.Pagination.EndPage; i++)
+                                    {
+                                        <li class="page-item @(ViewBag.Pagination.CurrentPage == i ? "active" : "")">
+                                            <a class="page-link" href="@Url.Action("Index", new { page = i, query = ViewBag.Query, sort = ViewBag.Sort })">@i</a>
+                                        </li>
+                                    }
+
+                                    @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages)
+                                    {
+                                        @if (ViewBag.Pagination.EndPage < ViewBag.Pagination.TotalPages - 1)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.Pagination.TotalPages, query = ViewBag.Query, sort = ViewBag.Sort })">@ViewBag.Pagination.TotalPages</a>
+                                        </li>
+                                    }
+
+                                    <li class="page-item @(ViewBag.Pagination.CurrentPage == ViewBag.Pagination.TotalPages ? "disabled" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.Pagination.CurrentPage + 1, query = ViewBag.Query, sort = ViewBag.Sort })">Next</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
