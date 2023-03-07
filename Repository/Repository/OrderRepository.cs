@@ -30,7 +30,7 @@ namespace Repository.Repository
         public int GetBooksSoldThisMonth()
         {
             return _context.Orders
-                .Where(o => o.PlaceDate!.Value.Month == DateTime.Today.Month && o.PlaceDate!.Value.Year == DateTime.Today.Year && o.Status == 2)
+                .Where(o => o.PlaceDate!.Value.Month == DateTime.Today.Month && o.PlaceDate!.Value.Year == DateTime.Today.Year && o.Status == 3)
                 .SelectMany(o => o.OrderDetails)
                 .Sum(od => od.Quantity) ?? 0;
         }
@@ -38,14 +38,14 @@ namespace Repository.Repository
         public double GetTotalEarnings()
         {
             return _context.Orders
-                .Where(o => o.Status == 2)
+                .Where(o => o.Status == 3)
                 .Sum(o => o.TotalAmount) ?? 0;
         }
 
         public int GetTotalBookSold()
         {
             return _context.Orders
-                .Where(o => o.Status == 2)
+                .Where(o => o.Status == 3)
                 .SelectMany(o => o.OrderDetails)
                 .Sum(od => od.Quantity) ?? 0;
         }

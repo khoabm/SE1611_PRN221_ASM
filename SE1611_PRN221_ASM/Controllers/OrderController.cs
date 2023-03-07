@@ -42,7 +42,7 @@ namespace SE1611_PRN221_ASM.Controllers
                 return View("EmptyOrder");
             }
 
-            return View("Index", list);
+            return View(list);
         }
 
         public async Task<IActionResult> ListOrders(string query
@@ -54,11 +54,6 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
             var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
-            if (list == null || !list.Any())
-            {
-                TempData["Message"] = "Looks like you haven't made any orders yet! Start shopping now.";
-                return View("EmptyOrder");
-            }
 
             int customerId = account.AccountId;
 

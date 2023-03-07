@@ -69,6 +69,14 @@ namespace SE1611_PRN221_ASM.Controllers
                 query = query,
                 size = size
             };
+            var statistics = new StatisticsViewModel
+            {
+                TotalCustomers = _unitOfWork.CustomerRepository.GetAll().Count() - 1,
+                TotalBooksSold = _unitOfWork.OrderRepository.GetTotalBookSold(),
+                BooksSoldThisMonth = _unitOfWork.OrderRepository.GetBooksSoldThisMonth(),
+                TotalEarnings = _unitOfWork.OrderRepository.GetTotalEarnings()
+            };
+            ViewBag.Statistics = statistics;
             ViewBag.Pagination = pagination;
             ViewBag.TotalItems = totalItems;
             ViewBag.SearchModel = searchModel;
@@ -391,6 +399,14 @@ namespace SE1611_PRN221_ASM.Controllers
             _unitOfWork.Save();
 
             var list = _unitOfWork.OrderRepository.GetAll();
+            var statistics = new StatisticsViewModel
+            {
+                TotalCustomers = _unitOfWork.CustomerRepository.GetAll().Count() - 1,
+                TotalBooksSold = _unitOfWork.OrderRepository.GetTotalBookSold(),
+                BooksSoldThisMonth = _unitOfWork.OrderRepository.GetBooksSoldThisMonth(),
+                TotalEarnings = _unitOfWork.OrderRepository.GetTotalEarnings()
+            };
+            ViewBag.Statistics = statistics;
 
             return View("Index", list);
         }
