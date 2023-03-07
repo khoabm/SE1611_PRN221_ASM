@@ -11,5 +11,8 @@ namespace Repository.Repository.Interfaces
     public interface IOrderRepository: IRepositoryBase<Order>
     {
         IEnumerable<Order> GetOrderByCustomerId(int  customerId);
+        public int GetBooksSoldThisMonth();
+        public double GetTotalEarnings();
+        public int GetTotalBookSold();
     }
 }

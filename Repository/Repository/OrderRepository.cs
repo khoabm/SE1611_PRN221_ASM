@@ -26,6 +26,27 @@ namespace Repository.Repository
                 .Where(o => o.CustomerId == customerId)
                 .ToList();
         }
-        
+        public int GetBooksSoldThisMonth()
+        {
+            return _context.Orders
+                .Where(o => o.PlaceDate!.Value.Month == DateTime.Today.Month && o.PlaceDate!.Value.Year == DateTime.Today.Year && o.Status == 2)
+                .SelectMany(o => o.OrderDetails)
+                .Sum(od => od.Quantity) ?? 0;
+        }
+
+        public double GetTotalEarnings()
+        {
+            return _context.Orders
+                .Where(o => o.Status == 2)
+                .Sum(o => o.TotalAmount) ?? 0;
+        }
+
+        public int GetTotalBookSold()
+        {
+            return _context.Orders
+                .Where(o => o.Status == 2)
+                .SelectMany(o => o.OrderDetails)
+                .Sum(od => od.Quantity) ?? 0;
+        }
     }
 }

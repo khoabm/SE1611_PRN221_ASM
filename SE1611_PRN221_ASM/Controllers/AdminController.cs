@@ -38,6 +38,16 @@ namespace SE1611_PRN221_ASM.Controllers
                 var customer = _unitOfWork.CustomerRepository.GetById(o.CustomerId);
                 o.Customer = customer;
             }
+
+            var statistics = new StatisticsViewModel
+            {
+                TotalCustomers = _unitOfWork.CustomerRepository.GetAll().Count() - 1,
+                TotalBooksSold = _unitOfWork.OrderRepository.GetTotalBookSold(),
+                BooksSoldThisMonth = _unitOfWork.OrderRepository.GetBooksSoldThisMonth(),
+                TotalEarnings = _unitOfWork.OrderRepository.GetTotalEarnings()
+            };
+            ViewBag.Statistics = statistics;
+
             return View(list);
         }
         [HttpPost]
