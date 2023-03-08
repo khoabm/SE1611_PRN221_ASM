@@ -117,6 +117,10 @@ namespace SE1611_PRN221_ASM.Controllers
                 {
                     TempData["Error"] = "Account is in disable";
                     return RedirectToAction(nameof(SignIn));
+                }else if(loginAccount.AccountType == (int)AccountType.GOOGLE)
+                {
+                    TempData["Error"] = "This email is already used for google account";
+                    return RedirectToAction(nameof(SignIn));
                 }
                 else
                 {

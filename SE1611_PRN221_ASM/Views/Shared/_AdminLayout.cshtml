@@ -83,6 +83,11 @@
                             <a asp-action="Index">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard
                             </a>
+                        </li>                        
+                        <li>
+                            <a asp-action="Logout" asp-controller="Account">
+                                <i class="fas fa-sign-out-alt"></i>Logout
+                            </a>
                         </li>
                         @*<li>
                             <a href="form.html">
@@ -162,14 +167,14 @@
         <!-- END MENU SIDEBAR-->
         <div class="page-container">
             <!-- HEADER DESKTOP-->
-            <header class="header-desktop3 d-none d-lg-block">
+            <!--<header class="header-desktop3 d-none d-lg-block">
                 <div class="section__content section__content--p35">
                     <div class="header3-wrap">
-                        <div class="header__logo">
+                        <div class="header__logo">-->
                             @*<a asp-controller="Admin" asp-action="Index">
                                 <img src="https://github.com/khoabm/A-Corner-Of-Books/blob/main/ACornerOfBooks/src/main/webapp/assets/images/logo_amban.png?raw=trueF" alt="CoolAdmin" />
                             </a>*@
-                        </div>
+                        <!--</div>-->
                         @*<div class="header__navbar">
                             <ul class="list-unstyled">
                                 <li>
@@ -192,15 +197,15 @@
                                 </li>
                             </ul>
                         </div>*@
-                        <div class="header__tool">
+                        <!--<div class="header__tool">
                             <div class="account-wrap">
-                                <div class="account-item account-item--style2 clearfix js-item-menu">
+                                <div class="account-item account-item--style2 clearfix js-item-menu">-->
                                     @*<div class="image">
                                         <img src="images/icon/avatar-01.jpg" alt="John Doe" />
                                     </div>*@
-                                    <div class="content">
+                                    <!--<div class="content">
                                         <a class="btn" asp-controller="Account" asp-action="Logout">Logout</a>
-                                    </div>
+                                    </div>-->
                                     @*<div class="account-dropdown js-dropdown">
                                         <div class="info clearfix">
                                             <div class="image">
@@ -238,12 +243,12 @@
                                             </a>
                                         </div>
                                     </div>*@
-                                </div>
+                                <!--</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </header>
+            </header>-->
 
             @RenderBody()
         </div>

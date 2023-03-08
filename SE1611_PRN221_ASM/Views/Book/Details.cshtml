@@ -386,7 +386,7 @@ blockquote::after{
                 data: { id: @Model.BookId, comment: comment, rating: rating, },
                 success: function(result) {
                     console.log(result);
-
+                    $('#comment').val('');
                     $("#partial_comment_container").html(result);
                 },
                 error: function() {
