@@ -396,10 +396,10 @@ namespace SE1611_PRN221_ASM.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditOrder(int id, short status)
+        public ActionResult EditOrder(int orderId, short orderStatus)
         {
-            var order = _unitOfWork.OrderRepository.GetById(id);
-            order.Status = status;
+            var order = _unitOfWork.OrderRepository.GetById(orderId);
+            order.Status = orderStatus;
             _unitOfWork.OrderRepository.Update(order);
             _unitOfWork.Save();
 
@@ -414,6 +414,12 @@ namespace SE1611_PRN221_ASM.Controllers
             ViewBag.Statistics = statistics;
 
             return View("Index", list);
+        }
+        public ActionResult OrderDetail(int id)
+        {
+            var orders = _unitOfWork.OrderDetailRepository.GetOrderDetailByOrderId(id);
+
+            return View("OrderDetail",orders);
         }
     }
 }
