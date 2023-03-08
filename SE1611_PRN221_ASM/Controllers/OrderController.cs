@@ -13,6 +13,7 @@ namespace SE1611_PRN221_ASM.Controllers
         Delivering = 2,
         Delivered = 3
     }
+    [SessionAuthorize]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -99,9 +100,24 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: OrderController/Details/5
-        public ActionResult Details(int id)
+        [SessionAuthorize]
+        public async Task<ActionResult> Details(int id)
         {
-            var orders = _unitOfWork.OrderDetailRepository.GetOrderDetailByOrderId(id);
+            var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+            var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession!.Email);
+
+            if(account == null)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
+
+            var orders = _unitOfWork.OrderDetailRepository.GetCustomerOrderDetailByOrderId(account.AccountId, id);
+            Console.WriteLine(orders);
+            if(orders == null || orders.Count() == 0)
+            {
+                //return Redirect(Request.Headers["Referer"].ToString());
+                return RedirectToAction(nameof(Index));
+            }
             var order = _unitOfWork.OrderRepository.GetByOrderId(id);
             ViewBag.Address = order.Address;
             ViewBag.Phone = order.Phone;

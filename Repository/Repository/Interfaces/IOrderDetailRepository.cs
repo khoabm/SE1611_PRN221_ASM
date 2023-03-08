@@ -12,5 +12,6 @@ namespace Repository.Repository.Interfaces
     public interface IOrderDetailRepository : IRepositoryBase<OrderDetail>
     {
         public IEnumerable<OrderDetail> GetOrderDetailByOrderId(int orderId);
+        public IEnumerable<OrderDetail>? GetCustomerOrderDetailByOrderId(int accountId, int orderId);
     }
 }

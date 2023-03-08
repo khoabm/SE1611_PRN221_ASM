@@ -7,6 +7,7 @@ using SE1611_PRN221_ASM.Models;
 
 namespace SE1611_PRN221_ASM.Controllers
 {
+    [SessionAuthorize]
     public class FavoriteController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

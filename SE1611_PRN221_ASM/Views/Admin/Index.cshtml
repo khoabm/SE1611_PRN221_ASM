@@ -4,14 +4,14 @@
 @{
     ViewData["Title"] = "View";
     var pagination = ViewBag.Pagination as PaginationViewModel;
-    var searchModel = ViewBag.SearchModel as SearchModel;
+    //var searchModel = ViewBag.SearchModel as SearchModel;
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var statistics = ViewBag.Statistics as StatisticsViewModel;
 }
 
 <!-- END HEADER DESKTOP-->
 <!-- HEADER MOBILE-->
-<header class="header-mobile header-mobile-2 d-block d-lg-none">
+<!--<header class="header-mobile header-mobile-2 d-block d-lg-none">
     <div class="header-mobile__bar">
         <div class="container-fluid">
             <div class="header-mobile-inner">
@@ -25,8 +25,8 @@
                 </button>
             </div>
         </div>
-    </div>
-    <nav class="navbar-mobile">
+    </div>-->
+    @*<nav class="navbar-mobile">
         <div class="container-fluid">
             <ul class="navbar-mobile__list list-unstyled">
                 <li class="has-sub">
@@ -131,9 +131,9 @@
                 </li>
             </ul>
         </div>
-    </nav>
-</header>
-<div class="sub-header-mobile-2 d-block d-lg-none">
+    </nav>*@
+<!--</header>-->
+@*<div class="sub-header-mobile-2 d-block d-lg-none">
     <div class="header__tool">
         <div class="header-button-item has-noti js-item-menu">
             <i class="zmdi zmdi-notifications"></i>
@@ -265,7 +265,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 <!-- END HEADER MOBILE -->
 <!-- PAGE CONTENT-->
 <div class="page-content--bgf7">
@@ -287,12 +287,12 @@
                                 <li class="list-inline-item">Dashboard</li>
                             </ul>
                         </div>
-                        <form class="au-form-icon--sm" action="" method="post">
-                            <input class="au-input--w300 au-input--style2" type="text" placeholder="Search for datas &amp; reports...">
-                            <button class="au-btn--submit2" type="submit">
+                        
+                            <input form="ViewOrder" name="query" value="@(ViewBag.Query?? "")" class="au-input--w300 au-input--style2" type="text" placeholder="Search for orders">
+                            <button form="ViewOrder" class="au-btn--submit2" type="submit">
                                 <i class="zmdi zmdi-search"></i>
                             </button>
-                        </form>
+                        
                     </div>
                 </div>
             </div>
@@ -306,7 +306,7 @@
                 <div class="col-md-12">
                     <h1 class="title-4">
                         Welcome back
-                        <span>John!</span>
+                        <span>Admin!</span>
                     </h1>
                     <hr class="line-seprate">
                 </div>
@@ -373,7 +373,7 @@
                         <div class="table-data__tool-left">
 
                             <div class="rs-select2--light rs-select2--md">
-                                <form asp-controller="Admin" asp-action="Index" id="ViewOrder">
+                                <form method="get" asp-controller="Admin" asp-action="Index" id="ViewOrder">
                                     <select class="js-select2" name="sort">
                                         @if (ViewBag.Sort == "latest")
                                         {
@@ -395,19 +395,7 @@
                                 <i class="zmdi zmdi-filter-list"></i>filters
                             </button>
                         </div>
-                        <div class="table-data__tool-right">
-                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                <i class="zmdi zmdi-plus"></i>add item
-                            </button>
-                            <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                                <select class="js-select2" name="type">
-                                    <option selected="selected">Export</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2">
@@ -438,39 +426,39 @@
                                         <td>@item.Address</td>
                                         <td>@item.Phone</td>
                                         <td>
-                                            <select name="orderStatus">
-                                                    @if (item.Status == 0)
-                                                    {
-                                                    <option value="0" selected >Pending</option>
-                                                    <option value="1" >Accepted</option>
-                                                    <option value="2" >Delivering </option>
-                                                    <option value="3" >Delivered</option>
-                                                    }
-                                                    @if (item.Status == 1)
-                                                    {
-                                                    <option value="0" >Pending</option>
-                                                    <option value="1" selected >Accepted</option>
-                                                    <option value="2" >Delivering </option>
-                                                    <option value="3" >Delivered</option>
-                                                    }
-                                                    @if (item.Status == 2)
-                                                    {
-                                                    <option value="0" >Pending</option>
-                                                    <option value="1" >Accepted</option>
-                                                    <option value="2" selected >Delivering </option>
-                                                    <option value="3" >Delivered</option>
-                                                    }
-                                                    @if (item.Status == 3)
-                                                    {
-                                                    <option value="0" >Pending</option>
-                                                    <option value="1" >Accepted</option>
+                                            <select class="js-select2" name="orderStatus">
+                                                @if (item.Status == 0)
+                                                {
+                                                    <option value="0" selected>Pending</option>
+                                                    <option value="1">Accepted</option>
                                                     <option value="2">Delivering </option>
-                                                    <option value="3" selected >Delivered</option>
-                                                    }
+                                                    <option value="3">Delivered</option>
+                                                }
+                                                @if (item.Status == 1)
+                                                {
+                                                    <option value="0">Pending</option>
+                                                    <option value="1" selected>Accepted</option>
+                                                    <option value="2">Delivering </option>
+                                                    <option value="3">Delivered</option>
+                                                }
+                                                @if (item.Status == 2)
+                                                {
+                                                    <option value="0">Pending</option>
+                                                    <option value="1">Accepted</option>
+                                                    <option value="2" selected>Delivering </option>
+                                                    <option value="3">Delivered</option>
+                                                }
+                                                @if (item.Status == 3)
+                                                {
+                                                    <option value="0">Pending</option>
+                                                    <option value="1">Accepted</option>
+                                                    <option value="2">Delivering </option>
+                                                    <option value="3" selected>Delivered</option>
+                                                }
 
-                                                </select>
-
-                                            </td>
+                                            </select>
+                                            <div class="dropDownSelect2"></div>
+                                        </td>
                                             <td>@item.PlaceDate</td>
                                             <td>@item.TotalAmount</td>
                                             <td>
@@ -479,8 +467,8 @@
                                                         <i class="zmdi zmdi-edit"></i>
                                                     </button>
 
-                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                                        <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
+                                                    <button type="button" class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                                        <a asp-controller="Admin" asp-action="OrderDetail" asp-route-id="@item.OrderId">
                                                             <i class="zmdi zmdi-more"></i>
                                                         </a>
                                                     </button>

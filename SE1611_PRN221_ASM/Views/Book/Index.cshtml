@@ -51,9 +51,9 @@
                                             <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox" @(searchModel.genres != null && (searchModel.genres).Contains(item.GenreName) ? "checked" : "")>
 
                                             @*else
-                                        {
-                                        <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox">
-                                        }*@
+                                                {
+                                                <input id="@item.GenreId" name="genres" value="@item.GenreName" type="checkbox">
+                                                }*@
                                             <label for="@item.GenreId">@item.GenreName</label>
                                         </li>
                                         @*<li><a href="#" title="@item.GenreName" class="open">@item.GenreName</a></li>*@
@@ -80,6 +80,7 @@
 
                             </div>
                             <input class="btn" type="submit" value="Filter" />
+                        </div>
                     </form>
                 </div>
             </div>
@@ -203,8 +204,8 @@
                             @($"&genres={g}")
 
                             }">@i</a>
-                                </li>
-                            }
+                        </li>
+                    }
                             @if (pagination.EndPage < pagination.TotalPages)
                             {
                                 <li class="@(pagination.TotalPages == pagination.CurrentPage ? "active" : "")">
@@ -246,16 +247,16 @@
     <script>
         const form = document.getElementById('filter');
         const select = document.getElementById('sortOptions');
-        select.addEventListener('change', function() {
+        select.addEventListener('change', function () {
             form.submit();
         });
 
         /*
          Toogle Price Filter
          */
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.sidebar-block_price').unbind('click');
-            $('.sidebar-block_price').click(function() {
+            $('.sidebar-block_price').click(function () {
                 $(this).next('.sidebar-block_content').find('.price-filter').slideToggle();
                 if ($(this).closest('.sidebar-block').hasClass('open')) {
                     $(this).closest('.sidebar-block').removeClass('open')

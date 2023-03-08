@@ -32,14 +32,15 @@ namespace SE1611_PRN221_ASM.Controllers
         }
 
         // GET: AdminController
-        public ActionResult Index(string query
+        public ActionResult Index(string query = ""
             , double minPrice = 0
             , double maxPrice = 1000000000
             , int page = 1
             , int size = 9
             , string sort = "latest")
         {
-            var list = _unitOfWork.OrderRepository.GetAll();
+            //var list = _unitOfWork.OrderRepository.GetAll();
+            if (query == null) query = "";
             var (orders, totalItems) = _unitOfWork.OrderRepository.SearchOrders(query, minPrice, maxPrice, page, size, sort);
             //string[] orderSortOptions = new string[2];
             //orderSortOptions[0] = sort;
@@ -73,6 +74,7 @@ namespace SE1611_PRN221_ASM.Controllers
             ViewBag.Pagination = pagination;
             ViewBag.TotalItems = totalItems;
             ViewBag.Sort = sort;
+            ViewBag.Query = query;
             foreach (var o in orders)
             {
                 var customer = _unitOfWork.CustomerRepository.GetById(o.CustomerId);
@@ -406,7 +408,8 @@ namespace SE1611_PRN221_ASM.Controllers
             _unitOfWork.OrderRepository.Update(order);
             _unitOfWork.Save();
 
-            var list = _unitOfWork.OrderRepository.GetAll();
+            //var list = _unitOfWork.OrderRepository.GetAll();
+            //var list = _unitOfWork.OrderRepository.GetAll();
             var statistics = new StatisticsViewModel
             {
                 TotalCustomers = _unitOfWork.CustomerRepository.GetAll().Count() - 1,
@@ -416,13 +419,17 @@ namespace SE1611_PRN221_ASM.Controllers
             };
             ViewBag.Statistics = statistics;
 
-            return View("Index", list);
+            return Redirect(Request.Headers["Referer"].ToString());
         }
+
+
         public ActionResult OrderDetail(int id)
         {
             var orders = _unitOfWork.OrderDetailRepository.GetOrderDetailByOrderId(id);
 
-            return View("OrderDetail",orders);
+            return View(orders);
         }
+
+
     }
 }

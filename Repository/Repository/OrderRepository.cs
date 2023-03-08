@@ -61,7 +61,9 @@ namespace Repository.Repository
 
         public (List<Order>, int totalItems) SearchOrders(string query, double minPrice, double maxPrice, int pageNum, int pageSize, string sort)
         {
-            List<Order> orders = _context.Orders.Include(o => o.Customer).ToList();
+            List<Order> orders = _context.Orders.Include(o => o.Customer).Where(o => o.Customer.Name.Contains(query)).ToList();
+            //search
+            
             //sort
             if (sort.Equals("latest")) orders = orders.OrderBy(b => b.PlaceDate).ToList();
             if (sort.Equals("oldest")) orders = orders.OrderByDescending(b => b.PlaceDate).ToList();

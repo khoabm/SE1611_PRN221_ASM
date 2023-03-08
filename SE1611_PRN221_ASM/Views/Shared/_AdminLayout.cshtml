@@ -43,7 +43,7 @@
         <!-- MENU SIDEBAR-->
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                <a href="#">
+                <a asp-controller="Admin" asp-action="Index">
                     <img src="https://raw.githubusercontent.com/khoabm/A-Corner-Of-Books/main/ACornerOfBooks/src/main/webapp/User/imgs/book-logo-1.jpg" alt="Cool Admin" />
                 </a>
             </div>
@@ -70,20 +70,20 @@
                             </ul>
                         </li>*@
                         <li>
+                            <a asp-action="Index">
+                                <i class="fas fa-tachometer-alt"></i>Dashboard
+                            </a>
+                        </li>                        
+                        <li>
                             <a asp-controller="admin" asp-action="create">
                                 <i class="fa fa-book"></i>Book management
                             </a>
                         </li>                        
                         <li>
                             <a asp-controller="admin" asp-action="accounts">
-                                <i class="fa fa-user"></i>Book management
+                                <i class="fa fa-user"></i>Account management
                             </a>
                         </li>
-                        <li>
-                            <a asp-action="Index">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard
-                            </a>
-                        </li>                        
                         <li>
                             <a asp-action="Logout" asp-controller="Account">
                                 <i class="fas fa-sign-out-alt"></i>Logout
