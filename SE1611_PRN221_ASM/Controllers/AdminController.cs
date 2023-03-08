@@ -62,13 +62,6 @@ namespace SE1611_PRN221_ASM.Controllers
                 StartPage = startPage,
                 EndPage = endPage
             };
-            var searchModel = new SearchModel
-            {
-                maxPrice = (int)maxPrice,
-                minPrice = (int)minPrice,
-                query = query,
-                size = size
-            };
             var statistics = new StatisticsViewModel
             {
                 TotalCustomers = _unitOfWork.CustomerRepository.GetAll().Count() - 1,
@@ -79,7 +72,6 @@ namespace SE1611_PRN221_ASM.Controllers
             ViewBag.Statistics = statistics;
             ViewBag.Pagination = pagination;
             ViewBag.TotalItems = totalItems;
-            ViewBag.SearchModel = searchModel;
             ViewBag.Sort = sort;
             foreach (var o in orders)
             {
@@ -313,13 +305,16 @@ namespace SE1611_PRN221_ASM.Controllers
                         _unitOfWork.Save();
                     }
                     //Update thanh cong ne
+                    TempData["Success"] = "Book updated";
                     return RedirectToAction(nameof(Create));
                 }
                 // book id = null
+                TempData["Error"] = "Book not found";
                 return RedirectToAction(nameof(Create));
             }
             catch (Exception e)
             {
+                TempData["Error"] = e.Message.ToString();
                 Console.WriteLine(e.Message.ToString());
                 return RedirectToAction(nameof(Edit), id);
             }
@@ -328,18 +323,26 @@ namespace SE1611_PRN221_ASM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            Book book = _unitOfWork.BookRepository.GetById(id);
-            if (book != null)
+            try
             {
-                List<BookGenre> bg = _unitOfWork.BookGenreRepository.GetAll().Where(bookgenre => bookgenre.BookId == id).ToList();
-                foreach (var bookGenre in bg)
+                Book book = _unitOfWork.BookRepository.GetById(id);
+                if (book != null)
                 {
-                    _unitOfWork.BookGenreRepository.Delete(bookGenre);
+                    List<BookGenre> bg = _unitOfWork.BookGenreRepository.GetAll().Where(bookgenre => bookgenre.BookId == id).ToList();
+                    foreach (var bookGenre in bg)
+                    {
+                        _unitOfWork.BookGenreRepository.Delete(bookGenre);
+                        _unitOfWork.Save();
+                    }
+                    _unitOfWork.BookRepository.Delete(book);
                     _unitOfWork.Save();
+                    TempData["Success"] = "Book delete";
                 }
-                _unitOfWork.BookRepository.Delete(book);
-                _unitOfWork.Save();
-                return RedirectToAction(nameof(Create));
+                TempData["Error"] = "Book not found";
+            }
+            catch(Exception e)
+            {
+                TempData["Error"] = e.Message.ToString();
             }
             return RedirectToAction(nameof(Create));
         }

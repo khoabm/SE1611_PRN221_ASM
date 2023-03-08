@@ -79,16 +79,16 @@ namespace SE1611_PRN221_ASM.Controllers
                 StartPage = startPage,
                 EndPage = endPage
             };
-            var searchModel = new SearchModel
-            {
-                maxPrice = (int)maxPrice,
-                minPrice = (int)minPrice,
-                query = query,
-                size = size
-            };
+            //var searchModel = new SearchModel
+            //{
+            //    maxPrice = maxPrice,
+            //    minPrice = minPrice,
+            //    query = query,
+            //    size = size
+            //};
             ViewBag.Pagination = pagination;
             ViewBag.TotalItems = totalItems;
-            ViewBag.SearchModel = searchModel;
+            //ViewBag.SearchModel = searchModel;
             ViewBag.Sort = sort;
             foreach (var o in orders)
             {

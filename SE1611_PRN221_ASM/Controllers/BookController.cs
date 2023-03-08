@@ -20,13 +20,13 @@ namespace SE1611_PRN221_ASM.Controllers
         // GET: BookController
         public ActionResult Index(string query
             ,string[] genres
-            ,double minPrice = 0
-            ,double maxPrice = 1000000000
+            ,string minPrice = "0"
+            ,string maxPrice = "1,000,000,000"
             ,int page=1
             ,int size=9
             ,string sort="latest")
         {
-            var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, minPrice, maxPrice,page,size,sort);
+            var (books, totalItems) = _unitOfWork.BookRepository.SearchBooks(query, genres, double.Parse(minPrice.Replace(",", "")), double.Parse(maxPrice.Replace(",", "")), page,size,sort);
             string[] bookSortOptions = new string[4];
             bookSortOptions[0] = sort;
             int j = 1;
@@ -51,8 +51,8 @@ namespace SE1611_PRN221_ASM.Controllers
             var searchModel = new SearchModel
             {
                 genres = genres,
-                maxPrice = (int)maxPrice,
-                minPrice = (int)minPrice,
+                maxPrice = maxPrice,
+                minPrice = minPrice,
                 query = query,
                 size = size,
                 sortOptions = bookSortOptions
