@@ -123,9 +123,9 @@ namespace Repository.Repository
             //search by query title and author
             if (!string.IsNullOrEmpty(query))
             {
-                books = books.Where(b => b.Author.Contains(query, StringComparison.OrdinalIgnoreCase)
-                || b.Title.Contains(query, StringComparison.OrdinalIgnoreCase) 
-                || b.Publisher.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+                books = books.Where(b => b.Author!.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || b.Title!.Contains(query, StringComparison.OrdinalIgnoreCase) 
+                || b.Publisher!.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             //filter by price
             books = books.Where(b => (b.Price <= maxPrice && b.Price >= minPrice)).ToList();

@@ -77,7 +77,7 @@ namespace SE1611_PRN221_ASM.Controllers
                     List<Comment> comments = _unitOfWork.CommentRepository.GetAllCommentOfABookNoPaging(id).ToList();
                     if (comments.Count != 0)
                     {
-                        book.AverageRating = Math.Ceiling(comments.Average(c => c.Rating).Value);
+                        book.AverageRating = Math.Ceiling(comments.Average(c => c.Rating)!.Value);
                     }
                     else
                     {

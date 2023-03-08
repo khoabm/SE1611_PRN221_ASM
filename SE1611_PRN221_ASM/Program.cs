@@ -50,26 +50,11 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = "546584990405-i57t58ev9ib0dh3kk1celkulfdoiolgq.apps.googleusercontent.com";
     options.ClientSecret = "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";
     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    //options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
-    //options.Scope.Add("profile");
-    //options.Scope.Add("https://www.googleapis.com/auth/user.gender.read");
     options.Events = new OAuthEvents
     {
         OnCreatingTicket = async context =>
         {
-            //var accessToken = context.AccessToken;
 
-            //var client = new HttpClient();
-            //var response = await client.GetAsync($"https://www.googleapis.com/oauth2/v2/userinfo?access_token={accessToken}");
-            //response.EnsureSuccessStatusCode();
-
-            //var userInfoJson = await response.Content.ReadAsStringAsync();
-            //var userInfo = JObject.Parse(userInfoJson);
-            //Console.WriteLine(userInfoJson);
-            //// Get user information from the userInfo object
-            //var email = (string)userInfo["email"];
-            //var gender = (string)userInfo["gender"];
-            // get the user's email address from the claims
             var email = context.Identity.FindFirst(ClaimTypes.Email)?.Value;
             var gender = context.Identity.FindFirst("gender");
 
@@ -97,54 +82,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = "MyScheme";
-//    options.DefaultChallengeScheme = "MyScheme";
-//})
-//        .AddScheme<SessionAuthenticationOptions, SessionAuthenticationHandler>(
-//            "MySession", options => { });
-
-//builder.Services
-//.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-//    options.DefaultSignOutScheme = GoogleDefaults.AuthenticationScheme;
-//})
-//.AddCookie(options =>
-//{
-//})
-//.AddGoogle(options =>
-//{
-//    options.ClientId = "546584990405-i57t58ev9ib0dh3kk1celkulfdoiolgq.apps.googleusercontent.com";
-//    options.ClientSecret = "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";
-//    options.Events = new OAuthEvents
-//    {
-//        OnCreatingTicket = context =>
-//        {
-//            // get the user's email address from the claims
-//            var email = context.Identity.FindFirst(ClaimTypes.Email)?.Value;
-//            Console.WriteLine(email);
-//            // add a custom claim to the user's identity
-//            if (!string.IsNullOrEmpty(email))
-//            {
-//                // remove the default NameIdentifier claim if it exists
-//                var nameIdentifierClaim = context.Identity.FindFirst(ClaimTypes.NameIdentifier);
-//                if (nameIdentifierClaim != null)
-//                {
-//                    context.Identity.RemoveClaim(nameIdentifierClaim);
-//                }
-
-//                // add the email as the new NameIdentifier claim
-//                var newClaim = new Claim(ClaimTypes.NameIdentifier, email);
-//                context.Identity.AddClaim(newClaim);
-//            }
-
-//            return Task.CompletedTask;
-//        }
-//    };
-//});
 
 
 builder.Services.AddSignalR();
