@@ -366,7 +366,7 @@ blockquote::after{
 
     }
     //star rating init
-    let rating = 0;
+    let rating = options.initial_value;
     $(".rating").rate(options);
     $(".rating").on("change", function(ev, data) {
         console.log(data.from, data.to);

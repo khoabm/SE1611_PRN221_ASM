@@ -344,17 +344,22 @@ namespace SE1611_PRN221_ASM.Controllers
             return RedirectToAction(nameof(Create));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         // POST: AdminController/Delete/5
-        public async Task<ActionResult> Disable(int accountId)
+        public async Task<ActionResult> Disable(int accountId, string status)
         {
             try
             {
-                await _unitOfWork.AccountRepository.DisableAccount(accountId);
-                return RedirectToAction(nameof(Index));
+                await _unitOfWork.AccountRepository.DisableAccount(accountId, status);
+                
+                TempData["Success"] = "Updated successfully";
+                return Redirect(Request.Headers["Referer"].ToString());
             }
             catch
             {
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = "Update user status failed";
+                return Redirect(Request.Headers["Referer"].ToString());
             }
         }
 
