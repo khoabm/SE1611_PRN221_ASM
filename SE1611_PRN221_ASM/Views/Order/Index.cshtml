@@ -29,7 +29,7 @@
                             <a asp-controller="Account" asp-action="ChangePassword" class="list-group-item">Change Password</a>
                         }
                         <a asp-controller="Favorite" asp-action="Index" class="list-group-item">My Favorite</a>
-                        <a asp-controller="Order" asp-action="Index" class="list-group-item active">My Order History</a>
+                        <a asp-controller="Order" asp-action="Index" class="list-group-item active">My Order</a>
                     </div>
                 </div>
                 <div class="col-md-14 aside">
@@ -70,6 +70,10 @@
                                             else if (order.Status == 3)
                                             {
                                                 <span class="status--process" value="3">Delivered</span>
+                                            }
+                                            else if (order.Status == 4)
+                                            {
+                                                <span class="status--process" value="4">Canceled</span>
                                             }
                                         </td>
                                         <td>@order.PlaceDate!.Value.ToString("MM/dd/yyyy")</td>

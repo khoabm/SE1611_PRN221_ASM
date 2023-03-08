@@ -85,5 +85,12 @@ namespace Repository.Repository
             int totalItems = orders.Count();
             return (PaginatedList<Order>.Create(orders.AsQueryable(), pageNum, pageSize), orders.Count());
         }
+
+        public void ChangeOrderStatus(int id, int status)
+        {
+            Order order = _context.Orders.FirstOrDefault(o => o.OrderId == id);
+            order.Status = Convert.ToInt16(status);
+            _context.SaveChanges();
+        }
     }
 }

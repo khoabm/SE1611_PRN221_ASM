@@ -24,24 +24,24 @@
     }
 }
 @section StarRating{
-<style>
-blockquote::after{
-    content: none;
-}
-</style>
+    <style>
+        blockquote::after {
+            content: none;
+        }
+    </style>
 }
 
-<partial name="_Notification" />
-<div class="page-content">
-    <div class="holder">
-        <div class="container js-prd-gallery" id="prdGallery">
-            <div class="row prd-block prd-block-under prd-block--prv-bottom">
-                <div class="col">
-                    <div class="js-prd-d-holder">
-                        <div class="prd-block_title-wrap">
-                            <div class="prd-block_reviews" data-toggle="tooltip" data-placement="top" title="Scroll To Reviews">
+    <partial name="_Notification" />
+    <div class="page-content">
+        <div class="holder">
+            <div class="container js-prd-gallery" id="prdGallery">
+                <div class="row prd-block prd-block-under prd-block--prv-bottom">
+                    <div class="col">
+                        <div class="js-prd-d-holder">
+                            <div class="prd-block_title-wrap">
+                                <div class="prd-block_reviews" data-toggle="tooltip" data-placement="top" title="Scroll To Reviews">
 
-                                @for (int i = 0; i < 5; i++)
+                                    @for (int i = 0; i < 5; i++)
                                 {
                                     if (i < Model.AverageRating)
                                     {
@@ -113,7 +113,7 @@ blockquote::after{
                                             @item.GenreName
                                             @if ((genres.Count >= 2) && (!item.Equals(genres[genres.Count - 1])))
                                             {
-                                                <text>,</text>
+                                                <i>,</i>
                                             }
                                         </span>
                                     }
@@ -132,16 +132,30 @@ blockquote::after{
                                     </div>
                                     <div class="btn-wrap">
                                         <input type="hidden" name="bookId" value="@Model.BookId" />
-                                        <button type="submit" class="btn btn--add-to-cart js-trigger-addtocart js-prd-addtocart">Add to cart</button>
-                                    </div>
-                                    <div class="btn-wishlist-wrap">
-                                        @if (isFavorite)
+                                        @if (userSession == null)
                                         {
-                                            <a asp-controller="Favorite" asp-action="Delete" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Remove From Favorite"><i class="icon-heart-hover"></i></a>
+                                            <a href="#" class="btn btn--add-to-cart js-trigger-addtocart js-prd-addtocart dropdn-link js-dropdn-link" data-panel="#dropdnAccount">Add to cart</a>
                                         }
                                         else
                                         {
-                                            <a asp-controller="Favorite" asp-action="Add" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Add To Favorite"><i class="icon-heart-stroke"></i></a>
+                                            <button type="submit" class="btn btn--add-to-cart js-trigger-addtocart js-prd-addtocart">Add to cart</button>
+                                        }
+                                    </div>
+                                    <div class="btn-wishlist-wrap">
+                                        @if (userSession == null)
+                                        {
+                                            <a class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add js-trigger-addtocart js-prd-addtocart dropdn-link js-dropdn-link" title="Remove From Favorite" data-panel="#dropdnAccount"><i class="icon-heart-stroke"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (isFavorite)
+                                            {
+                                                <a asp-controller="Favorite" asp-action="Delete" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Remove From Favorite"><i class="icon-heart-hover"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Favorite" asp-action="Add" asp-route-bookId="@Model.BookId" class="btn-add-to-wishlist ml-auto btn-add-to-wishlist--add" title="Add To Favorite"><i class="icon-heart-stroke"></i></a>
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -290,30 +304,11 @@ blockquote::after{
 </div>
 
 @section Scripts {
-<script>
-    $(document).ready(function() {
-        var qtyInput = $(".qty-input");
-        var maxQuantity = parseInt(qtyInput.attr("data-max"));
-        var bookId = parseInt(qtyInput.attr("data-book-id"));
-
-        // Get the quantity of the book in the cart
-        $.ajax({
-            url: "/Cart/GetCartQuantity",
-            type: "GET",
-            data: { bookId: bookId },
-            success: function(cartQuantity) {
-                var maxAllowedQuantity = maxQuantity - cartQuantity;
-
-                if (maxAllowedQuantity <= 0) {
-                    qtyInput.val(0);
-                } else {
-                    qtyInput.val(1);
-                }
-            }
-        });
-
-        $(".qty-input").on("change", function() {
-            var currentValue = parseInt(qtyInput.val());
+    <script>
+        $(document).ready(function() {
+            var qtyInput = $(".qty-input");
+            var maxQuantity = parseInt(qtyInput.attr("data-max"));
+            var bookId = parseInt(qtyInput.attr("data-book-id"));
 
             // Get the quantity of the book in the cart
             $.ajax({
@@ -323,80 +318,99 @@ blockquote::after{
                 success: function(cartQuantity) {
                     var maxAllowedQuantity = maxQuantity - cartQuantity;
 
-                    if (currentValue >= maxAllowedQuantity) {
-                        qtyInput.val(maxAllowedQuantity);
-                    }
                     if (maxAllowedQuantity <= 0) {
                         qtyInput.val(0);
+                    } else {
+                        qtyInput.val(1);
                     }
                 }
+            });
+
+            $(".qty-input").on("change", function() {
+                var currentValue = parseInt(qtyInput.val());
+
+                // Get the quantity of the book in the cart
+                $.ajax({
+                    url: "/Cart/GetCartQuantity",
+                    type: "GET",
+                    data: { bookId: bookId },
+                    success: function(cartQuantity) {
+                        var maxAllowedQuantity = maxQuantity - cartQuantity;
+
+                        if (currentValue >= maxAllowedQuantity) {
+                            qtyInput.val(maxAllowedQuantity);
+                        }
+                        if (maxAllowedQuantity <= 0) {
+                            qtyInput.val(0);
+                        }
+                    }
+                });
+            });
+
+            $(".increase").on("click", function() {
+                var currentValue = parseInt(qtyInput.val());
+
+                // Get the quantity of the book in the cart
+                $.ajax({
+                    url: "/Cart/GetCartQuantity",
+                    type: "GET",
+                    data: { bookId: bookId },
+                    success: function(cartQuantity) {
+                        var maxAllowedQuantity = maxQuantity - cartQuantity;
+
+                        if (currentValue >= maxAllowedQuantity) {
+                            qtyInput.val(maxAllowedQuantity);
+                        }
+                        if (maxAllowedQuantity <= 0) {
+                            qtyInput.val(0);
+
+                        }
+                    }
+                });
             });
         });
 
-        $(".increase").on("click", function() {
-            var currentValue = parseInt(qtyInput.val());
+        //star rating options
+        var options = {
+            max_value: 5,
+            step_size: 1,
+            initial_value: 1,
+            selected_symbol_type: 'fontawesome_star',
+            cursor: 'default',
 
-            // Get the quantity of the book in the cart
-            $.ajax({
-                url: "/Cart/GetCartQuantity",
-                type: "GET",
-                data: { bookId: bookId },
-                success: function(cartQuantity) {
-                    var maxAllowedQuantity = maxQuantity - cartQuantity;
-
-                    if (currentValue >= maxAllowedQuantity) {
-                        qtyInput.val(maxAllowedQuantity);
-                    }
-                    if (maxAllowedQuantity <= 0) {
-                        qtyInput.val(0);
-
-                    }
-                }
-            });
+        }
+        //star rating init
+        let rating = options.initial_value;
+        $(".rating").rate(options);
+        $(".rating").on("change", function(ev, data) {
+            console.log(data.from, data.to);
+            rating = data.to;
         });
-    });
-
-    //star rating options
-    var options = {
-        max_value: 5,
-        step_size: 1,
-        initial_value: 1,
-        selected_symbol_type: 'fontawesome_star',
-        cursor: 'default',
-
-    }
-    //star rating init
-    let rating = options.initial_value;
-    $(".rating").rate(options);
-    $(".rating").on("change", function(ev, data) {
-        console.log(data.from, data.to);
-        rating = data.to;
-    });
-    $(document).ready(() => {
-        $('#post_comment').click((e) => {
-            e.preventDefault();
-            let comment = $('#comment').val();
-            if (comment.length == 0) {
-                $('#comment').addClass('form-control--sm form-control--error');
-                return;
-            }
-            $.ajax({
-                url: "/Comment/Test",
-                type: "POST",
-                data: { id: @Model.BookId, comment: comment, rating: rating, },
-                success: function(result) {
-                    console.log(result);
-                    $('#comment').val('');
-                    $("#partial_comment_container").html(result);
-                },
-                error: function() {
-                    console.log("Error loading partial view.");
+        $(document).ready(() => {
+            $('#post_comment').click((e) => {
+                e.preventDefault();
+                let comment = $('#comment').val();
+                if (comment.length == 0) {
+                    $('#comment').addClass('form-control--sm form-control--error');
+                    return;
                 }
-            });
+                $.ajax({
+                    url: "/Comment/Test",
+                    type: "POST",
+                    data: { id: @Model.BookId, comment: comment, rating: rating, },
+                    success: function(result) {
+                        console.log(result);
+                        $('#comment').val('');
+                        $("#partial_comment_container").html(result);
+                    },
+                    error: function() {
+                        console.log("Error loading partial view.");
+                    }
+                });
+            })
         })
-    })
 
-            // Options
+                            // Options
 
-</script>
+    </script>
 }

@@ -1,6 +1,8 @@
-﻿@model IEnumerable<Repository.Entities.OrderDetail>
+﻿@using Repository.Entities
+@model IEnumerable<Repository.Entities.OrderDetail>
 
 @{
+    var order = ViewBag.Order as Order;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -59,17 +61,24 @@
                                 </div>
                             </div>
                         }
-
                     </div>
-                    <button type="submit" class="btn btn--grey">
-                        <a asp-controller="Order" asp-action="Index">
-                            <span>Order History</span>
-                        </a>
-                    </button>
-
+                    <div class="row">
+                        <a asp-controller="Order" asp-action="Index" class="btn btn--grey mr-1"><span>Order History</span></a>
+                        @if (order.Status == 0)
+                        {
+                                <a class="btn btn-outline-danger mr-1" id="CancelButton">Cancel order</a>
+                                <form asp-controller="Order" asp-action="CancelOrder" asp-route-id="@order.OrderId">
+                                    <button class="btn mr-1" type="submit" id="ConfirmButton" style="display:none">Confirm</button>
+                                </form>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-danger" data-toggle="tooltip" data-placement="bottom" data-original-title="You can only cancel when your order is not confirm" disabled href="">Cancel order</a>
+                        }
+                    </div>
                 </div>
                 <div class="col-lg-7 col-xl-5 mt-3 mt-md-0">
-                    
+
                     <div class="card-total">
                         <div class="row d-flex">
                             <div class="col card-total-txt">Total:</div>
@@ -83,11 +92,11 @@
                                 <div class="panel-body">
                                     <label>Address:</label>
                                     <div class="form-group">
-                                        <span class="form-control form-control--sm" name="address">@ViewBag.Address</span>
+                                        <span class="form-control form-control--sm" name="address">@order.Address</span>
                                     </div>
                                     <label>Phone:</label>
                                     <div class="form-group">
-                                        <span class="form-control form-control--sm" name="phone">@ViewBag.Phone</span>
+                                        <span class="form-control form-control--sm" name="phone">@order.Phone</span>
                                     </div>
                                 </div>
                             </div>
@@ -98,3 +107,10 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        $('#CancelButton').click(function() {
+            $('#ConfirmButton').animate({ width: 'toggle' });
+        });
+    </script>
+}

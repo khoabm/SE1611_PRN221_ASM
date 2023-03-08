@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿ using Microsoft.AspNetCore.Mvc;
 using Repository.Entities;
 using Repository.Infrastructure;
 using SE1611_PRN221_ASM.Helper;
@@ -112,22 +112,25 @@ namespace SE1611_PRN221_ASM.Controllers
             }
 
             var orders = _unitOfWork.OrderDetailRepository.GetCustomerOrderDetailByOrderId(account.AccountId, id);
-            Console.WriteLine(orders);
+            Console.WriteLine(orders.Count());
             if(orders == null || orders.Count() == 0)
             {
                 //return Redirect(Request.Headers["Referer"].ToString());
                 return RedirectToAction(nameof(Index));
             }
             var order = _unitOfWork.OrderRepository.GetByOrderId(id);
-            ViewBag.Address = order.Address;
-            ViewBag.Phone = order.Phone;
-            return View("View", orders);
+            ViewBag.Order = order;
+            return View("View",orders);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Checkout(string address, string phone, double total)
         {
+            if ((address==null)||(phone==null))
+            {
+                return RedirectToAction(nameof(Index));
+            }
             var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
             var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
 
@@ -175,8 +178,7 @@ namespace SE1611_PRN221_ASM.Controllers
         {
             var order = _unitOfWork.OrderRepository.GetByOrderId(orderId);
             var orderDetails = order!.OrderDetails;
-            ViewBag.Address = address;
-            ViewBag.Phone = phone;
+            ViewBag.Order = order;
             return View("View", orderDetails);
         }
 
@@ -195,8 +197,34 @@ namespace SE1611_PRN221_ASM.Controllers
             }
         }
 
-
-
+        [HttpPost]
+        [SessionAuthorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CancelOrder(int id)
+        {
+            try
+            {
+                var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
+                var order = _unitOfWork.OrderRepository.GetByOrderId(id);
+                if (order != null)
+                {
+                    Account account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
+                    if (account.AccountId == order.Customer.CustomerId)
+                    {
+                        _unitOfWork.OrderRepository.ChangeOrderStatus(id, 4);
+                        _unitOfWork.Save();
+                        ViewBag.Order = order;
+                        return RedirectToAction(nameof(Index));
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         // POST: OrderController/Edit/5
         [HttpPost]

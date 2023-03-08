@@ -19,5 +19,6 @@ namespace Repository.Repository.Interfaces
         public int GetBooksSoldThisMonth();
         public double GetTotalEarnings();
         public int GetTotalBookSold();
+        public void ChangeOrderStatus(int id, int status);
     }
 }

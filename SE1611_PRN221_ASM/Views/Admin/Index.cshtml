@@ -427,34 +427,46 @@
                                         <td>@item.Phone</td>
                                         <td>
                                             <select class="js-select2" name="orderStatus">
-                                                @if (item.Status == 0)
-                                                {
-                                                    <option value="0" selected>Pending</option>
-                                                    <option value="1">Accepted</option>
+                                                    @if (item.Status == 0)
+                                                    {
+                                                    <option value="0" selected >Pending</option>
+                                                    <option value="1" >Accepted</option>
+                                                    <option value="2" >Delivering </option>
+                                                    <option value="3" >Delivered</option>
+                                                    <option value="4">Canceled</option>
+                                                    }
+                                                    @if (item.Status == 1)
+                                                    {
+                                                    <option value="0" >Pending</option>
+                                                    <option value="1" selected >Accepted</option>
+                                                    <option value="2" >Delivering </option>
+                                                    <option value="3" >Delivered</option>
+                                                    <option value="4">Canceled</option>
+                                                    }
+                                                    @if (item.Status == 2)
+                                                    {
+                                                    <option value="0" >Pending</option>
+                                                    <option value="1" >Accepted</option>
+                                                    <option value="2" selected >Delivering </option>
+                                                    <option value="3" >Delivered</option>
+                                                    <option value="4">Canceled</option>
+                                                    }
+                                                    @if (item.Status == 3)
+                                                    {
+                                                    <option value="0" >Pending</option>
+                                                    <option value="1" >Accepted</option>
                                                     <option value="2">Delivering </option>
-                                                    <option value="3">Delivered</option>
-                                                }
-                                                @if (item.Status == 1)
-                                                {
-                                                    <option value="0">Pending</option>
-                                                    <option value="1" selected>Accepted</option>
+                                                    <option value="3" selected >Delivered</option>
+                                                    <option value="4">Canceled</option>
+                                                    }
+                                                    @if (item.Status == 4)
+                                                    {
+                                                    <option value="0" >Pending</option>
+                                                    <option value="1" >Accepted</option>
                                                     <option value="2">Delivering </option>
-                                                    <option value="3">Delivered</option>
-                                                }
-                                                @if (item.Status == 2)
-                                                {
-                                                    <option value="0">Pending</option>
-                                                    <option value="1">Accepted</option>
-                                                    <option value="2" selected>Delivering </option>
-                                                    <option value="3">Delivered</option>
-                                                }
-                                                @if (item.Status == 3)
-                                                {
-                                                    <option value="0">Pending</option>
-                                                    <option value="1">Accepted</option>
-                                                    <option value="2">Delivering </option>
-                                                    <option value="3" selected>Delivered</option>
-                                                }
+                                                    <option value="3">Delivered </option>
+                                                    <option value="4" selected >Canceled</option>
+                                                    }
 
                                             </select>
                                             <div class="dropDownSelect2"></div>
@@ -542,7 +554,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="copyright">
-                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                        
                     </div>
                 </div>
             </div>

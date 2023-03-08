@@ -73,8 +73,8 @@ namespace Repository.Repository
             {
                 accounts = await _context.Accounts
                             .Include(a => a.Customer)
-                            .Where((a => query == "" || a.Email.Contains(query)
-                            || a.Customer!.Name!.Contains(query)
+                            .Where((a =>  (a.Email.Contains(query)
+                            || a.Customer!.Name!.Contains(query))
                             && a.RoleId != (int)RoleId.Admin))
                             .ToListAsync();
                 switch (orderBy)

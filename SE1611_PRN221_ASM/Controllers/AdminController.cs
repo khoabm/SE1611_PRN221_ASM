@@ -338,9 +338,12 @@ namespace SE1611_PRN221_ASM.Controllers
                     }
                     _unitOfWork.BookRepository.Delete(book);
                     _unitOfWork.Save();
-                    TempData["Success"] = "Book delete";
+                    TempData["Success"] = "Book deleted";
                 }
-                TempData["Error"] = "Book not found";
+                else
+                {
+                    TempData["Error"] = "Book not found";
+                }
             }
             catch(Exception e)
             {
