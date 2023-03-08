@@ -17,18 +17,18 @@
     <div class="holder">
         <div class="container">
             <div class="page-title text-center">
-                <h1 class="custom-color">Order Summary</h1>
+                <h1 class="custom-color">Order Details</h1>
             </div>
             <div class="row">
                 <div class="col-lg-11 col-xl-13">
                     <div class="cart-table">
                         <div class="cart-table-prd cart-table-prd--head py-1 d-none d-md-flex">
-                            <div class="cart-table-prd-image text-center">
+                            <div class="cart-table-prd-image">
                                 Image
                             </div>
                             <div class="cart-table-prd-content-wrap">
                                 <div class="cart-table-prd-info">Name</div>
-                                <div class="cart-table-prd-qty">Qty</div>
+                                <div class="cart-table-prd-qty text-right">Qty</div>
                                 <div class="cart-table-prd-price">Price</div>
                                 <div class="cart-table-prd-action">&nbsp;</div>
                             </div>
@@ -55,7 +55,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="cart-table-prd-price-total">@($"{item.Book.Price * item.Quantity:C}")</div>
+                                    <div class="cart-table-prd-price-total text-left">@($"{item.Book.Price * item.Quantity:C}")</div>
                                 </div>
                             </div>
                         }
@@ -63,16 +63,34 @@
                     </div>
                     <button type="submit" class="btn btn--grey">
                         <a asp-controller="Order" asp-action="Index">
-                            <span>Back to Order History</span>
+                            <span>Order History</span>
                         </a>
                     </button>
 
                 </div>
-                <div style="display: flex; justify-content: center; align-items: center; border: 2px solid black" class="col-lg-7 col-xl-5 mt-3 mt-md-0">
+                <div class="col-lg-7 col-xl-5 mt-3 mt-md-0">
+                    
                     <div class="card-total">
                         <div class="row d-flex">
                             <div class="col card-total-txt">Total:</div>
                             <div class="col-auto card-total-price text-right">@($"{Model.Sum(c => c.Book.Price * c.Quantity):C}")</div>
+                        </div>
+                    </div>
+                    <div class="mt-2"></div>
+                    <div class="panel-group panel-group--style1 prd-block_accordion" id="productAccordion">
+                        <div class="panel">
+                            <div id="collapse1" class="panel-collapse collapse show">
+                                <div class="panel-body">
+                                    <label>Address:</label>
+                                    <div class="form-group">
+                                        <span class="form-control form-control--sm" name="address">@ViewBag.Address</span>
+                                    </div>
+                                    <label>Phone:</label>
+                                    <div class="form-group">
+                                        <span class="form-control form-control--sm" name="phone">@ViewBag.Phone</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

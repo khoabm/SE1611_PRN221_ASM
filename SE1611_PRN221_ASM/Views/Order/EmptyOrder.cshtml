@@ -1,0 +1,59 @@
+﻿@using SE1611_PRN221_ASM.Helper
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = HttpContextAccessor.HttpContext.Session;
+    var userSession = session.GetObject<UserSession>("UserSession");
+}
+
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><span>My account</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 aside aside--left">
+                    <div class="list-group">
+                        <a asp-controller="Account" asp-action="Details" class="list-group-item ">Account Details</a>
+                        @if (userSession!.AccountType == 1)
+                        {
+                            <a asp-controller="Account" asp-action="ChangePassword" class="list-group-item">Change Password</a>
+                        }
+                        <a asp-controller="Favorite" asp-action="Index" class="list-group-item">My Favorite</a>
+                        <a asp-controller="Order" asp-action="Index" class="list-group-item active">My Order History</a>
+                    </div>
+                </div>
+                <div class="col-md-14 aside">
+                    @if (TempData["Message"]?.ToString() != "Please log in first.")
+                    {
+                        <div style="margin: 0;" class="dropdn-content minicart-drop cart-items justify-content-center d-flex flex-column align-items-right">
+                            <div style="padding: 0;" class="dropdn-content-block text-center">
+                                @if (TempData["Message"]?.ToString() != "Please log in first.")
+                                {
+                                    <div class="dropdn-close"><a asp-controller="Home" asp-action="Index">Close</a></div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    <div class="dropdn-content minicart-drop cart-items justify-content-center d-flex flex-column align-items-center" id="dropdnMinicart">
+                        <div class="dropdn-content-block text-center">
+                            <h2>@TempData["Message"]?.ToString()</h2>
+                        </div>
+                        @if (TempData["Message"]?.ToString() == "Please log in first.")
+                        {
+                            <div class="text-center">
+                                <a asp-controller="Account" asp-action="SignIn" class="btn btn-primary">Login</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

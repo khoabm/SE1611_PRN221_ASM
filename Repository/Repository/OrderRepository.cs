@@ -19,6 +19,15 @@ namespace Repository.Repository
         {
             _context = context;
         }
+
+        public Order? GetByOrderId(int id)
+        {
+            return _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Book)
+                .FirstOrDefault(o => o.OrderId == id);
+        }
+
         public IEnumerable<Order> GetOrderByCustomerId(int customerId)
         {
             return _context.Orders

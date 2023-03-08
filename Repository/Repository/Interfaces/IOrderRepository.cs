@@ -14,6 +14,7 @@ namespace Repository.Repository.Interfaces
                                                         , int pageNum, int pageSize, string sort);
         public (List<Order>, int totalItems) SearchOrdersCustomer(string query, double minPrice, double maxPrice
                                                         , int pageNum, int pageSize, string sort, int customerId);
+        Order? GetByOrderId(int id);
         IEnumerable<Order> GetOrderByCustomerId(int  customerId);
         public int GetBooksSoldThisMonth();
         public double GetTotalEarnings();

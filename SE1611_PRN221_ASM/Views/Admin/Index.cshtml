@@ -363,7 +363,6 @@
         </div>
     </section>
     <!-- END STATISTIC-->
-    
     <!-- DATA TABLE-->
     <section class="p-t-20">
         <div class="container">
@@ -372,26 +371,26 @@
                     <h3 class="title-5 m-b-35">data table</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            
+
                             <div class="rs-select2--light rs-select2--md">
                                 <form asp-controller="Admin" asp-action="Index" id="ViewOrder">
-                                <select class="js-select2" name="sort">
-                                    @if (ViewBag.Sort == "latest")
-                                    {
-                                        <option selected value="latest">Latest</option>
-                                        <option value="oldest">Oldest</option>
-                                    }
-                                    @if (ViewBag.Sort == "oldest")
-                                    {
-                                        <option value="latest">Latest</option>
-                                        <option selected value="oldest">Oldest</option>
-                                    }
-                                </select>
+                                    <select class="js-select2" name="sort">
+                                        @if (ViewBag.Sort == "latest")
+                                        {
+                                            <option selected value="latest">Latest</option>
+                                            <option value="oldest">Oldest</option>
+                                        }
+                                        @if (ViewBag.Sort == "oldest")
+                                        {
+                                            <option value="latest">Latest</option>
+                                            <option selected value="oldest">Oldest</option>
+                                        }
+                                    </select>
                                     <div class="dropDownSelect2"></div>
                                 </form>
-                                
+
                             </div>
-                            
+
                             <button class="au-btn-filter" type="submit" form="ViewOrder">
                                 <i class="zmdi zmdi-filter-list"></i>filters
                             </button>
@@ -427,18 +426,19 @@
                             <tbody>
                                 @foreach (var item in Model)
                                 {
+                                    <form asp-controller="Admin" asp-action="EditOrder" method="post" id="Edit">
                                     <tr class="tr-shadow">
 
                                         <td>
-                                            @item.OrderId
+                                                @item.OrderId
                                         </td>
                                         <td>
-                                            @item.Customer.Name
+                                                @item.Customer.Name
                                         </td>
                                         <td>@item.Address</td>
                                         <td>@item.Phone</td>
-                                        <form asp-controller="Admin" asp-action="EditOrder" method="post" id="Edit">
-                                            <input type="hidden" name="id" value="@item.OrderId" />
+
+                                        <input type="hidden" name="id" value="@item.OrderId" />
                                         <td>
                                             <select name="status">
                                                     @if (item.Status == 0)
@@ -472,12 +472,12 @@
 
                                             </select>
                                         </td>
-                                        </form>
+
                                         <td>@item.PlaceDate</td>
                                         <td>@item.TotalAmount</td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit" form="Edit">
+                                                <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button>
 
@@ -489,6 +489,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    </form>
                                     <tr class="spacer"></tr>
                                 }
                             </tbody>

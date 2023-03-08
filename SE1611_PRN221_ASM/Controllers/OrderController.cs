@@ -10,13 +10,13 @@ namespace SE1611_PRN221_ASM.Controllers
     {
         Pending = 0,
         Accepted = 1,
-        Delivering= 2,
+        Delivering = 2,
         Delivered = 3
     }
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private static string[] sortOptions = { "latest", "oldest"};
+        private static string[] sortOptions = { "latest", "oldest" };
 
         public OrderController(IUnitOfWork unitOfWork)
         {
@@ -95,20 +95,22 @@ namespace SE1611_PRN221_ASM.Controllers
                 var customer = _unitOfWork.CustomerRepository.GetById(o.CustomerId);
                 o.Customer = customer;
             }
-            return View("Orders",orders);
+            return View("Orders", orders);
         }
 
         // GET: OrderController/Details/5
         public ActionResult Details(int id)
         {
             var orders = _unitOfWork.OrderDetailRepository.GetOrderDetailByOrderId(id);
-
+            var order = _unitOfWork.OrderRepository.GetByOrderId(id);
+            ViewBag.Address = order.Address;
+            ViewBag.Phone = order.Phone;
             return View("View", orders);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Checkout(string address, string phone, double total)
+        public async Task<IActionResult> Checkout(string address, string phone, double total)
         {
             var userSession = HttpContext.Session.GetObject<UserSession>("UserSession");
             var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
@@ -150,6 +152,15 @@ namespace SE1611_PRN221_ASM.Controllers
             HttpContext.Session.SetObject("UserSession", userSession);
             TempData["Success"] = "Checkout successfully.";
 
+            return RedirectToAction("OrderSummary", new { orderId = order.OrderId, address = address, phone = phone });
+        }
+
+        public IActionResult OrderSummary(int orderId, string address, string phone)
+        {
+            var order = _unitOfWork.OrderRepository.GetByOrderId(orderId);
+            var orderDetails = order!.OrderDetails;
+            ViewBag.Address = address;
+            ViewBag.Phone = phone;
             return View("View", orderDetails);
         }
 
