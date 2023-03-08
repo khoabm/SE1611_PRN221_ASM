@@ -366,7 +366,7 @@ blockquote::after{
 
     }
     //star rating init
-    let rating = 0;
+    let rating = options.initial_value;
     $(".rating").rate(options);
     $(".rating").on("change", function(ev, data) {
         console.log(data.from, data.to);
@@ -386,7 +386,7 @@ blockquote::after{
                 data: { id: @Model.BookId, comment: comment, rating: rating, },
                 success: function(result) {
                     console.log(result);
-
+                    $('#comment').val('');
                     $("#partial_comment_container").html(result);
                 },
                 error: function() {

@@ -171,16 +171,26 @@ namespace Repository.Repository
             }
         }
 
-        public async Task DisableAccount(int accountId)
+        public async Task DisableAccount(int accountId, string status)
         {
             try
             {
                 var account = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.AccountId == accountId);
                 if (account != null)
                 {
-                    account.Customer!.Status = (int)CustomerStatus.DISABLE;
+                    switch (status)
+                    {
+                        case "available":
+                            account.Customer!.Status = (int)CustomerStatus.DISABLE;
+                            break;
+                        case "disable":
+                            account.Customer!.Status = (int)CustomerStatus.AVAILABLE;
+                            break;
+                        default:
+                            break;
+                    }
+                    _context.Customers.Entry(account.Customer!).State = EntityState.Modified;
                 }
-                _context.Update(account);
                 await _context.SaveChangesAsync();
             }
             catch (Exception)

@@ -51,20 +51,20 @@ namespace SE1611_PRN221_ASM.Controllers
             TempData["Error"] = "Demo Error";
             return View(listOfAccounts);
         }
-        [HttpPost]
-        public async Task<IActionResult> DisableAccount(int accountId)
-        {
-            try
-            {
-                await _unitOfWork.AccountRepository.DisableAccount(accountId);
-            }
-            catch (Exception ex)
-            {
+        //[HttpPost]
+        //public async Task<IActionResult> DisableAccount(int accountId)
+        //{
+        //    try
+        //    {
+        //        await _unitOfWork.AccountRepository.DisableAccount(accountId);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                _logger.LogError(ex.Message);
-            }
-            return RedirectToAction(nameof(Index));
-        }
+        //        _logger.LogError(ex.Message);
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         // GET: AccountController/Details/5
         [SessionAuthorize]
@@ -116,6 +116,10 @@ namespace SE1611_PRN221_ASM.Controllers
                 else if (loginAccount.Customer!.Status == (int)CustomerStatus.DISABLE)
                 {
                     TempData["Error"] = "Account is in disable";
+                    return RedirectToAction(nameof(SignIn));
+                }else if(loginAccount.AccountType == (int)AccountType.GOOGLE)
+                {
+                    TempData["Error"] = "This email is already used for google account";
                     return RedirectToAction(nameof(SignIn));
                 }
                 else

@@ -430,10 +430,10 @@
                                         <input type="hidden" name="orderId" value="@item.OrderId" />
                                     <tr class="tr-shadow">
                                         <td>
-                                                @item.OrderId
+                                            @item.OrderId
                                         </td>
                                         <td>
-                                                @item.Customer.Name
+                                            @item.Customer.Name
                                         </td>
                                         <td>@item.Address</td>
                                         <td>@item.Phone</td>
@@ -441,52 +441,55 @@
                                             <select name="orderStatus">
                                                     @if (item.Status == 0)
                                                     {
-                                                    <option value="0" selected >Pending</option>
-                                                    <option value="1" >Accepted</option>
-                                                    <option value="2" >Delivering </option>
-                                                    <option value="3" >Delivered</option>
+                                                        <option value="0" selected name="Pending">Pending</option>
+                                                        <option value="1" name="Accepted">Accepted</option>
+                                                        <option value="2" name="Delivering ">Delivering </option>
+                                                        <option value="3" name="Deliveried">Deliveried</option>
                                                     }
                                                     @if (item.Status == 1)
                                                     {
-                                                    <option value="0" >Pending</option>
-                                                    <option value="1" selected >Accepted</option>
-                                                    <option value="2" >Delivering </option>
-                                                    <option value="3" >Delivered</option>
+                                                        <option value="0" name="Pending">Pending</option>
+                                                        <option value="1" selected name="Accepted">Accepted</option>
+                                                        <option value="2" name="Delivering ">Delivering </option>
+                                                        <option value="3" name="Deliveried">Deliveried</option>
                                                     }
                                                     @if (item.Status == 2)
                                                     {
-                                                    <option value="0" >Pending</option>
-                                                    <option value="1" >Accepted</option>
-                                                    <option value="2" selected >Delivering </option>
-                                                    <option value="3" >Delivered</option>
+                                                        <option value="0" name="Pending">Pending</option>
+                                                        <option value="1" name="Accepted">Accepted</option>
+                                                        <option value="2" selected name="Delivering ">Delivering </option>
+                                                        <option value="3" name="Deliveried">Deliveried</option>
                                                     }
                                                     @if (item.Status == 3)
                                                     {
-                                                    <option value="0" >Pending</option>
-                                                    <option value="1" >Accepted</option>
-                                                    <option value="2">Delivering </option>
-                                                    <option value="3" selected >Delivered</option>
+                                                        <option value="0" name="Pending">Pending</option>
+                                                        <option value="1" name="Accepted">Accepted</option>
+                                                        <option value="2" name="Delivering ">Delivering </option>
+                                                        <option value="3" selected name="Deliveried">Deliveried</option>
                                                     }
 
-                                            </select>
-                                        </td>
-                                       
-                                        <td>@item.PlaceDate</td>
-                                        <td>@item.TotalAmount</td>
-                                        <td>
-                                            <div class="table-data-feature">
-                                                <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                    <i class="zmdi zmdi-edit"></i>
-                                                </button>
-                                                    <a asp-controller="Admin" asp-action="OrderDetail" asp-route-id="@item.OrderId">
-                                                        <i class="zmdi zmdi-more"></i>
-                                                    </a>
-   
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </form>
+                                                </select>
+
+                                            </td>
+                                            <td>@item.PlaceDate</td>
+                                            <td>@item.TotalAmount</td>
+                                            <td>
+                                                <div class="table-data-feature">
+                                                    <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                        <i class="zmdi zmdi-edit"></i>
+                                                    </button>
+
+                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                                        <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId">
+                                                            <i class="zmdi zmdi-more"></i>
+                                                        </a>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
                                     <tr class="spacer"></tr>
+                                    </form>
                                 }
                             </tbody>
                         </table>
