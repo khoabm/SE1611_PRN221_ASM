@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>OrderDetail</h1>
-
 <div class="holder">
     <div class="container">
         <div class="page-title text-center">
@@ -13,52 +11,54 @@
         </div>
 <div class="row">
     <div class="col-lg-11 col-xl-13">
-        <div class="cart-table">
-            <div class="cart-table-prd cart-table-prd--head py-1 d-none d-md-flex">
-                <div class="cart-table-prd-image text-center">
-                    Image
-                </div>
-                <div class="cart-table-prd-content-wrap">
-                    <div class="cart-table-prd-info">Name</div>
-                    <div class="cart-table-prd-qty">Qty</div>
-                    <div class="cart-table-prd-price">Price</div>
-                    <div class="cart-table-prd-action">&nbsp;</div>
-                </div>
-            </div>
-
-            @foreach (var item in Model)
-            {
-                <div class="cart-table-prd">
-                    <div class="cart-table-prd-image">
-                        <a asp-controller="Book" asp-action="Details" asp-route-id="@item.Book.BookId">
-                            <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="@item.Book.ImageLink" alt="">
-                        </a>
-                    </div>
-                    <div class="cart-table-prd-content-wrap">
-                        <div class="cart-table-prd-info">
-                            <div class="cart-table-prd-price">
-                                <div class="price-new">@($"{item.Book.Price:C}")</div>
-                            </div>
-                            <h2 class="cart-table-prd-name"><a asp-controller="Book" asp-action="Details" asp-route-id="@item.Book.BookId">@item.Book.Title</a></h2>
-                        </div>
-                        <div class="cart-table-prd-qty">
-                            <div class="qty qty-changer">
-                                <div class="price-new">@item.Quantity</div>
-
-                            </div>
-                        </div>
-                        <div class="cart-table-prd-price-total">@($"{item.Book.Price * item.Quantity:C}")</div>
-                    </div>
-                </div>
-            }
-
-        </div>
+       
         <button type="submit" class="btn btn--grey">
             <a asp-controller="Order" asp-action="Index">
                 <span>Back to Order History</span>
             </a>
         </button>
-
+                <div class="cart-table-prd">
+                <table class="table table-data2">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Price</th>
+                            <th>Title</th>
+                            <th>Quanlity</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        { 
+                            <tr class="tr-shadow">
+                                <td>
+                                    <div class="cart-table-prd-image">
+                                    <a asp-controller="Book" asp-action="Details" asp-route-id="@item.Book.BookId">
+                                                <img style="max-width: 100%; max-height:50%;" src="@item.Book.ImageLink" alt="@item.Book.Title" class="card-img-top" />
+                                            </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-new">@($"{item.Book.Price:C}")</div>
+                                </td>
+                                <td>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4 style=" display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis;" class="card-title mb-3">@item.Book.Title</h4>
+                                            </div>
+                                        </div>
+                                    </td>
+                                <td>@item.Quantity</td>
+                                <td>@($"{item.Book.Price * item.Quantity:C}")</td>
+                            </tr>
+                            <tr class="spacer"></tr>
+                            
+                        }
+                    </tbody>
+                </table>
+                </div>
     </div>
     <div style="display: flex; justify-content: center; align-items: center; border: 2px solid black" class="col-lg-7 col-xl-5 mt-3 mt-md-0">
         <div class="card-total">
