@@ -72,7 +72,12 @@ namespace SE1611_PRN221_ASM.Controllers
                 TempData["Message"] = "Please log in first.";
                 return View("EmptyCart");
             }
-
+            if (quantity == 0)
+            {
+                TempData["Error"] = "You have exceeded your purchase limit.";
+                string url1 = Request.Headers["Referer"].ToString();
+                return Redirect(url1);
+            }
             var account = await _unitOfWork.AccountRepository.FindAccountByEmail(userSession.Email);
             int customerId = account.AccountId;
 
@@ -95,19 +100,12 @@ namespace SE1611_PRN221_ASM.Controllers
             }
             else
             {
-                if (quantity == 0)
-                {
-                    TempData["Error"] = "You have exceeded your purchase limit.";
-                    string url1 = Request.Headers["Referer"].ToString();
-                    return Redirect(url1);
-                }
                 // book is already in cart, update its quantity
                 cartItem.Quantity += quantity;
                 _unitOfWork.CartRepository.Update(cartItem);
             }
-
             _unitOfWork.Save();
-
+            
             TempData["Success"] = "Added to cart successfully.";
 
             // Get the URL of the previous page
