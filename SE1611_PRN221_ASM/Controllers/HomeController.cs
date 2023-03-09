@@ -75,6 +75,11 @@ namespace SE1611_PRN221_ASM.Controllers
             return View();
         }
         [AllowAnonymous]
+        public IActionResult AboutUs()
+        {
+            return View("About");
+        }
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
