@@ -213,6 +213,14 @@ namespace SE1611_PRN221_ASM.Controllers
                     {
                         _unitOfWork.OrderRepository.ChangeOrderStatus(id, 4);
                         _unitOfWork.Save();
+                        var orderDetails = _unitOfWork.OrderDetailRepository.GetOrderDetailByOrderId(id);
+                        foreach (OrderDetail order1 in orderDetails)
+                        {
+                            Book b = _unitOfWork.BookRepository.GetById(order1.BookId);
+                            b.QuantityLeft+=order1.Quantity;
+                            _unitOfWork.BookRepository.Update(b);
+                            _unitOfWork.Save();
+                        }
                         ViewBag.Order = order;
                         return RedirectToAction(nameof(Index));
                     }
